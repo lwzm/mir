@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<flexLibProperties includeAllClasses="true" useMultiPlatformConfig="false" version="3">
+  <includeClasses>
+    <classEntry path="mir.Const"/>
+    <classEntry path="flexUnitTests.TestConst"/>
+    <classEntry path="mir.Foo"/>
+    <classEntry path="mir.MirBmp"/>
+    <classEntry path="flexUnitTests.TestFoo"/>
+  </includeClasses>
+  <includeResources/>
+  <namespaceManifests/>
+</flexLibProperties>
