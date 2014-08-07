@@ -2,7 +2,7 @@
 <testrun name="" >
 <testsuite  name="Default Test Suite" project="mirlib">
 <testsuite name="flexUnitTests:TestConst" type="testcaseclass"/>
-<testsuite name="flexUnitTests:TestFoo" type="testcaseclass"/>
+<testsuite name="flexUnitTests:TestUtils" type="testcaseclass"/>
 </testsuite>
 <portNumber value="8765" />
 </testrun>

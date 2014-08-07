@@ -3,9 +3,9 @@
   <includeClasses>
     <classEntry path="mir.Const"/>
     <classEntry path="flexUnitTests.TestConst"/>
-    <classEntry path="mir.Foo"/>
+    <classEntry path="mir.Utils"/>
     <classEntry path="mir.MirBmp"/>
-    <classEntry path="flexUnitTests.TestFoo"/>
+    <classEntry path="flexUnitTests.TestUtils"/>
   </includeClasses>
   <includeResources/>
   <namespaceManifests/>

@@ -5,7 +5,7 @@ package
 	import flash.display.Sprite;
 	
 	import flexUnitTests.TestConst;
-	import flexUnitTests.TestFoo;
+	import flexUnitTests.TestUtils;
 	
 	import flexunit.flexui.FlexUnitTestRunnerUIAS;
 	
@@ -28,7 +28,7 @@ package
 		{
 			var testsToRun:Array = new Array();
 			testsToRun.push(flexUnitTests.TestConst);
-			testsToRun.push(flexUnitTests.TestFoo);
+			testsToRun.push(flexUnitTests.TestUtils);
 			return testsToRun;
 		}
 	}
