@@ -1,6 +1,8 @@
 package mir {
 	import flash.display.BitmapData;
 	import flash.events.Event;
+	import flash.net.URLLoader;
+	import flash.net.URLLoaderDataFormat;
 	import flash.net.URLRequest;
 	import flash.net.URLStream;
 	import flash.utils.ByteArray;
@@ -10,6 +12,10 @@ package mir {
 
 	public class Utils {
 
+		public static function trim(str:String):String {
+			return str.replace(/^\s+/, "").replace(/\s+$/, "");
+		}
+
 		public static function loadMirBmp(url:String, callback:Function, need_shadow:Boolean=false):void {
 			loadAsset(url, function(bytes:ByteArray):void {
 				callback(extractMirBmp(bytes, need_shadow));
@@ -17,24 +23,30 @@ package mir {
 			});
 		}
 
-		public static function loadMirBmps(url:String, arr:Array, need_shadow:Boolean=false, callback:Function=null):void {
+		public static function loadMirBmps(url:String, callback:Function, need_shadow:Boolean=false):void {
 			loadAsset(url, function(bytes:ByteArray):void {
+				var arr:Vector.<MirBmp> = new Vector.<MirBmp>();
 				while (bytes.bytesAvailable) {
 					arr.push(extractMirBmp(bytes, need_shadow));
 				}
-				callback ? callback() : null;
+				callback(arr);
+			});
+		}
+
+		public static function load(url:String, callback:Function, fmt:String=URLLoaderDataFormat.BINARY):void {
+			var loader:URLLoader = new URLLoader(new URLRequest(url));
+			loader.dataFormat = fmt;
+			loader.addEventListener(Event.COMPLETE, function(e:Event):void {
+				callback(loader.data);
 			});
 		}
 
 		public static function loadAsset(url:String, callback:Function):void {
-			var stream:URLStream = new URLStream();
 			var bytes:ByteArray = new ByteArray();
-			stream.load(new URLRequest(url));
-			stream.addEventListener(Event.COMPLETE, function(e:Event):void {
-				stream.readBytes(bytes);
+			load(url, function(bytes:ByteArray):void {
 				bytes.inflate();
 				callback(bytes);
-			})
+			});
 		}
 
 		public static function extractMirBmp(bytes:ByteArray, need_shadow:Boolean=false):MirBmp {

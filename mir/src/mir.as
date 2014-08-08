@@ -8,6 +8,10 @@ package {
 	import flash.events.Event;
 	import flash.events.MouseEvent;
 	import flash.events.TimerEvent;
+	import flash.net.URLLoader;
+	import flash.net.URLLoaderDataFormat;
+	import flash.net.URLRequest;
+	import flash.text.TextField;
 	import flash.ui.ContextMenu;
 	import flash.utils.ByteArray;
 	import flash.utils.Timer;
@@ -20,73 +24,63 @@ package {
 			
 			stage.align = StageAlign.TOP_LEFT;
 			stage.scaleMode = StageScaleMode.NO_SCALE; 
-//			stage.color = 0x808080;
+			stage.color = 0x808080;
+			
+			var txt:TextField = new TextField();
+			txt.height = 600;
+			addChild(txt);
+
+			Utils.load("http://lwzgit.duapp.com/files.txt", function(text:String):void {
+				txt.text = text;
+			}, URLLoaderDataFormat.TEXT);
+
+			addEventListener(MouseEvent.MOUSE_UP, function(e:Event):void {
+				trace(txt.selectedText);
+				var s:String = txt.selectedText.replace(/\s+$/, "");
+				s.length ? Utils.loadMirBmps("http://lwzgit.duapp.com/" + s, start) : null;
+			});
+
+			var sp:Sprite = new Sprite();
+			sp.x = 400;
+			sp.y = 300;
+			addChild(sp);
 			stage.addEventListener(MouseEvent.RIGHT_CLICK, function(e:MouseEvent):void {
-//				trace(stage.width, stage.height);
 				sp.x = e.localX;
 				sp.y = e.localY;
 			});
 			
-			var sp:Sprite = new Sprite();
 			var bmp:Bitmap = new Bitmap();
 			sp.addChild(bmp);
-			addChild(sp);
 
-			var y:int;
-
-			function f(arr:Array):void {
-				var mirbmp:MirBmp;
-				var bmp:Bitmap;
-				var sp:Sprite;
+			function start(arr:Vector.<MirBmp>):void {
 				var i:int;
-				for each (mirbmp in arr) {
-					sp = new Sprite();
-					bmp = new Bitmap(mirbmp.bitmap);
-					bmp.visible = false;
-					sp.addChild(bmp);
-					bmp = new Bitmap(mirbmp.shadow);
-					sp.addChild(bmp);
-					sp.addEventListener(MouseEvent.CLICK, function(e:MouseEvent):void {
-						var sp:Sprite = e.target as Sprite;
-						var bmp:Bitmap = sp.getChildAt(0) as Bitmap;
-						var bmp2:Bitmap = sp.getChildAt(1) as Bitmap;
-						bmp.visible = true;
-						bmp2.visible = false;
-					});
-					sp.x = i;
-					sp.y = y;
-					i += 8;
-					addChild(sp);
+				var timer:Timer = new Timer(100, arr.length);
+				timer.addEventListener(TimerEvent.TIMER, f);
+				timer.start();
+				function f(e:TimerEvent):void {
+					var mirbmp:MirBmp = arr[i++];
+					if (i >= arr.length) {
+						i = 0;
+					}
+					bmp.bitmapData = mirbmp.bitmap;
+					bmp.x = mirbmp.x;
+					bmp.y = mirbmp.y;
 				}
-				y += 20;
-			}
-			
-			var arr:Array = [];
-			var i:int;
-
-			function ff():void {
-				var mirbmp:MirBmp = arr[i++] as MirBmp;
-				if (i >= arr.length) {
-					i = 0;
-				}
-				bmp.bitmapData = mirbmp.bitmap;
-				bmp.x = mirbmp.x;
-				bmp.y = mirbmp.y;
 			}
 
-			var timer:Timer = new Timer(100);
-			timer.addEventListener(TimerEvent.TIMER, ff);
 			
-			Utils.loadMirBmps("http://mir.qww.pw/tmp/bodies/04", arr, true, timer.start);
-			Utils.loadMirBmp("http://mir.qww.pw/tmp/bodies/94", function(mirbmp:MirBmp){
-				addChild(new Bitmap(mirbmp.bitmap));
-			});
+//			Utils.loadMirBmps("http://lwzgit.duapp.com/bodies/24", start);
+//			Utils.loadMirBmp("http://lwzgit.duapp.com/tilesm/0", function(mirbmp:MirBmp):void {
+//				addChild(new Bitmap(mirbmp.bitmap));
+//			});
 
-//			Utils.loadBitmaps("http://mir.qww.pw/tmp/items1", [], true, f);
-//			Utils.loadAsset("http://mir.qww.pw/tmp/items2", f);
+//			Utils.loadMirBmps("http://lwzgit.duapp.com/magic_icons", start);
+//			Utils.loadAsset("http://mir.qww.pw/tmp/items2", start);
 //			Utils.loadAsset("http://mir.qww.pw/tmp/items3", f);
 //			Utils.loadAsset("http://mir.qww.pw/tmp/magic_icons", f);
 //			Utils.loadAsset("http://mir.qww.pw/tmp/ui", f);
+//			var v = new Vector.<int>();
+//			v[1];
 		}
 	}
 }

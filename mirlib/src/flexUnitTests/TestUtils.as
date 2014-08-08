@@ -36,15 +36,20 @@ package flexUnitTests
 		
 		[Test]
 		public function test_loadAsset():void {
-			Utils.loadAsset("http://mirsvn.duapp.com/0", function(bytes:ByteArray):void {
+			Utils.loadAsset("http://lwzgit.duapp.com/bodies/00", function(bytes:ByteArray):void {
 				assertTrue(bytes.length > 0);
 			});
 		}
 		
 		[Test]
+		public function test_trim():void {
+			assertEquals("s", Utils.trim(" s  "));
+		}
+
+		[Test]
 		public function test_loadBitmaps():void {
-			Utils.loadMirBmps("http://mirsvn.duapp.com/0", []);
-			Utils.loadMirBmp("http://mirsvn.duapp.com/0", function(x){});
+			Utils.loadMirBmps("http://lwzgit.duapp.com/bodies/00", function(x){});
+			Utils.loadMirBmp("http://lwzgit.duapp.com/bodies/00", function(x){});
 		}
 
 		[Test]
