@@ -4,8 +4,10 @@
     <classEntry path="mir.Const"/>
     <classEntry path="flexUnitTests.TestConst"/>
     <classEntry path="mir.Utils"/>
-    <classEntry path="mir.MirBmp"/>
+    <classEntry path="mir.Bmp"/>
     <classEntry path="flexUnitTests.TestUtils"/>
+    <classEntry path="mir.MirBitmapData"/>
+    <classEntry path="mir.MirBitmaps"/>
   </includeClasses>
   <includeResources/>
   <namespaceManifests/>

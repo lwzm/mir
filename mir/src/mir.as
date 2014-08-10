@@ -1,6 +1,7 @@
 package {
 	import flash.display.Bitmap;
 	import flash.display.BitmapData;
+	import flash.display.SimpleButton;
 	import flash.display.Sprite;
 	import flash.display.StageAlign;
 	import flash.display.StageScaleMode;
@@ -8,6 +9,7 @@ package {
 	import flash.events.Event;
 	import flash.events.MouseEvent;
 	import flash.events.TimerEvent;
+	import flash.filters.ColorMatrixFilter;
 	import flash.net.URLLoader;
 	import flash.net.URLLoaderDataFormat;
 	import flash.net.URLRequest;
@@ -16,7 +18,9 @@ package {
 	import flash.utils.ByteArray;
 	import flash.utils.Timer;
 	
-	import mir.MirBmp;
+	import mir.Bmp;
+	import mir.MirBitmapData;
+	import mir.MirBitmaps;
 	import mir.Utils;
 	
 	public class mir extends Sprite {
@@ -26,18 +30,24 @@ package {
 			stage.scaleMode = StageScaleMode.NO_SCALE; 
 			stage.color = 0x808080;
 			
+			var bt:SimpleButton = new CustomSimpleButton();
+			bt.x = 300;
+			bt.y = 300;
+			
 			var txt:TextField = new TextField();
 			txt.height = 600;
 			addChild(txt);
+			addChild(bt);
 
-			Utils.load("http://lwzgit.duapp.com/files.txt", function(text:String):void {
+			Utils.loadString("http://bmp.qww.pw/files.txt", function(text:String):void {
 				txt.text = text;
-			}, URLLoaderDataFormat.TEXT);
+			});
 
 			addEventListener(MouseEvent.MOUSE_UP, function(e:Event):void {
 				trace(txt.selectedText);
 				var s:String = txt.selectedText.replace(/\s+$/, "");
-				s.length ? Utils.loadMirBmps("http://lwzgit.duapp.com/" + s, start) : null;
+//				s.length ? Utils.loadMirBitmaps("http://lwzgit.duapp.com/" + s, start) : null;
+				s.length ? Utils.loadMirBitmaps("http://bmp.qww.pw/" + s, start) : null;
 			});
 
 			var sp:Sprite = new Sprite();
@@ -51,20 +61,50 @@ package {
 			
 			var bmp:Bitmap = new Bitmap();
 			sp.addChild(bmp);
+			
+			var g:Number = 0.333
+			var gray:ColorMatrixFilter = new ColorMatrixFilter([
+				g, g, g, 0, 0,
+				g, g, g, 0, 0,
+				g, g, g, 0, 0,
+				0, 0, 0, 1, 0,
+			]);
+			var highlight:ColorMatrixFilter = new ColorMatrixFilter([
+				1, 0, 0, 0, 20,
+				0, 1, 0, 0, 20,
+				0, 0, 1, 0, 20,
+				0, 0, 0, 1, 0,
+			]);
+			var green:ColorMatrixFilter = new ColorMatrixFilter([
+				0, 0, 0, 0, 0,
+				0, 1, 0, 0, 0,
+				0, 0, 0, 0, 0,
+				0, 0, 0, 1, 0,
+			]);
+			var trans:ColorMatrixFilter = new ColorMatrixFilter([
+				1, 0, 0, 0, 0,
+				0, 1, 0, 0, 0,
+				0, 0, 1, 0, 0,
+				0, 0, 0, .5, 0,
+			]);
 
-			function start(arr:Vector.<MirBmp>):void {
+			sp.filters = [trans];
+			trace(bmp.filters.length);
+			function start(arr:Array):void {
+				trace(arr.blendMode);
 				var i:int;
-				var timer:Timer = new Timer(100, arr.length);
+				var timer:Timer = new Timer(50, arr.length);
 				timer.addEventListener(TimerEvent.TIMER, f);
 				timer.start();
 				function f(e:TimerEvent):void {
-					var mirbmp:MirBmp = arr[i++];
+					bmp.blendMode = arr.blendMode;
+					var mirbmp:MirBitmapData = arr[i++];
 					if (i >= arr.length) {
 						i = 0;
 					}
-					bmp.bitmapData = mirbmp.bitmap;
-					bmp.x = mirbmp.x;
-					bmp.y = mirbmp.y;
+					bmp.bitmapData = mirbmp;
+					bmp.x = mirbmp ? mirbmp.x : 0;
+					bmp.y = mirbmp ? mirbmp.y : 0;
 				}
 			}
 
@@ -82,5 +122,41 @@ package {
 //			var v = new Vector.<int>();
 //			v[1];
 		}
+	}
+}
+import flash.display.Shape;
+import flash.display.SimpleButton;
+
+class CustomSimpleButton extends SimpleButton {
+	private var upColor:uint   = 0xFFCC00;
+	private var overColor:uint = 0xCCFF00;
+	private var downColor:uint = 0x00CCFF;
+	private var size:uint      = 80;
+	
+	public function CustomSimpleButton() {
+		downState      = new ButtonDisplayState(downColor, size);
+		overState      = new ButtonDisplayState(overColor, size);
+		upState        = new ButtonDisplayState(upColor, size);
+		hitTestState   = new ButtonDisplayState(0x0, size);
+		hitTestState.x = 0;
+		hitTestState.y = 0;
+		useHandCursor  = true;
+	}
+}
+
+class ButtonDisplayState extends Shape {
+	private var bgColor:uint;
+	private var size:uint;
+	
+	public function ButtonDisplayState(bgColor:uint, size:uint) {
+		this.bgColor = bgColor;
+		this.size    = size;
+		draw();
+	}
+	
+	private function draw():void {
+		graphics.beginFill(bgColor);
+		graphics.drawRect(0, 0, size, size);
+		graphics.endFill();
 	}
 }

@@ -2,9 +2,11 @@ package flexUnitTests
 {
 	import flash.display.Bitmap;
 	import flash.display.BitmapData;
+	import flash.display.BlendMode;
 	import flash.utils.ByteArray;
 	
-	import mir.MirBmp;
+	import mir.Bmp;
+	import mir.MirBitmaps;
 	import mir.Utils;
 	
 	import org.flexunit.asserts.assertEquals;
@@ -36,7 +38,7 @@ package flexUnitTests
 		
 		[Test]
 		public function test_loadAsset():void {
-			Utils.loadAsset("http://lwzgit.duapp.com/bodies/00", function(bytes:ByteArray):void {
+			Utils.loadDeflatedBinary("http://bmp.qww.pw/bodies/00", function(bytes:ByteArray):void {
 				assertTrue(bytes.length > 0);
 			});
 		}
@@ -48,12 +50,11 @@ package flexUnitTests
 
 		[Test]
 		public function test_loadBitmaps():void {
-			Utils.loadMirBmps("http://lwzgit.duapp.com/bodies/00", function(x){});
-			Utils.loadMirBmp("http://lwzgit.duapp.com/bodies/00", function(x){});
+//			Utils.loadMirBitmaps("http://mir.qww.pw/bodies/00", function(x):void{});
 		}
 
 		[Test]
-		public function test_extractMirBmp():void {
+		public function test_loadMirBitmaps():void {
 			var bytes:ByteArray = new ByteArray();
 			var repeat:int = 10;
 			var w:int = 4;
@@ -70,23 +71,14 @@ package flexUnitTests
 					bytes.writeByte(repeat);
 				}
 			}
+			bytes.writeByte(1);
 			bytes.deflate(); bytes.inflate();  // or bytes.position = 0;
-			var mir_bmp:MirBmp;
-			mir_bmp = Utils.extractMirBmp(bytes);
-			assertNull(mir_bmp.shadow);  // normal
-			assertEquals(mir_bmp.bitmap.width, w);
-			assertEquals(mir_bmp.bitmap.height, h);
-			assertEquals(mir_bmp.x, x);
-			assertEquals(mir_bmp.y, y);
-			mir_bmp = Utils.extractMirBmp(bytes, true);  // with shadow
-			assertNotNull(mir_bmp.shadow);
-			assertEquals(mir_bmp.bitmap.width, w);
-			assertEquals(mir_bmp.bitmap.height, h);
-			assertEquals(mir_bmp.shadow.width, w);
-			assertEquals(mir_bmp.shadow.height, h);
-			assertEquals(mir_bmp.x, x);
-			assertEquals(mir_bmp.y, y);
-			// ...
+			var bmps:Array = Utils.bytesToMirBitmaps(bytes);
+			assertEquals(bmps.blendMode, BlendMode.ADD);
+			assertEquals(bmps[0].width, w);
+			assertEquals(bmps[0].height, h);
+			assertEquals(bmps[0].x, x);
+			assertEquals(bmps[0].y, y);
 		}
 	}
 }
