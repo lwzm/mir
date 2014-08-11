@@ -12,16 +12,30 @@ angular.module("mir", ["ngRoute", ], function($routeProvider) {
     $http.get($routeParams.dir + ".json").success(function(data) {
         //console.log($routeParams);
         //console.log($location.path());
-        var n = 10;
+        var N = 10;
+        var P = 100;
+        var i, j;
         var page = $routeParams.page || 1;
         var pages = [];
-        var _len = (data.length + n - 1) / n;
-        for (var _p = 1; _p < _len; _p++) {
-            pages.push(_p);
+
+        for (i = 1; i < data[data.length - 1] / P + 1; i++) {
+            pages.push(i);
         }
-        $scope.pics = data.slice(n * (page - 1), n * page);
+
+        var src_pre = $location.path() + "/";
+        var pics_list = [];
+        for (i = (page - 1) * P; i < page * P; i += N) {
+            var pics = [];
+            for (j = i; j < i + N; j++) {
+                if (data.indexOf(j) != -1) {
+                    pics.push(src_pre + j + ".bmp");
+                }
+            }
+            pics_list.push(pics);
+        }
+
+        $scope.pics_list = pics_list;
         $scope.pages = pages;
         $scope.href_pre = "#" + $location.path() + "?page=";
-        $scope.src_pre = $location.path() + "/";
     });
 })

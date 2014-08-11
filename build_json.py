@@ -12,6 +12,6 @@ with open("dirs.json", "w") as f:
     json.dump(dirs, f, indent=0, separators=(',', ':'))
 
 for dir in dirs:
-    pics = sorted((i for i in os.listdir(dir) if i.endswith(".bmp")), key=lambda s: int(s[:-4]))
+    pics = sorted(int(i[:-4]) for i in os.listdir(dir) if i.endswith(".bmp"))
     with open(dir + ".json", "w") as f:
         json.dump(pics, f, indent=0, separators=(',', ':'))
