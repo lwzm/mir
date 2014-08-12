@@ -1,7 +1,7 @@
 package mir {
 	public final class Const {
-		public static const ASSETS_HEAD:String = "http://localhost:8100/static/assets/";
-		public static const ASSETS_TAIL:String = String(new Date().time);
+		public static const ASSETS_DOMAIN:String = "http://tmp.qww.pw/";
+		public static const ASSETS_ARGUMENT:String = String(new Date().time);
 		public static const SCREEN_W:int = 800;
 		public static const SCREEN_H:int = 600;
 		public static const TILE_W:int = 48;

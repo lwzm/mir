@@ -18,12 +18,14 @@ package {
 	import flash.utils.ByteArray;
 	import flash.utils.Timer;
 	
+	import fl.controls.ComboBox;
+	
 	import mir.Bmp;
+	import mir.Hero;
 	import mir.MirBitmapData;
 	import mir.MirBitmaps;
 	import mir.Utils;
 	
-	import fl.controls.ComboBox;
 	import org.hamcrest.SelfDescribing;
 	
 	public class mir extends Sprite {
@@ -33,6 +35,8 @@ package {
 			stage.scaleMode = StageScaleMode.NO_SCALE; 
 			stage.color = 0x808080;
 			
+			var h:Hero = new Hero();
+			addChild(h);
 			var bt:SimpleButton = new CustomSimpleButton();
 			bt.x = 300;
 			bt.y = 300;
@@ -58,8 +62,10 @@ package {
 			sp.y = 300;
 			addChild(sp);
 			stage.addEventListener(MouseEvent.RIGHT_CLICK, function(e:MouseEvent):void {
-				sp.x = e.localX;
-				sp.y = e.localY;
+//				sp.x = e.localX;
+//				sp.y = e.localY;
+				h.x = e.localX;
+				h.y = e.localY;
 			});
 			
 			var bmp:Bitmap = new Bitmap();
