@@ -23,6 +23,9 @@ package {
 	import mir.MirBitmaps;
 	import mir.Utils;
 	
+	import fl.controls.ComboBox;
+	import org.hamcrest.SelfDescribing;
+	
 	public class mir extends Sprite {
 		public function mir() {
 			
@@ -39,7 +42,7 @@ package {
 			addChild(txt);
 			addChild(bt);
 
-			Utils.loadString("http://bmp.qww.pw/files.txt", function(text:String):void {
+			Utils.loadString("http://tmp.qww.pw/files.txt", function(text:String):void {
 				txt.text = text;
 			});
 
@@ -47,7 +50,7 @@ package {
 				trace(txt.selectedText);
 				var s:String = txt.selectedText.replace(/\s+$/, "");
 //				s.length ? Utils.loadMirBitmaps("http://lwzgit.duapp.com/" + s, start) : null;
-				s.length ? Utils.loadMirBitmaps("http://bmp.qww.pw/" + s, start) : null;
+				s.length ? Utils.loadMirBitmaps("http://tmp.qww.pw/" + s, start) : null;
 			});
 
 			var sp:Sprite = new Sprite();
@@ -88,20 +91,22 @@ package {
 				0, 0, 0, .5, 0,
 			]);
 
-			sp.filters = [trans];
+//			var cb:ComboBox = new ComboBox();
+
+			sp.filters = [];
 			trace(bmp.filters.length);
 			function start(arr:Array):void {
-				trace(arr.blendMode);
 				var i:int;
 				var timer:Timer = new Timer(50, arr.length);
 				timer.addEventListener(TimerEvent.TIMER, f);
 				timer.start();
+				
 				function f(e:TimerEvent):void {
-					bmp.blendMode = arr.blendMode;
 					var mirbmp:MirBitmapData = arr[i++];
 					if (i >= arr.length) {
 						i = 0;
 					}
+					bmp.blendMode = arr.blendMode;
 					bmp.bitmapData = mirbmp;
 					bmp.x = mirbmp ? mirbmp.x : 0;
 					bmp.y = mirbmp ? mirbmp.y : 0;

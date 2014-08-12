@@ -38,7 +38,7 @@ package flexUnitTests
 		
 		[Test]
 		public function test_loadAsset():void {
-			Utils.loadDeflatedBinary("http://bmp.qww.pw/bodies/00", function(bytes:ByteArray):void {
+			Utils.loadDeflatedBinary("http://tmp.qww.pw/bodies/00", function(bytes:ByteArray):void {
 				assertTrue(bytes.length > 0);
 			});
 		}
@@ -71,10 +71,10 @@ package flexUnitTests
 					bytes.writeByte(repeat);
 				}
 			}
-			bytes.writeByte(1);
+//			bytes.writeByte(1);
 			bytes.deflate(); bytes.inflate();  // or bytes.position = 0;
 			var bmps:Array = Utils.bytesToMirBitmaps(bytes);
-			assertEquals(bmps.blendMode, BlendMode.ADD);
+//			assertEquals(bmps.blendMode, BlendMode.ADD);
 			assertEquals(bmps[0].width, w);
 			assertEquals(bmps[0].height, h);
 			assertEquals(bmps[0].x, x);

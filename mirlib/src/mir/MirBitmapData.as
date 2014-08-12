@@ -5,7 +5,7 @@ package mir {
 		public var x:int;
 		public var y:int;
 		public function MirBitmapData(width:int, height:int, x:int, y:int) {
-			super(width, height, true, 0xFF000000);
+			super(width, height, true, 0);
 			this.x = x;
 			this.y = y;
 		}
