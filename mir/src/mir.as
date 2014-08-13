@@ -21,6 +21,7 @@ package {
 	import fl.controls.ComboBox;
 	
 	import mir.Bmp;
+	import mir.Const;
 	import mir.Hero;
 	import mir.MirBitmapData;
 	import mir.MirBitmaps;
@@ -44,10 +45,15 @@ package {
 			var txt:TextField = new TextField();
 			txt.height = 600;
 			addChild(txt);
-			addChild(bt);
+//			addChild(bt);
 
-			Utils.loadString("http://tmp.qww.pw/files.txt", function(text:String):void {
+			Utils.loadString(Const.ASSETS_DOMAIN + "files.txt", function(text:String):void {
 				txt.text = text;
+			});
+
+			addEventListener(MouseEvent.CLICK, function(e:Event):void {
+				h.motion = h.motion >= 10 ? 0 : h.motion + 1;
+				trace(e);
 			});
 
 			addEventListener(MouseEvent.MOUSE_UP, function(e:Event):void {

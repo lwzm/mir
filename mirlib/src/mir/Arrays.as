@@ -13,7 +13,7 @@ package mir {
 			motion < 11;
 			direction < 8;
 			var s:String = (role * 22 + sex * 11 + motion).toString() + direction.toString(16);
-			trace(s);
+//			trace(s);
 			return gg(s, id);
 		}
 
