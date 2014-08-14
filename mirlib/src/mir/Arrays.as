@@ -13,11 +13,13 @@ package mir {
 			arr = all[name];
 			if (!arr) {
 				prepair(name);
+				return null;
 			}
-			return arr ? arr[id % arr.length] as MirBitmapData : null;
+			return arr[id % arr.length] as MirBitmapData;
 		}
 
 		public function prepair(name:String):void {
+			all[name] = [];
 			Utils.loadMirBitmaps(urlPrefix + name, function(arr:Array):void {
 				all[name] = arr;
 			});

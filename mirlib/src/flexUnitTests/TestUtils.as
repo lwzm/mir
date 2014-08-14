@@ -5,8 +5,6 @@ package flexUnitTests
 	import flash.display.BlendMode;
 	import flash.utils.ByteArray;
 	
-	import mir.Bmp;
-	import mir.MirBitmaps;
 	import mir.Utils;
 	
 	import org.flexunit.asserts.assertEquals;

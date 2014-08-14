@@ -52,27 +52,29 @@ package mir {
 		}
 
 		public function get body():uint { return _b; }
+		public function get hair():uint { return _h; }
+		public function get weapon():uint { return _w; }
+		public function get sex():uint { return _s; }
+		public function get motion():uint { return _m; }
+		public function get direction():uint { return _d; }
+
 		public function set body(body:uint):void {
 			_b = body;
 			name_body = build_name(body);
 		}
-		public function get hair():uint { return _h; }
 		public function set hair(hair:uint):void {
 			_h = hair;
 			name_hair = build_name(hair);
 		}
-		public function get weapon():uint { return _w; }
 		public function set weapon(weapon:uint):void {
 			_w = weapon;
 			name_weapon = build_name(weapon);
 		}
-		public function get sex():uint { return _s; }
 		public function set sex(sex:uint):void {
 			_s = sex;
 			rename_them();
 		}
 
-		public function get motion():uint { return _m; }
 		public function set motion(motion:uint):void {
 			_m = motion;
 			rename_them();
@@ -82,7 +84,6 @@ package mir {
 			}
 		}
 
-		public function get direction():uint { return _d; }
 		public function set direction(direction:uint):void {
 			_d = direction;
 			rename_them();

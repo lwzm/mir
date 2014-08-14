@@ -61,10 +61,11 @@ package mir {
 		private static function load(url:String, format:String, callback:Function):void {
 			var loader:URLLoader = new URLLoader(new URLRequest(url));
 			loader.dataFormat = format;
-			loader.addEventListener(Event.COMPLETE, function(e:Event):void {
-				loader.removeEventListener(Event.COMPLETE, arguments.callee);  // then, loader.hasEventListener(Event.COMPLETE) == false;
+			function f(e:Event):void {
+				loader.removeEventListener(Event.COMPLETE, f);  // trace(loader.hasEventListener(Event.COMPLETE));
 				callback(loader.data);
-			});
+			}
+			loader.addEventListener(Event.COMPLETE, f);
 		}
 
 		public static function loadString(url:String, callback:Function):void {
