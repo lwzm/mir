@@ -62,6 +62,7 @@ package mir {
 			var loader:URLLoader = new URLLoader(new URLRequest(url));
 			loader.dataFormat = format;
 			loader.addEventListener(Event.COMPLETE, function(e:Event):void {
+				loader.removeEventListener(Event.COMPLETE, arguments.callee);  // then, loader.hasEventListener(Event.COMPLETE) == false;
 				callback(loader.data);
 			});
 		}

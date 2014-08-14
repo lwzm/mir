@@ -8,27 +8,13 @@ package mir {
 			urlPrefix = Const.ASSETS_DOMAIN + category +"/";
 		}
 
-		public function ggg(role:uint, sex:uint, motion:uint, direction:uint, id:uint):MirBitmapData {
-			sex < 2;
-			motion < 11;
-			direction < 8;
-			var s:String = (role * 22 + sex * 11 + motion).toString() + direction.toString(16);
-//			trace(s);
-			return gg(s, id);
-		}
-
-		public function gg(name:String, id:uint):MirBitmapData {
-			var arr:Array = g(name);
-			return arr ? arr[id % arr.length] as MirBitmapData : null;
-		}
-
-		public function g(name:String):Array {
+		public function g(name:String, id:uint):MirBitmapData {
 			var arr:Array;
 			arr = all[name];
 			if (!arr) {
 				prepair(name);
 			}
-			return arr;
+			return arr ? arr[id % arr.length] as MirBitmapData : null;
 		}
 
 		public function prepair(name:String):void {

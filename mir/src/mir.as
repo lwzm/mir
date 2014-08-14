@@ -37,7 +37,6 @@ package {
 			stage.color = 0x808080;
 			
 			var h:Hero = new Hero();
-			addChild(h);
 			var bt:SimpleButton = new CustomSimpleButton();
 			bt.x = 300;
 			bt.y = 300;
@@ -67,6 +66,7 @@ package {
 			sp.x = 400;
 			sp.y = 300;
 			addChild(sp);
+			sp.addChild(h);
 			stage.addEventListener(MouseEvent.RIGHT_CLICK, function(e:MouseEvent):void {
 //				sp.x = e.localX;
 //				sp.y = e.localY;

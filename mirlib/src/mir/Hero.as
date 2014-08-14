@@ -1,5 +1,6 @@
 package mir {
 	import flash.display.Bitmap;
+	import flash.display.BlendMode;
 	import flash.display.Sprite;
 	import flash.events.TimerEvent;
 	import flash.utils.Timer;
@@ -8,70 +9,103 @@ package mir {
 
 		public static const delay_list:Array = [500, 100, 100, 100, 100, 100, 100, 100, 200, 100, 100];
 
-		public var body_id:uint=0;
-		public var hair_id:uint;
-		public var weapon_id:uint=11;
-		public var sex:uint=1;
-		public var frame:uint;
-
-		public var body:Bitmap;
-		public var hair:Bitmap;
-		public var weapon:Bitmap;
-
 		public var timer:Timer;
 
-		private var d:uint;
-		private var m:uint;
+		public var bmp_body:Bitmap;
+		public var bmp_hair:Bitmap;
+		public var bmp_weapon:Bitmap;
+
+		public var name_body:String;
+		public var name_hair:String;
+		public var name_weapon:String;
+
+		private var _b:uint;
+		private var _h:uint;
+		private var _w:uint;
+		private var _s:uint;
+		private var _m:uint;
+		private var _d:uint;
 
 		public function Hero() {
-			body = new Bitmap();
-			hair = new Bitmap();
-			weapon = new Bitmap();
+			blendMode = BlendMode.NORMAL;
+			bmp_body = new Bitmap();
+			bmp_hair = new Bitmap();
+			bmp_weapon = new Bitmap();
 			timer = new Timer(delay_list[0]);
+			body = 0;
+			hair = 0;
+			weapon = 0;
+			sex = 0;
 			direction = 0;
 			motion = 0;
 			timer.addEventListener(TimerEvent.TIMER, function(e:TimerEvent):void {
-				frame++;
-				update();
+				var mirbmp:MirBitmapData;
+				var n:uint = timer.currentCount;
+				mirbmp = Res.bodies.g(name_body, n);
+				mirbmp ? mirbmp.to(bmp_body) : null;
+				mirbmp = hair ? Res.hairs.g(name_hair, n) : null;
+				mirbmp ? mirbmp.to(bmp_hair) : null;
+				mirbmp = weapon ? Res.weapons.g(name_weapon, n) : null;
+				mirbmp ? mirbmp.to(bmp_weapon) : null;
 			});
 			timer.start();
 		}
 
-		public function get motion():uint {
-			return m;
+		public function get body():uint { return _b; }
+		public function set body(body:uint):void {
+			_b = body;
+			name_body = build_name(body);
 		}
+		public function get hair():uint { return _h; }
+		public function set hair(hair:uint):void {
+			_h = hair;
+			name_hair = build_name(hair);
+		}
+		public function get weapon():uint { return _w; }
+		public function set weapon(weapon:uint):void {
+			_w = weapon;
+			name_weapon = build_name(weapon);
+		}
+		public function get sex():uint { return _s; }
+		public function set sex(sex:uint):void {
+			_s = sex;
+			rename_them();
+		}
+
+		public function get motion():uint { return _m; }
 		public function set motion(motion:uint):void {
-			m = motion;
+			_m = motion;
+			rename_them();
 			var delay:uint = delay_list[motion];
 			if (timer.delay != delay) {
 				timer.delay = delay;
 			}
 		}
 
-		public function get direction():uint {
-			return d;
-		}
+		public function get direction():uint { return _d; }
 		public function set direction(direction:uint):void {
-			d = direction;
+			_d = direction;
+			rename_them();
 			if (direction >= 1 && direction <= 4) {
-				addChild(body);
-				addChild(hair);
-				addChild(weapon);
+				addChild(bmp_body);
+				addChild(bmp_hair);
+				addChild(bmp_weapon);
 			} else {
-				addChild(weapon);
-				addChild(body);
-				addChild(hair);
+				addChild(bmp_weapon);
+				addChild(bmp_body);
+				addChild(bmp_hair);
 			}
 		}
 
-		public function update():void {
-			var mirbmp:MirBitmapData;
-			mirbmp = Res.bodies.ggg(body_id, sex, motion, d, frame);
-			mirbmp ? mirbmp.to(body) : null;
-			mirbmp = hair_id ? Res.hairs.ggg(hair_id, sex, motion, d, frame) : null;
-			mirbmp ? mirbmp.to(hair) : null;
-			mirbmp = weapon_id ? Res.weapons.ggg(weapon_id, sex, motion, d, frame) : null;
-			mirbmp ? mirbmp.to(weapon) : null;
+		private function rename_them():void {
+			name_body = build_name(body);
+			name_hair = build_name(hair);
+			name_weapon = build_name(weapon);
+		}
+
+		private function build_name(x:uint):String {
+			/* _s < 2; _m < 11; _d < 8; */
+			return (x * 22 + _s * 11 + _m).toString() + _d.toString(16);
 		}
 		
 	}
