@@ -1,5 +1,8 @@
 package mir {
+	import flash.utils.Dictionary;
+
 	public class Arrays {
+		public static const dummy:Array = [null]; 
 		public var all:Object; 
 		public var urlPrefix:String; 
 		public function Arrays(category:String, dummy:Boolean=false) {
@@ -8,18 +11,16 @@ package mir {
 			urlPrefix = Const.ASSETS_DOMAIN + category +"/";
 		}
 
-		public function g(name:String, id:uint):MirBitmapData {
+		public function g(name:String):Array {
 			var arr:Array;
-			arr = all[name];
-			if (!arr) {
+			if (!all[name]) {
 				prepair(name);
-				return null;
 			}
-			return arr[id % arr.length] as MirBitmapData;
+			return all[name];
 		}
 
 		public function prepair(name:String):void {
-			all[name] = [];
+			all[name] = dummy;
 			Utils.loadMirBitmaps(urlPrefix + name, function(arr:Array):void {
 				all[name] = arr;
 			});

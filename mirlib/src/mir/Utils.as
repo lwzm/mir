@@ -1,4 +1,5 @@
 package mir {
+	import flash.display.Bitmap;
 	import flash.display.BitmapData;
 	import flash.display.BitmapDataChannel;
 	import flash.display.BlendMode;
@@ -18,6 +19,16 @@ package mir {
 
 		public static function trim(str:String):String {
 			return str.replace(/^\s+/, "").replace(/\s+$/, "");
+		}
+
+		public static function copyMirBitmapDataToBitmap(mirbmp:MirBitmapData, bmp:Bitmap):void {
+			if (mirbmp) {
+				bmp.bitmapData = mirbmp;
+				bmp.x = mirbmp.x;
+				bmp.y = mirbmp.y;
+			} else {
+				bmp.bitmapData = null;
+			}
 		}
 
 		public static function bytesToMirBitmapData(bytes:ByteArray):MirBitmapData {

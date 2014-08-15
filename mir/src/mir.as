@@ -14,6 +14,7 @@ package {
 	import mir.Const;
 	import mir.Hero;
 	import mir.MirBitmapData;
+	import mir.Res;
 	import mir.Utils;
 	
 	
@@ -35,33 +36,39 @@ package {
 				txt.text = text;
 			});
 
-			addEventListener(MouseEvent.CLICK, function(e:Event):void {
-				h.motion = h.motion >= 10 ? 0 : h.motion + 1;
-				trace(e);
-			});
+			function count(o:*):int {
+				var i:int;
+				for (var k in o) i++;
+				return i;
+			}
+//			addEventListener(MouseEvent.CLICK, function(e:Event):void {
+//				h.motion = h.motion >= 10 ? 0 : h.motion + 1;
+//				trace(count(Res.bodies.all))
+//				trace(e);
+//			});
 
 			var sp:Sprite = new Sprite();
 			sp.x = 0;
 			sp.y = 0;
 			addChild(sp);
 			sp.addChild(h);
-			for (var i:int = 0; i < 1000; i++) {
+			for (var i:int = 0; i < 100; i++) {
 				var hh:Hero = new Hero();
-				hh.x = (i % 50) * 30;
-				hh.y = (i / 50) * 40;
+				hh.x = Math.random() * 1800;
+				hh.y = Math.random() * 900;
 				hh.hair=2;
-				hh.sex=Math.random() * 2;
+				hh.sex = Math.random() * 2;
 				hh.direction = Math.random() * 8;
 				hh.body = Math.random() * 6;
-				hh.weapon = Math.random() * 30;
+				hh.weapon = Math.random() * 25;
 				hh.motion = Math.random() * 11;
 				sp.addChild(hh);
 			}
 			
-			stage.addEventListener(MouseEvent.RIGHT_CLICK, function(e:MouseEvent):void {
-				sp.x = e.localX;
-				sp.y = e.localY;
-			});
+//			stage.addEventListener(MouseEvent.RIGHT_CLICK, function(e:MouseEvent):void {
+//				sp.x = e.localX;
+//				sp.y = e.localY;
+//			});
 		}
 	}
 }
