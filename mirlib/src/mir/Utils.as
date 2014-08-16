@@ -53,13 +53,16 @@ package mir {
 
 		public static function bytesToMirBitmaps(bytes:ByteArray):Array {
 			const bmps:Array = [];
-			var flag:uint;
 			while (bytes.bytesAvailable > 1) {
 				bmps.push(bytesToMirBitmapData(bytes));
 			}
-			flag = bytes.bytesAvailable ? bytes.readUnsignedByte() : 0x00;
-			bmps.blendMode = flag && 0x01 ? BlendMode.ADD : BlendMode.NORMAL;
 			return bmps;
+		}
+
+		public static function loadMirBitmap(url:String, callback:Function):void {
+			loadDeflatedBinary(url, function(bytes:ByteArray):void {
+				callback(bytesToMirBitmapData(bytes));
+			});
 		}
 
 		public static function loadMirBitmaps(url:String, callback:Function):void {
@@ -81,6 +84,13 @@ package mir {
 
 		public static function loadString(url:String, callback:Function):void {
 			load(url, URLLoaderDataFormat.TEXT, callback);
+		}
+
+		public static function loadBinary(url:String, callback:Function):void {
+			var bytes:ByteArray = new ByteArray();
+			load(url, URLLoaderDataFormat.BINARY, function(bytes:ByteArray):void {
+				callback(bytes);
+			});
 		}
 
 		public static function loadDeflatedBinary(url:String, callback:Function):void {

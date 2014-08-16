@@ -9,7 +9,8 @@ package mir {
 
 	public class Hero extends Sprite {
 
-		public static const delay_list:Array = [500, 100, 100, 100, 100, 100, 100, 100, 200, 100, 150];
+		public static const delaies:Array = [500, 100, 100, 100, 100, 100, 100, 100, 200, 100, 150];
+		public static const mirbmp_default:Array = [null];
 		public static const motion_default:int = 0;
 
 		public var timer:Timer;
@@ -33,14 +34,13 @@ package mir {
 
 		private var filters_record:Object;
 		private var animation_index:int;
-		private var count:int;
 
 		public function Hero() {
 			blendMode = BlendMode.NORMAL;
 			bmp_body = new Bitmap();
 			bmp_hair = new Bitmap();
 			bmp_weapon = new Bitmap();
-			timer = new Timer(delay_list[0]);
+			timer = new Timer(delaies[0]);
 			filters_record = {};
 			body = 0;
 			hair = 0;
@@ -73,8 +73,8 @@ package mir {
 		private function timer_task(e:TimerEvent):void {
 			var arr_b:Array, arr_h:Array, arr_w:Array;
 			arr_b = Res.bodies.g(name_body);
-			arr_h = _h ? Res.hairs.g(name_hair) : [];
-			arr_w = _w ? Res.weapons.g(name_weapon) : [];
+			arr_h = _h ? Res.hairs.g(name_hair) : mirbmp_default;
+			arr_w = _w ? Res.weapons.g(name_weapon) : mirbmp_default;
 			Utils.copyMirBitmapDataToBitmap(arr_b[animation_index] as MirBitmapData, bmp_body);
 			Utils.copyMirBitmapDataToBitmap(arr_h[animation_index] as MirBitmapData, bmp_hair);
 			Utils.copyMirBitmapDataToBitmap(arr_w[animation_index] as MirBitmapData, bmp_weapon);
@@ -96,42 +96,42 @@ package mir {
 		public function get motion():int { return _m; }
 		public function get direction():int { return _d; }
 
-		public function set body(body:int):void {
-			_b = body;
-			name_body = build_name(body);
+		public function set body(b:int):void {
+			_b = b;
+			name_body = build_name(b);
 		}
-		public function set hair(hair:int):void {
-			_h = hair;
-			name_hair = build_name(hair);
+		public function set hair(h:int):void {
+			_h = h;
+			name_hair = build_name(h);
 		}
-		public function set weapon(weapon:int):void {
-			_w = weapon;
-			name_weapon = build_name(weapon);
+		public function set weapon(w:int):void {
+			_w = w;
+			name_weapon = build_name(w);
 		}
-		public function set sex(sex:int):void {
-			_s = sex;
+		public function set sex(s:int):void {
+			_s = s;
 			rename_them();
 		}
 
-		public function set motion(motion:int):void {
+		public function set motion(m:int):void {
 			if (_m != motion_default && _m_lock) {
-				_m_todo = motion;
+				_m_todo = m;
 			} else {
 				animation_index = 0;
 				_m_lock = true;
-				_m = motion;
+				_m = m;
 				rename_them();
-				var delay:int = delay_list[motion];
+				var delay:int = delaies[m];
 				if (timer.delay != delay) {
 					timer.delay = delay;
 				}
 			}
 		}
 
-		public function set direction(direction:int):void {
-			_d = direction;
+		public function set direction(d:int):void {
+			_d = d;
 			rename_them();
-			if (direction >= 1 && direction <= 4) {
+			if (d >= 1 && d <= 4) {
 				addChild(bmp_body);
 				addChild(bmp_hair);
 				addChild(bmp_weapon);
