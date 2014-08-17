@@ -1,4 +1,6 @@
 package  {
+	import com.hexagonstar.util.debug.Debug;
+	
 	import flash.display.Bitmap;
 	import flash.display.Sprite;
 	import flash.events.KeyboardEvent;
@@ -34,6 +36,7 @@ package  {
 			timer.addEventListener(TimerEvent.TIMER, timer_task);
 			timer.start();
 			addEventListener(MouseEvent.CLICK, function(e:MouseEvent):void {
+				Debug.mark();
 				map_x++;
 				map_y++;
 				update();
@@ -57,7 +60,6 @@ package  {
 		}
 
 		private function timer_task(e:TimerEvent):void {
-			trace(10);
 			update();
 		}
 	}

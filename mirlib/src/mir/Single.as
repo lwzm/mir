@@ -9,7 +9,7 @@ package mir {
 			urlPrefix = Const.ASSETS_DOMAIN + category +"/";
 		}
 		
-		public function g(name:String):* {
+		public function g(name:String):MirBitmapData {
 			if (!all[name]) {
 				prepair(name);
 			}

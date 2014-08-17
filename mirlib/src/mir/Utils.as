@@ -12,8 +12,6 @@ package mir {
 	import flash.net.URLStream;
 	import flash.utils.ByteArray;
 	
-	import org.flexunit.asserts.assertFalse;
-	
 
 	public class Utils {
 
