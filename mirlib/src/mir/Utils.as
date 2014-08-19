@@ -3,7 +3,9 @@ package mir {
 	import flash.display.BitmapData;
 	import flash.display.BitmapDataChannel;
 	import flash.display.BlendMode;
+	import flash.events.ErrorEvent;
 	import flash.events.Event;
+	import flash.events.IOErrorEvent;
 	import flash.geom.Point;
 	import flash.geom.Rectangle;
 	import flash.net.URLLoader;
@@ -13,7 +15,7 @@ package mir {
 	import flash.utils.ByteArray;
 	
 
-	public class Utils {
+	public final class Utils {
 
 		public static function trim(str:String):String {
 			return str.replace(/^\s+/, "").replace(/\s+$/, "");
@@ -29,7 +31,7 @@ package mir {
 			}
 		}
 
-		public static function bytesToMirBitmapData(bytes:ByteArray):MirBitmapData {
+		private static function bytesToMirBitmapData(bytes:ByteArray):MirBitmapData {
 			var data:MirBitmapData;
 			var w:int, h:int, x:int, y:int;
 			var iw:int, ih:int, color:uint;
@@ -78,6 +80,12 @@ package mir {
 				callback(loader.data);
 			}
 			loader.addEventListener(Event.COMPLETE, f);
+			loader.addEventListener(IOErrorEvent.IO_ERROR, loadOnError);
+		}
+
+		private static function loadOnError(e:ErrorEvent):void {
+			trace(e);
+			(e.target as URLLoader).removeEventListener(IOErrorEvent.IO_ERROR, loadOnError);
 		}
 
 		public static function loadString(url:String, callback:Function):void {

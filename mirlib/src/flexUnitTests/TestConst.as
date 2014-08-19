@@ -1,6 +1,8 @@
 package flexUnitTests
 {
 	
+	import flash.events.IOErrorEvent;
+	
 	import mir.Const;
 	
 	import org.flexunit.asserts.assertEquals;

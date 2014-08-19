@@ -1,6 +1,6 @@
 package mir {
 
-	public class Multiple {
+	public final class Multiple {
 		public static const dummy:Array = [null]; 
 		public var all:Object; 
 		public var urlPrefix:String; 

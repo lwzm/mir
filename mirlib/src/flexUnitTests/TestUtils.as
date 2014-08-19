@@ -39,6 +39,9 @@ package flexUnitTests
 			Utils.loadDeflatedBinary("http://tmp.qww.pw/bodies/00", function(bytes:ByteArray):void {
 				assertTrue(bytes.length > 0);
 			});
+			Utils.loadDeflatedBinary("http://tmp.qww.pw/not_exist", function(bytes:ByteArray):void {
+				trace("loaded");
+			});
 		}
 		
 		[Test]

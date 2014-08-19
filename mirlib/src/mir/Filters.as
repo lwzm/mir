@@ -1,7 +1,7 @@
 package mir {
 	import flash.filters.ColorMatrixFilter;
 
-	public class Filters {
+	public final class Filters {
 		public static const highlight:ColorMatrixFilter = new ColorMatrixFilter([
 			1, 0, 0, 0, 30,
 			0, 1, 0, 0, 30,

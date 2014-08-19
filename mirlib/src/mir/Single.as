@@ -1,5 +1,5 @@
 package mir {
-	public class Single {
+	public final class Single {
 		public static const dummy:Array = null;  // dummy 用于临时顶替显示
 		public var all:Object; 
 		public var urlPrefix:String; 

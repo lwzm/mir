@@ -1,7 +1,7 @@
 package {
 	import flash.utils.ByteArray;
 
-	public class StructGround {
+	public final class StructGround {
 		public var w:int;
 		public var h:int;
 		public var tiles:Vector.<int>;

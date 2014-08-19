@@ -6,6 +6,7 @@ package  {
 	import flash.events.KeyboardEvent;
 	import flash.events.MouseEvent;
 	import flash.events.TimerEvent;
+	import flash.geom.Point;
 	import flash.utils.ByteArray;
 	import flash.utils.Timer;
 	
@@ -13,11 +14,12 @@ package  {
 	import mir.Res;
 	import mir.Utils;
 	
-	public class Ground extends Sprite {
+	public final class Ground extends Sprite {
 		public var struct:StructGround;
 		public var timer:Timer;
-		public var map_x:int;
-		public var map_y:int;
+
+		private var mapX:int;
+		private var mapY:int;
 
 		public function Ground() {
 			Utils.loadBinary(Const.ASSETS_DOMAIN + "ground.bin", f);
@@ -36,10 +38,23 @@ package  {
 			timer.addEventListener(TimerEvent.TIMER, timer_task);
 			timer.start();
 			addEventListener(MouseEvent.CLICK, function(e:MouseEvent):void {
-				Debug.mark();
-				map_x++;
-				map_y++;
+				mapX++;
 				update();
+			});
+			addEventListener(MouseEvent.RIGHT_CLICK, function(e:MouseEvent):void {
+				var t:Timer = new Timer(100, 6);
+				t.addEventListener(TimerEvent.TIMER, function(e:TimerEvent):void {
+					if (t.currentCount != t.repeatCount) {
+						y -= 64/6;
+						Debug.trace(y);
+					}
+				});
+				t.addEventListener(TimerEvent.TIMER_COMPLETE, function(e:TimerEvent):void {
+					y = 0;
+					mapY++;
+					update();
+				});
+				t.start();
 			});
 		}
 
@@ -54,7 +69,7 @@ package  {
 			var i:int;
 			for (h = 0; h < 6; h++) {
 				for (w = 0; w < 8; w++) {
-					(getChildAt(i++) as Bitmap).bitmapData = Res.tiles.g(struct.g(w+map_x, h+map_y));
+					(getChildAt(i++) as Bitmap).bitmapData = Res.tiles.g(struct.g(w+mapX, h+mapY));
 				}
 			}
 		}
