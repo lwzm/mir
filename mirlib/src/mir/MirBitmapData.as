@@ -10,10 +10,5 @@ package mir {
 			this.x = x;
 			this.y = y;
 		}
-		public function to(bmp:Bitmap):void {
-			bmp.bitmapData = this;
-			bmp.x = x;
-			bmp.y = y;
-		}
 	}
 }

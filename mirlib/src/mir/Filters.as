@@ -3,9 +3,9 @@ package mir {
 
 	public final class Filters {
 		public static const highlight:ColorMatrixFilter = new ColorMatrixFilter([
-			1, 0, 0, 0, 30,
-			0, 1, 0, 0, 30,
-			0, 0, 1, 0, 30,
+			1, 0, 0, 0, 25,
+			0, 1, 0, 0, 25,
+			0, 0, 1, 0, 25,
 			0, 0, 0, 1, 0,
 		]);
 		public static const translucent:ColorMatrixFilter = new ColorMatrixFilter([

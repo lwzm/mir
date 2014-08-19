@@ -30,16 +30,15 @@ package {
 //			addChild(new Ground());
 
 			var arr = [];
-			for (var i:int = 0; i < 100; i++) {
+			for (var i:int = 0; i < 1; i++) {
 				var h:Hero = new Hero();
-				h.x = Math.random() * 800;
-				h.y = Math.random() * 600;
+				h.x = 0*Math.random() * 800;
+				h.y = 600//Math.random() * 600;
 				h.hair=2;
-				h.sex = Math.random() * 2;
-				h.direction = Math.random() * 8;
-				h.body = Math.random() * 6;
-				h.weapon = Math.random() * 25;
-				h.motion = Math.random() * 11;
+				h.sex = 0//Math.random() * 2;
+				h.direction = 0//Math.random() * 8;
+				h.body = 0//Math.random() * 6;
+				h.weapon = 25//Math.random() * 25;
 				addChild(h);
 				arr.push(h);
 //				addChild(h.shadow);
