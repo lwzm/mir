@@ -65,8 +65,7 @@ package  {
 		
 		private function update():void {
 			if (!struct) return
-			var w:int, h:int;
-			var i:int;
+			var w:int, h:int, i:int;
 			for (h = 0; h < 6; h++) {
 				for (w = 0; w < 8; w++) {
 					(getChildAt(i++) as Bitmap).bitmapData = Res.tiles.g(struct.g(w+mapX, h+mapY));
@@ -75,7 +74,14 @@ package  {
 		}
 
 		private function timer_task(e:TimerEvent):void {
-			update();
+			var w:int, h:int, i:int;
+			var bmp:Bitmap;
+			for (h = 0; h < 6; h++) {
+				for (w = 0; w < 8; w++) {
+					bmp = getChildAt(i++) as Bitmap;
+					bmp.bitmapData ? null : bmp.bitmapData = Res.tiles.g(struct.g(w+mapX, h+mapY));
+				}
+			}
 		}
 	}
 }

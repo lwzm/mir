@@ -10,7 +10,6 @@ package mir {
 	public final class Hero extends Sprite {
 
 		public static const DELAIES:Array = [500, 100, 100, 100, 100, 100, 100, 100, 200, 100, 150];
-		public static const MIRBMP_DEFAULT:Array = [null];
 		public static const MOTION_DEFAULT:int = 0;
 
 		public var timer:Timer;
@@ -31,10 +30,10 @@ package mir {
 		public var nameHair:String;
 		public var nameWeapon:String;
 		
-		public var deltaX:Number = 0;
-		public var deltaY:Number = 0;
-		private var _delta_x:Number = 0;
-		private var _delta_y:Number = 0;
+		public var deltaX:int;
+		public var deltaY:int;
+		private var stepsX:Array;
+		private var stepsY:Array;
 
 		private var _b:int;
 		private var _h:int;
@@ -77,10 +76,10 @@ package mir {
 //				deltaX = 48;
 			});
 			hitArea.addEventListener(MouseEvent.RIGHT_CLICK, function(e:MouseEvent):void {
-//				motion = 2;
-//				deltaY = -64;
-				direction = (direction+1) % 8;
-				motion = 0;
+				motion = 2;
+				deltaY = -64;
+//				direction = (direction+1) % 8;
+//				motion = 0;
 			});
 			hitArea.addEventListener(MouseEvent.MOUSE_OVER, function(e:MouseEvent):void {
 				addFilter("highlight");
@@ -114,12 +113,27 @@ package mir {
 
 		private function update():void {
 			if (aniIdx == 0) {
+				switch_delay();
+				switch_layers();
 				arrBody = Res.bodies.g(nameBody);
-				arrHair = _h ? Res.hairs.g(nameHair) : MIRBMP_DEFAULT;
-				arrWeapon = _w ? Res.weapons.g(nameWeapon) : MIRBMP_DEFAULT;
+				arrHair = _h ? Res.hairs.g(nameHair) : Multiple.dummy;
+				arrWeapon = _w ? Res.weapons.g(nameWeapon) : Multiple.dummy;
 				arrLength = Math.max(arrBody.length, arrHair.length, arrWeapon.length);
-				_delta_x = deltaX / arrLength;
-				_delta_y = deltaY / arrLength;
+				var delta:Number, start:Number;
+				if (deltaX) {
+					delta = deltaX / arrLength;
+					start = Math.round(x);
+					stepsX = Utils.range(start + delta, start + deltaX, delta);
+				} else {
+					stepsX = null;
+				}
+				if (deltaY) {
+					delta = deltaY / arrLength;
+					start = Math.round(y);
+					stepsY = Utils.range(start + delta, start + deltaY, delta);
+				} else {
+					stepsY = null;
+				}
 				deltaX = deltaY = 0;
 			}
 			var b:MirBitmapData = arrBody[aniIdx] as MirBitmapData;
@@ -131,13 +145,13 @@ package mir {
 			Utils.copyMirBitmapDataToBitmap(b, bmpBodyShadow);
 			Utils.copyMirBitmapDataToBitmap(h, bmpHairShadow);
 			Utils.copyMirBitmapDataToBitmap(w, bmpWeaponShadow);
-			x += _delta_x;
-			y += _delta_y;
+			stepsX ? x = stepsX[aniIdx] : null;
+			stepsY ? y = stepsY[aniIdx] : null;
 			if (++aniIdx >= arrLength) {
-				_delta_x = _delta_y = 0;
 				_m = _m_todo;
 				_m_todo = MOTION_DEFAULT;
-				swc();
+				aniIdx = 0;
+				renameThem();
 			}
 		}
 
@@ -180,7 +194,10 @@ package mir {
 		public function set motion(m:int):void {
 			if (_m == MOTION_DEFAULT) {
 				_m = m;
-				swc();
+				aniIdx = 0;
+				switch_delay();
+				switch_layers();
+				renameThem();
 			} else {
 				_m_todo = m;
 			}
@@ -190,12 +207,13 @@ package mir {
 			_d_todo = d;
 		}
 		
-		private function swc():void {
-			aniIdx = 0;
+		private function switch_delay():void {
 			var delay:int = DELAIES[_m];
 			if (timer.delay != delay) {
 				timer.delay = delay;
 			}
+		}
+		private function switch_layers():void {
 			if (_d != _d_todo) {
 				var w0:Boolean = isUp(_d);
 				var w1:Boolean = isUp(_d_todo);
@@ -204,7 +222,6 @@ package mir {
 				}
 				_d = _d_todo;
 			}
-			renameThem();
 		}
 
 		private function renameThem():void {

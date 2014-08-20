@@ -21,6 +21,24 @@ package mir {
 			return str.replace(/^\s+/, "").replace(/\s+$/, "");
 		}
 
+		public static function range(start:Number, stop:Number, step:Number=1):Array {
+			var arr:Array = [];
+			if (start < stop) {
+				stop += 0.01;
+				while (start < stop) {
+					arr.push(start);
+					start += step;
+				}
+			} else {
+				stop -= 0.01;
+				while (start > stop) {
+					arr.push(start);
+					start += step;
+				}
+			}
+			return arr;
+		}
+
 		public static function copyMirBitmapDataToBitmap(mirbmp:MirBitmapData, bmp:Bitmap):void {
 			if (mirbmp) {
 				bmp.bitmapData = mirbmp;

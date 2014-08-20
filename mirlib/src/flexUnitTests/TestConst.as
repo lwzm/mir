@@ -2,6 +2,7 @@ package flexUnitTests
 {
 	
 	import flash.events.IOErrorEvent;
+	import flash.text.TextField;
 	
 	import mir.Const;
 	

@@ -12,6 +12,7 @@ package {
 	import flash.events.TimerEvent;
 	import flash.filters.ColorMatrixFilter;
 	import flash.text.TextField;
+	import flash.utils.ByteArray;
 	import flash.utils.Timer;
 	import flash.utils.describeType;
 	
@@ -27,7 +28,7 @@ package {
 			stage.align = StageAlign.TOP_LEFT;
 			stage.scaleMode = StageScaleMode.NO_SCALE; 
 
-//			addChild(new Ground());
+			addChild(new Ground());
 
 			var arr = [];
 			for (var i:int = 0; i < 1; i++) {
