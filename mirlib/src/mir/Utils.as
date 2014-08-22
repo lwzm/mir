@@ -39,6 +39,14 @@ package mir {
 			return arr;
 		}
 
+		public static function steps(start:Number, stop:Number, delta:Number):Array {
+			return range(start + delta, stop, delta).map(round);
+		}
+		
+		private static function round(item:Number, index:int, array:Array):int {
+			return Math.round(item);
+		}
+
 		public static function copyMirBitmapDataToBitmap(mirbmp:MirBitmapData, bmp:Bitmap):void {
 			if (mirbmp) {
 				bmp.bitmapData = mirbmp;
@@ -49,7 +57,7 @@ package mir {
 			}
 		}
 
-		private static function bytesToMirBitmapData(bytes:ByteArray):MirBitmapData {
+		public static function bytesToMirBitmapData(bytes:ByteArray):MirBitmapData {
 			var data:MirBitmapData;
 			var w:int, h:int, x:int, y:int;
 			var iw:int, ih:int, color:uint;

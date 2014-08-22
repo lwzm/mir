@@ -74,6 +74,7 @@ package  {
 		}
 
 		private function timer_task(e:TimerEvent):void {
+			if (!struct) return
 			var w:int, h:int, i:int;
 			var bmp:Bitmap;
 			for (h = 0; h < 6; h++) {

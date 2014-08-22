@@ -1,37 +1,37 @@
 package {
 	import com.hexagonstar.util.debug.Debug;
 	
-	import flash.display.Bitmap;
-	import flash.display.BitmapData;
-	import flash.display.SimpleButton;
 	import flash.display.Sprite;
 	import flash.display.StageAlign;
 	import flash.display.StageScaleMode;
-	import flash.events.Event;
-	import flash.events.MouseEvent;
-	import flash.events.TimerEvent;
-	import flash.filters.ColorMatrixFilter;
-	import flash.text.TextField;
-	import flash.utils.ByteArray;
-	import flash.utils.Timer;
-	import flash.utils.describeType;
 	
-	import mir.Const;
 	import mir.Hero;
-	import mir.Utils;
+	import mir.Res;
 	
 	[SWF(width="800", height="600", backgroundColor="#808080", frameRate="60")]
 	public class mir extends Sprite {
 
 		public function mir() {
+			initStage();
+			addChild(new Ground());
+			initHeroes();
+//			b();
+		}
+		
+		private function b():void {
+//			var v:ByteArray = new Embed.bodies._00;
+//			Debug.trace(v.length);
+		}
+
+		private function initStage():void {
 			Debug.monitor(stage);
 			stage.align = StageAlign.TOP_LEFT;
 			stage.scaleMode = StageScaleMode.NO_SCALE; 
+		}
 
-			addChild(new Ground());
-
+		public function initHeroes():void {
 			var arr = [];
-			for (var i:int = 0; i < 1; i++) {
+			for (var i:int = 0; i < 5; i++) {
 				var h:Hero = new Hero();
 				h.x = 0*Math.random() * 800;
 				h.y = 600//Math.random() * 600;
@@ -49,6 +49,9 @@ package {
 			}
 			for each (var v in arr) {
 				addChild(v.hitArea);
+			}
+			for (i=0;i<8;i++) {
+				Res.bodies.g('0'+i);
 			}
 		}
 	}

@@ -73,13 +73,13 @@ package mir {
 			
 			hitArea.addEventListener(MouseEvent.CLICK, function(e:MouseEvent):void {
 				motion = 1;
-//				deltaX = 48;
+				deltaX = 48;
 			});
 			hitArea.addEventListener(MouseEvent.RIGHT_CLICK, function(e:MouseEvent):void {
-				motion = 2;
-				deltaY = -64;
-//				direction = (direction+1) % 8;
-//				motion = 0;
+//				motion = 2;
+//				deltaY = -64;
+				direction = (direction+1) % 8;
+				motion = 0;
 			});
 			hitArea.addEventListener(MouseEvent.MOUSE_OVER, function(e:MouseEvent):void {
 				addFilter("highlight");
@@ -92,7 +92,7 @@ package mir {
 		}
 
 		public function addFilter(name:String):void {
-			if (name in filtersRecord)
+			if (filtersRecord[name])
 				return
 			var arr:Array = filters;
 			filtersRecord[name] = arr.length;
@@ -104,36 +104,19 @@ package mir {
 			shadow.filters = filters = filters.filter(function(item:*, index:int, array:Array):Boolean {
 				return index !== filtersRecord[name];
 			});
-			delete filtersRecord[name];
+			filtersRecord[name] = null;
 		}
 
 		private function timer_task(e:TimerEvent):void {
-			update();
-		}
-
-		private function update():void {
 			if (aniIdx == 0) {
 				switch_delay();
 				switch_layers();
 				arrBody = Res.bodies.g(nameBody);
-				arrHair = _h ? Res.hairs.g(nameHair) : Multiple.dummy;
-				arrWeapon = _w ? Res.weapons.g(nameWeapon) : Multiple.dummy;
-				arrLength = Math.max(arrBody.length, arrHair.length, arrWeapon.length);
-				var delta:Number, start:Number;
-				if (deltaX) {
-					delta = deltaX / arrLength;
-					start = Math.round(x);
-					stepsX = Utils.range(start + delta, start + deltaX, delta);
-				} else {
-					stepsX = null;
-				}
-				if (deltaY) {
-					delta = deltaY / arrLength;
-					start = Math.round(y);
-					stepsY = Utils.range(start + delta, start + deltaY, delta);
-				} else {
-					stepsY = null;
-				}
+				arrHair = _h ? Res.hairs.g(nameHair) : RemoteMultiple.dummy;
+				arrWeapon = _w ? Res.weapons.g(nameWeapon) : RemoteMultiple.dummy;
+				arrLength = arrBody.length;//Math.max(arrBody.length, arrHair.length, arrWeapon.length);
+				stepsX = deltaX ? Utils.steps(x, x + deltaX, deltaX / arrLength) : null;
+				stepsY = deltaY ? Utils.steps(y, y + deltaY, deltaY / arrLength) : null;
 				deltaX = deltaY = 0;
 			}
 			var b:MirBitmapData = arrBody[aniIdx] as MirBitmapData;
@@ -208,11 +191,12 @@ package mir {
 		}
 		
 		private function switch_delay():void {
-			var delay:int = DELAIES[_m];
+			var delay:Number = DELAIES[_m];
 			if (timer.delay != delay) {
 				timer.delay = delay;
 			}
 		}
+
 		private function switch_layers():void {
 			if (_d != _d_todo) {
 				var w0:Boolean = isUp(_d);

@@ -1,8 +1,8 @@
 package mir {
 	public final class Res {
-		public static const bodies:Multiple = new Multiple("bodies");
-		public static const hairs:Multiple = new Multiple("hairs");
-		public static const weapons:Multiple = new Multiple("weapons");
-		public static const tiles:Single = new Single("tiles");
+		public static const bodies:RemoteMultiple = new RemoteMultiple("bodies");
+		public static const hairs:RemoteMultiple = new RemoteMultiple("hairs");
+		public static const weapons:RemoteMultiple = new RemoteMultiple("weapons");
+		public static const tiles:RemoteSingle = new RemoteSingle("tiles");
 	}
 }

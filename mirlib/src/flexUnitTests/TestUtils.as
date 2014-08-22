@@ -36,12 +36,12 @@ package flexUnitTests
 		
 		[Test]
 		public function test_loadAsset():void {
-			Utils.loadDeflatedBinary("http://tmp.qww.pw/bodies/00", function(bytes:ByteArray):void {
+			Utils.loadDeflatedBinary("http://tmp.qww.pw/../../data/bodies/00", function(bytes:ByteArray):void {
 				assertTrue(bytes.length > 0);
 			});
-//			Utils.loadDeflatedBinary("http://tmp.qww.pw/not_exist", function(bytes:ByteArray):void {
-//				trace("loaded");
-//			});
+			Utils.loadDeflatedBinary("http://tmp.qww.pw/not_exist", function(bytes:ByteArray):void {
+				trace("loaded");
+			});
 		}
 		
 		[Test]
@@ -61,7 +61,7 @@ package flexUnitTests
 
 		[Test]
 		public function test_loadBitmaps():void {
-//			Utils.loadMirBitmaps("http://mir.qww.pw/bodies/00", function(x):void{});
+//			Utils.loadMirBitmaps("http://mir.qww.pw/../../data/bodies/00", function(x):void{});
 		}
 
 		[Test]
