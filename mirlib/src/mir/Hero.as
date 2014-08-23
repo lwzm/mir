@@ -115,8 +115,8 @@ package mir {
 				arrHair = _h ? Res.hairs.g(nameHair) : RemoteMultiple.dummy;
 				arrWeapon = _w ? Res.weapons.g(nameWeapon) : RemoteMultiple.dummy;
 				arrLength = arrBody.length;//Math.max(arrBody.length, arrHair.length, arrWeapon.length);
-				stepsX = deltaX ? Utils.steps(x, x + deltaX, deltaX / arrLength) : null;
-				stepsY = deltaY ? Utils.steps(y, y + deltaY, deltaY / arrLength) : null;
+				stepsX = deltaX ? Utils.steps(x, x + deltaX, arrLength) : null;
+				stepsY = deltaY ? Utils.steps(y, y + deltaY, arrLength) : null;
 				deltaX = deltaY = 0;
 			}
 			var b:MirBitmapData = arrBody[aniIdx] as MirBitmapData;

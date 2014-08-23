@@ -14,7 +14,7 @@ package {
 		public function mir() {
 			initStage();
 			addChild(new Ground());
-			initHeroes();
+//			initHeroes();
 //			b();
 		}
 		

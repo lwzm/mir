@@ -6,8 +6,8 @@ package mir {
 		public static const SCREEN_H:int = 600;
 		public static const TILE_W:int = 48;
 		public static const TILE_H:int = 32;
-		public static const TILE_X:int = 21;
-		public static const TILE_Y:int = 17;
+		public static const TILE_X:int = 20;
+		public static const TILE_Y:int = 20;
 		public static const PALLET:Vector.<uint> = Vector.<uint>([
 			0,
 			0xFF800000,

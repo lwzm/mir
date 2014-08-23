@@ -39,7 +39,8 @@ package mir {
 			return arr;
 		}
 
-		public static function steps(start:Number, stop:Number, delta:Number):Array {
+		public static function steps(start:Number, stop:Number, n:Number):Array {
+			var delta:Number = (stop - start) / n;
 			return range(start + delta, stop, delta).map(round);
 		}
 		
