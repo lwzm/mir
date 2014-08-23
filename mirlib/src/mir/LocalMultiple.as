@@ -1,10 +1,4 @@
 package mir {
-	import flash.utils.ByteArray;
-	
-	import assets.Embed;
-	
-	import org.hamcrest.collection.emptyArray;
-
 	public final class LocalMultiple {
 		public static const dummy:Array = [null,null,null,null,null,null]; 
 		public var all:Object; 

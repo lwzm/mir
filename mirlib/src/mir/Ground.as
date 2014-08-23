@@ -1,29 +1,22 @@
-package  {
-	import com.hexagonstar.util.debug.Debug;
-	
+package mir  {
 	import flash.display.Bitmap;
 	import flash.display.Sprite;
-	import flash.events.KeyboardEvent;
 	import flash.events.MouseEvent;
 	import flash.events.TimerEvent;
-	import flash.geom.Point;
 	import flash.utils.ByteArray;
 	import flash.utils.Timer;
 	
-	import mir.Const;
-	import mir.Res;
-	import mir.Utils;
 	
 	public final class Ground extends Sprite {
 		public var struct:StructGround;
-		public var timer:Timer;
 
 		private var stepsX:Array;
 		private var stepsY:Array;
-		private var mX:int=320;
-		private var mY:int=0;
+		private var mX:int=300;
+		private var mY:int=300;
 		private var mX_:int;
 		private var mY_:int;
+		private var idx:int;
 		private static const FRAME:int = 6;
 		private static const FRAME_RATE:int = 100;
 
@@ -43,31 +36,43 @@ package  {
 				}
 			}
 
-			timer = new Timer(1000);
-			timer.addEventListener(TimerEvent.TIMER, timer_task);
-			timer.start();
+			var t:Timer = new Timer(1000);
+			t.addEventListener(TimerEvent.TIMER, timer_task);
+			t.start();
 			reg();
 		}
 		
-		public function go():void {
+		public function f1():void {
+			stepsX ? x = stepsX[idx] : null;
+			stepsY ? y = stepsY[idx] : null;
+			++idx;
+		}
+
+		public function f2():void {
+			if (stepsX) {
+				x = stepsX.pop();
+				mX = mX_;
+				mX % 2 ? null : update();
+			}
+			if (stepsY) {
+				y = stepsY.pop();
+				mY = mY_;
+				mY % 2 ? null : update();
+			}
+			idx = 0;
+			stepsX = stepsY = null;
+		}
+
+		private function go():void {
 			var t:Timer = new Timer(FRAME_RATE, FRAME);
+			var i:int;
 			function t1(e:TimerEvent):void {
-				var i:int = t.currentCount - 1;
-				if (i != t.repeatCount) {
-					x = stepsX[i];
-					y = stepsY[i];
+				if (t.currentCount != t.repeatCount) {
+					f1();
 				}
 			}
 			function t2(e:TimerEvent):void {
-				var i:int = t.currentCount - 1;
-				mX = mX_;
-				mY = mY_;
-				if (mX % 2) {
-					x = stepsX[i];
-					y = stepsY[i];
-				} else {
-					update();
-				}
+				f2();
 				t.removeEventListener(TimerEvent.TIMER, t1);
 				t.removeEventListener(TimerEvent.TIMER_COMPLETE, t2);
 			}
@@ -92,15 +97,13 @@ package  {
 		private function reg():void {
 			addEventListener(MouseEvent.CLICK, function(e:MouseEvent):void {
 				mapX += (e.altKey ? 2 : 1) * (e.ctrlKey ? 1 : -1);
-				mapY += (e.altKey ? 2 : 1) * (e.ctrlKey ? 1 : -1);
-				trace([stepsX, stepsY]);
+//				mapY += (e.altKey ? 2 : 1) * (e.ctrlKey ? 1 : -1);
 				go();
 			});
 			addEventListener(MouseEvent.RIGHT_CLICK, function(e:MouseEvent):void {
 				mapY += (e.altKey ? 2 : 1) * (e.ctrlKey ? 1 : -1);
 			});
 		}
-
 		
 		private function update():void {
 			if (!struct) return;
@@ -118,7 +121,6 @@ package  {
 
 		private function timer_task(e:TimerEvent):void {
 			if (!struct) return;
-			Debug.trace([x, y, mX, mY]);
 			var w:int, h:int, i:int, _x:int, _y:int;
 			var bmp:Bitmap;
 			for (h = 0; h < Const.TILE_Y / 2; h++) {

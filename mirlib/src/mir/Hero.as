@@ -47,6 +47,9 @@ package mir {
 		private var filtersRecord:Object;
 		private var aniIdx:int;
 		
+		private var hooks:Vector.<Function>;
+		private var hooksTodo:Vector.<Function>;
+
 		public function Hero() {
 			blendMode = BlendMode.NORMAL;
 			mouseEnabled = false;
@@ -71,10 +74,6 @@ package mir {
 			timer.addEventListener(TimerEvent.TIMER, timer_task);
 			timer.start();
 			
-			hitArea.addEventListener(MouseEvent.CLICK, function(e:MouseEvent):void {
-				motion = 1;
-				deltaX = 48;
-			});
 			hitArea.addEventListener(MouseEvent.RIGHT_CLICK, function(e:MouseEvent):void {
 //				motion = 2;
 //				deltaY = -64;
@@ -118,6 +117,9 @@ package mir {
 				stepsX = deltaX ? Utils.steps(x, x + deltaX, arrLength) : null;
 				stepsY = deltaY ? Utils.steps(y, y + deltaY, arrLength) : null;
 				deltaX = deltaY = 0;
+				hooks = hooksTodo;
+				hooksTodo = null;
+				exeHook(0);
 			}
 			var b:MirBitmapData = arrBody[aniIdx] as MirBitmapData;
 			var h:MirBitmapData = arrHair[aniIdx] as MirBitmapData;
@@ -130,13 +132,33 @@ package mir {
 			Utils.copyMirBitmapDataToBitmap(w, bmpWeaponShadow);
 			stepsX ? x = stepsX[aniIdx] : null;
 			stepsY ? y = stepsY[aniIdx] : null;
-			if (++aniIdx >= arrLength) {
+			if (++aniIdx < arrLength) {
+				exeHook(1);
+			} else {
 				_m = _m_todo;
 				_m_todo = MOTION_DEFAULT;
 				aniIdx = 0;
 				renameThem();
+				exeHook(2);
 			}
 		}
+
+		private function exeHook(i:int):void {
+			if (hooks && hooks[i]) {
+				hooks[i]()
+			}
+		}
+
+		private function setHook(i:int, f:Function):void {
+			if (!hooksTodo) {
+				hooksTodo = new Vector.<Function>(8);
+			}
+			hooksTodo[i] = f;
+		}
+
+		public function set hook0(f:Function):void { setHook(0, f); }
+		public function set hook1(f:Function):void { setHook(1, f); }
+		public function set hook2(f:Function):void { setHook(2, f); }
 
 		override public function set x(n:Number):void {
 			super.x = n;

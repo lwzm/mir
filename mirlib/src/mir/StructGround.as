@@ -1,4 +1,4 @@
-package {
+package mir {
 	import flash.utils.ByteArray;
 
 	public final class StructGround {
