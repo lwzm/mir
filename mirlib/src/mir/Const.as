@@ -8,6 +8,8 @@ package mir {
 		public static const TILE_H:int = 32;
 		public static const TILE_X:int = 20;
 		public static const TILE_Y:int = 20;
+		public static const MAP_OFFSET_X:int = 9;
+		public static const MAP_OFFSET_Y:int = -8;
 		public static const PALLET:Vector.<uint> = Vector.<uint>([
 			0,
 			0xFF800000,

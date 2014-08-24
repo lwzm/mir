@@ -1,4 +1,7 @@
 package mir {
+	/*
+	center hero: (376, 209)
+	*/
 	import flash.display.Bitmap;
 	import flash.display.BlendMode;
 	import flash.display.Sprite;
@@ -58,8 +61,9 @@ package mir {
 			shadow.mouseEnabled = false;
 			shadow.visible = false;
 			hitArea = new Sprite();
-			hitArea.graphics.beginFill(0, 0);
+			hitArea.graphics.beginFill(0, 0.5);
 			hitArea.graphics.drawRect(0,-32,48,64);
+			hitArea.graphics.drawCircle(0,0,1);
 			bmpBody = new Bitmap();
 			bmpHair = new Bitmap();
 			bmpWeapon = new Bitmap();
