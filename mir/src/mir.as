@@ -18,6 +18,7 @@ package {
 		private var objects:MapObjects;
 		private var center:Point = new Point(400, 220);
 		private var range:Array;
+		private var h:Hero = new Hero();
 
 		public function mir() {
 			initStage();
@@ -25,37 +26,60 @@ package {
 			objects = new MapObjects();
 			addChild(ground);
 			addChild(objects);
-			Debug.trace(objects.numChildren)
+			addChild(h);
+				h.x = 376
+				h.y = 209//Math.random() * 600;
 
-			initHeroes();
-//			b();
+//			initHeroes();
 		}
 		
-		private function b():void {
-//			var v:ByteArray = new Embed.bodies._00;
-//			Debug.trace(v.length);
-		}
-
 		private function initStage():void {
 			Debug.monitor(stage);
 			stage.align = StageAlign.TOP_LEFT;
 			stage.scaleMode = StageScaleMode.NO_SCALE; 
+
 			
-			range = [-1/8, 1/8, 3/8, 5/8, 7/8, 9/8, 11/8, 13/8].map(function(n:Number, idx, arr):Number {
-				trace(n);
-				return Math.sin(Math.PI/2 * n);
-			});
-			Debug.trace(range);
+			var coor:CoordinateSystem = new CoordinateSystem(center, 8);
 			stage.addEventListener(MouseEvent.MOUSE_MOVE, function(e:MouseEvent):void {
+				var p:Point = new Point(e.stageX, e.stageY);
+//				trace(coor.direction(p));
 			});
 			stage.addEventListener(MouseEvent.CLICK, function(e:MouseEvent):void {
 				var p:Point = new Point(e.stageX, e.stageY);
 				if (p.equals(center)) return;
-				Debug.trace(Math.atan2(p.y - center.y, p.x - center.x));
+				f(coor.direction(p), 1);
 			});
 			stage.addEventListener(MouseEvent.RIGHT_CLICK, function(e:MouseEvent):void {
-				Debug.trace([e.stageX, e.stageY]);
+				var p:Point = new Point(e.stageX, e.stageY);
+				if (p.equals(center)) return;
+				f(coor.direction(p), 2);
 			});
+		}
+
+		public function f(d:uint, l:int):void {
+			trace(d,l);
+			h.hook0 = function() { 
+				var x:int, y:int;
+				switch (d) {
+					case 0: y = -l; break;
+					case 1: x = l, y = -l;break;
+					case 2: x = l;break;
+					case 3: x = l, y = l;break;
+					case 4: y = l;break;
+					case 5: x = -l; y = l;break;
+					case 6: x = -l;break;
+					case 7: x = -l, y= -l;break;
+					default: break;
+				}
+				ground.mapX += x;
+				ground.mapY += y;
+				objects.mapX += x;
+				objects.mapY += y;
+			};
+			h.hook1 = function() { ground.f1(); objects.f1();};
+			h.hook2 = function() { ground.f2(); objects.f2();};
+			h.direction = d;
+			h.motion = l;
 		}
 
 		public function initHeroes():void {
@@ -69,16 +93,6 @@ package {
 				h.direction = 5//Math.random() * 8;
 				h.body = 0//Math.random() * 6;
 				h.weapon = 25//Math.random() * 25;
-				function f() {
-					h.hook0 = function() { ground.mapY += 2; ground.mapX += 2; objects.mapX += 2; objects.mapY += 2};
-					h.hook1 = function() { ground.f1(); objects.f1();};
-					h.hook2 = function() { ground.f2(); objects.f2();};
-					h.motion = 2;
-//					h.deltaX = 48;
-				}
-				h.hitArea.addEventListener(MouseEvent.CLICK, function(e:MouseEvent):void {
-					f();
-				});
 
 				addChild(h);
 				arr.push(h);

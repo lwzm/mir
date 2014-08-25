@@ -92,11 +92,13 @@ package {
 		public function get mapY():int { return mY; }
 
 		public function set mapX(n:int):void {
+			if (mX == n) return;
 			stepsX = Utils.steps(x, Const.TILE_W * (mX - n) + x, FRAME);
 			mX_ = n;
 		}
 
 		public function set mapY(n:int):void {
+			if (mY == n) return;
 			stepsY = Utils.steps(y, Const.TILE_H * (mY - n) + y, FRAME);
 			mY_ = n;
 		}
