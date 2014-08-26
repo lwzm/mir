@@ -1,45 +1,40 @@
-package {
+package mir {
 	import flash.geom.Point;
 
 	public class CoordinateSystem {
-		public var center:Point;
-		public var directions:uint;
-		public var atan2List:Array;
-		public var zone1:Object;
-		public var zone2:Object;
+		private var center:Point;
+		private var directions:uint;
+		private var atan2List:Array;
+		private var zone1:Vector.<uint>;
+		private var zone2:Vector.<uint>;
 
 		public function CoordinateSystem(c:Point, d:uint) {
-			var i:int;
 			var z:int;
 			var n:Number;
 			var delta:Number;
 			atan2List = [];
-			zone1 = {};
-			zone2 = {};
+			zone1 = new Vector.<uint>();
+			zone2 = new Vector.<uint>();
 			center = c;
 			directions = d;
-			d /= 2;
+			d /= 2;  // half circular
 			delta = Math.PI / d;
 
 			for (n = Math.PI / d / 2; n < Math.PI; n += delta) {
 				atan2List.push(Math.atan2(Math.sin(n), Math.cos(n)));
 			}
-			trace(atan2List);
 
-			for (z = d / 2, i = 0; z >= 0; i++, z--) {
-				zone1[i] = z;
-				trace(i, z);
+			for (z = d / 2; z >= 0; z--) {
+				zone1.push(z);
 			}
-			for (z = d * 2 - 1; z >= d + d / 2; i++, z--) {
-				zone1[i] = z;
-				trace(i, z);
+			for (z = d * 2 - 1; z >= d + d / 2; z--) {
+				zone1.push(z);
 			}
-			for (z = d / 2, i = 0; z < d + 1 + d / 2; i++, z++) {
-				zone2[i] = z;
-				trace(i, z);
+			for (z = d / 2; z < d + 1 + d / 2; z++) {
+				zone2.push(z);
 			}
-			
 		}
+
 		public function direction(p:Point):uint {
 			var x:int = p.x - center.x;
 			var y:int = p.y - center.y;

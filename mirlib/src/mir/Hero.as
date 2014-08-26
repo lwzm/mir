@@ -114,6 +114,7 @@ package mir {
 			if (aniIdx == 0) {
 				switch_delay();
 				switch_layers();
+				renameThem();
 				arrBody = Res.bodies.g(nameBody);
 				arrHair = _h ? Res.hairs.g(nameHair) : RemoteMultiple.dummy;
 				arrWeapon = _w ? Res.weapons.g(nameWeapon) : RemoteMultiple.dummy;
@@ -142,7 +143,6 @@ package mir {
 				_m = _m_todo;
 				_m_todo = MOTION_DEFAULT;
 				aniIdx = 0;
-				renameThem();
 				exeHook(2);
 			}
 		}
