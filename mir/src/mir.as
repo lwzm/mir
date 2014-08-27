@@ -5,8 +5,11 @@ package {
 	import flash.display.StageAlign;
 	import flash.display.StageScaleMode;
 	import flash.events.MouseEvent;
+	import flash.events.TimerEvent;
 	import flash.geom.Point;
+	import flash.utils.Timer;
 	
+	import mir.CoordinateSystem;
 	import mir.Hero;
 	import mir.MapGround;
 	import mir.Res;
@@ -39,11 +42,29 @@ package {
 			stage.scaleMode = StageScaleMode.NO_SCALE; 
 
 			
+			var t:Timer = new Timer(600);
 			var coor:CoordinateSystem = new CoordinateSystem(center, 8);
 			stage.addEventListener(MouseEvent.MOUSE_MOVE, function(e:MouseEvent):void {
 				var p:Point = new Point(e.stageX, e.stageY);
 //				trace(coor.direction(p));
 			});
+
+			function fmv(e:TimerEvent=null):void {
+				var p:Point = new Point(stage.mouseX, stage.mouseY);
+				if (p.equals(center)) return;
+				f(coor.direction(p), 2);
+			}
+
+			t.addEventListener(TimerEvent.TIMER, fmv);
+
+			stage.addEventListener(MouseEvent.RIGHT_MOUSE_DOWN, function(e:MouseEvent):void {
+				t.start();
+				fmv();
+			});
+			stage.addEventListener(MouseEvent.RIGHT_MOUSE_UP, function(e:MouseEvent):void {
+				t.stop();
+			});
+			/*
 			stage.addEventListener(MouseEvent.CLICK, function(e:MouseEvent):void {
 				var p:Point = new Point(e.stageX, e.stageY);
 				if (p.equals(center)) return;
@@ -54,10 +75,10 @@ package {
 				if (p.equals(center)) return;
 				f(coor.direction(p), 2);
 			});
+			*/
 		}
 
 		public function f(d:uint, l:int):void {
-			trace(d,l);
 			h.hook0 = function() { 
 				var x:int, y:int;
 				switch (d) {

@@ -55,8 +55,8 @@ package {
 					sp.graphics.beginFill(0xffffff);
 					sp.graphics.drawCircle(0,0,1);
 					sp.addEventListener(MouseEvent.MOUSE_OVER, function(e:MouseEvent):void {
-						(e.target as Sprite).filters = [Filters.red];
-						(e.target as Sprite).parent.alpha = 0.3;
+						(e.target as Sprite).filters = [Filters.highlight];
+						(e.target as Sprite).parent.alpha = 0.6;
 					});
 					sp.addEventListener(MouseEvent.MOUSE_OUT, function(e:MouseEvent):void {
 						(e.target as Sprite).filters = [];
@@ -125,8 +125,8 @@ package {
 				data = struct.g(x, y);
 				bmp.bitmapData = data;
 				if (data) {
-					bmp.x = data.x - data.width;
-					bmp.y = data.y - data.height;
+					bmp.x = 7 - data.width;
+					bmp.y = -44 - data.height;
 				}
 			}
 		}

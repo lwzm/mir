@@ -155,7 +155,7 @@ package mir {
 
 		private function setHook(i:int, f:Function):void {
 			if (!hooksTodo) {
-				hooksTodo = new Vector.<Function>(8);
+				hooksTodo = new Vector.<Function>(4);
 			}
 			hooksTodo[i] = f;
 		}
