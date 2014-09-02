@@ -15,15 +15,15 @@ package mir {
 		public static const DELAIES:Array = [500, 100, 100, 100, 100, 100, 100, 100, 200, 100, 150];
 		public static const MOTION_DEFAULT:int = 0;
 
-		public var timer:Timer;
-
 		public var shadow:Sprite;
-		public var bmpBody:Bitmap;
-		public var bmpHair:Bitmap;
-		public var bmpWeapon:Bitmap;
-		public var bmpBodyShadow:Bitmap;
-		public var bmpHairShadow:Bitmap;
-		public var bmpWeaponShadow:Bitmap;
+
+		private var timer:Timer;
+		private var bmpBody:Bitmap;
+		private var bmpHair:Bitmap;
+		private var bmpWeapon:Bitmap;
+		private var bmpBodyShadow:Bitmap;
+		private var bmpHairShadow:Bitmap;
+		private var bmpWeaponShadow:Bitmap;
 		private var arrBody:Array;
 		private var arrHair:Array;
 		private var arrWeapon:Array;
@@ -54,7 +54,6 @@ package mir {
 		private var hooksTodo:Vector.<Function>;
 
 		public function Hero() {
-			blendMode = BlendMode.NORMAL;
 			mouseEnabled = false;
 			shadow = new Sprite();
 			shadow.alpha = 0.5;
@@ -119,8 +118,8 @@ package mir {
 				arrHair = _h ? Res.hairs.g(nameHair) : RemoteMultiple.dummy;
 				arrWeapon = _w ? Res.weapons.g(nameWeapon) : RemoteMultiple.dummy;
 				arrLength = arrBody.length;//Math.max(arrBody.length, arrHair.length, arrWeapon.length);
-				stepsX = deltaX ? Utils.steps(x, x + deltaX, arrLength) : null;
-				stepsY = deltaY ? Utils.steps(y, y + deltaY, arrLength) : null;
+				stepsX = deltaX ? Util.steps(x, x + deltaX, arrLength) : null;
+				stepsY = deltaY ? Util.steps(y, y + deltaY, arrLength) : null;
 				deltaX = deltaY = 0;
 				hooks = hooksTodo;
 				hooksTodo = null;
@@ -129,19 +128,23 @@ package mir {
 			var b:MirBitmapData = arrBody[aniIdx] as MirBitmapData;
 			var h:MirBitmapData = arrHair[aniIdx] as MirBitmapData;
 			var w:MirBitmapData = arrWeapon[aniIdx] as MirBitmapData;
-			Utils.copyMirBitmapDataToBitmap(b, bmpBody);
-			Utils.copyMirBitmapDataToBitmap(h, bmpHair);
-			Utils.copyMirBitmapDataToBitmap(w, bmpWeapon);
-			Utils.copyMirBitmapDataToBitmap(b, bmpBodyShadow);
-			Utils.copyMirBitmapDataToBitmap(h, bmpHairShadow);
-			Utils.copyMirBitmapDataToBitmap(w, bmpWeaponShadow);
+			Util.copyMirBitmapDataToBitmap(b, bmpBody);
+			Util.copyMirBitmapDataToBitmap(h, bmpHair);
+			Util.copyMirBitmapDataToBitmap(w, bmpWeapon);
+			Util.copyMirBitmapDataToBitmap(b, bmpBodyShadow);
+			Util.copyMirBitmapDataToBitmap(h, bmpHairShadow);
+			Util.copyMirBitmapDataToBitmap(w, bmpWeaponShadow);
 			stepsX ? x = stepsX[aniIdx] : null;
 			stepsY ? y = stepsY[aniIdx] : null;
 			if (++aniIdx < arrLength) {
 				exeHook(1);
 			} else {
 				_m = _m_todo;
-				_m_todo = MOTION_DEFAULT;
+				if (_m === -1) {  // block
+					timer.delay = 3000;
+					_m = MOTION_DEFAULT;
+				}
+				_m_todo = -1;
 				aniIdx = 0;
 				exeHook(2);
 			}
@@ -163,6 +166,7 @@ package mir {
 		public function set hook0(f:Function):void { setHook(0, f); }
 		public function set hook1(f:Function):void { setHook(1, f); }
 		public function set hook2(f:Function):void { setHook(2, f); }
+		public function set hook3(f:Function):void { setHook(3, f); }
 
 		override public function set x(n:Number):void {
 			super.x = n;
@@ -205,7 +209,7 @@ package mir {
 				_m = m;
 				aniIdx = 0;
 				switch_delay();
-				switch_layers();
+//				switch_layers();
 				renameThem();
 			} else {
 				_m_todo = m;

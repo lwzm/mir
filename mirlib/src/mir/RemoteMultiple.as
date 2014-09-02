@@ -18,7 +18,7 @@ package mir {
 
 		private function prepair(name:String):void {
 			all[name] = dummy;
-			Utils.loadMirBitmaps(urlPrefix + name, function(arr:Array):void {
+			Util.loadMirBitmaps(urlPrefix + name, function(arr:Array):void {
 				all[name] = arr;
 			});
 		}

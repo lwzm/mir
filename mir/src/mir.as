@@ -22,6 +22,8 @@ package {
 		private var center:Point = new Point(400, 220);
 		private var range:Array;
 		private var h:Hero = new Hero();
+            var pressed:Boolean;
+			var coor:CoordinateSystem = new CoordinateSystem(center, 8);
 
 		public function mir() {
 			initStage();
@@ -30,12 +32,24 @@ package {
 			addChild(ground);
 			addChild(objects);
 			addChild(h);
-				h.x = 376
-				h.y = 209//Math.random() * 600;
+			h.body = 5
+			h.hair = 2
+			h.weapon = 5
+			ground.mapX = 300
+			ground.mapY = 300
+			objects.mapX = 300
+			objects.mapY = 300
+			h.x = 376
+			h.y = 209//Math.random() * 600;
 
 //			initHeroes();
 		}
 		
+			function fmv():void {
+				var p:Point = new Point(stage.mouseX, stage.mouseY);
+				if (p.equals(center)) return;
+				f(coor.direction(p), 2);
+			}
 		private function initStage():void {
 			Debug.monitor(stage);
 			stage.align = StageAlign.TOP_LEFT;
@@ -43,26 +57,23 @@ package {
 
 			
 			var t:Timer = new Timer(600);
-			var coor:CoordinateSystem = new CoordinateSystem(center, 8);
 			stage.addEventListener(MouseEvent.MOUSE_MOVE, function(e:MouseEvent):void {
 				var p:Point = new Point(e.stageX, e.stageY);
 //				trace(coor.direction(p));
 			});
 
-			function fmv(e:TimerEvent=null):void {
-				var p:Point = new Point(stage.mouseX, stage.mouseY);
-				if (p.equals(center)) return;
-				f(coor.direction(p), 2);
-			}
 
 			t.addEventListener(TimerEvent.TIMER, fmv);
 
 			stage.addEventListener(MouseEvent.RIGHT_MOUSE_DOWN, function(e:MouseEvent):void {
-				t.start();
+            pressed = true;
+				//t.start();
 				fmv();
 			});
 			stage.addEventListener(MouseEvent.RIGHT_MOUSE_UP, function(e:MouseEvent):void {
-				t.stop();
+            pressed = false;
+			h.motion = 0;
+				//t.stop();
 			});
 			/*
 			stage.addEventListener(MouseEvent.CLICK, function(e:MouseEvent):void {
@@ -98,7 +109,7 @@ package {
 				objects.mapY += y;
 			};
 			h.hook1 = function() { ground.f1(); objects.f1();};
-			h.hook2 = function() { ground.f2(); objects.f2();};
+			h.hook2 = function() { ground.f2(); objects.f2(); if (pressed) {fmv()}};
 			h.direction = d;
 			h.motion = l;
 		}

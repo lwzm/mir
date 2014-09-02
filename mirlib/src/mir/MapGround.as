@@ -24,7 +24,7 @@ package mir  {
 			x = Const.MAP_OFFSET_X;
 			y = Const.MAP_OFFSET_Y;
 
-			Utils.loadBinary(Const.ASSETS_DOMAIN + "ground.bin", function(bytes:ByteArray):void {
+			Util.loadBinary(Const.ASSETS_DOMAIN + "ground.bin", function(bytes:ByteArray):void {
 				struct = new StructGround(bytes);
 				update();
 			});
@@ -89,13 +89,13 @@ package mir  {
 
 		public function set mapX(n:int):void {
 			if (mX == n) return;
-			stepsX = Utils.steps(x, Const.TILE_W * (mX - n) + x, FRAME);
+			stepsX = Util.steps(x, Const.TILE_W * (mX - n) + x, FRAME);
 			mX_ = n;
 		}
 
 		public function set mapY(n:int):void {
 			if (mY == n) return;
-			stepsY = Utils.steps(y, Const.TILE_H * (mY - n) + y, FRAME);
+			stepsY = Util.steps(y, Const.TILE_H * (mY - n) + y, FRAME);
 			mY_ = n;
 		}
 

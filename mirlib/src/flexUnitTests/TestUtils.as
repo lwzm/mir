@@ -5,7 +5,7 @@ package flexUnitTests
 	import flash.display.BlendMode;
 	import flash.utils.ByteArray;
 	
-	import mir.Utils;
+	import mir.Util;
 	
 	import org.flexunit.asserts.assertEquals;
 	import org.flexunit.asserts.assertNotNull;
@@ -36,26 +36,26 @@ package flexUnitTests
 		
 		[Test]
 		public function test_loadAsset():void {
-			Utils.loadDeflatedBinary("http://tmp.qww.pw/../../data/bodies/00", function(bytes:ByteArray):void {
+			Util.loadDeflatedBinary("http://tmp.qww.pw/../../data/bodies/00", function(bytes:ByteArray):void {
 				assertTrue(bytes.length > 0);
 			});
-			Utils.loadDeflatedBinary("http://tmp.qww.pw/not_exist", function(bytes:ByteArray):void {
+			Util.loadDeflatedBinary("http://tmp.qww.pw/not_exist", function(bytes:ByteArray):void {
 				trace("loaded");
 			});
 		}
 		
 		[Test]
 		public function test_trim():void {
-			assertEquals("s", Utils.trim(" s  "));
+			assertEquals("s", Util.trim(" s  "));
 		}
 
 		[Test]
 		public function test_range():void {
 			var arr:Array;
-			arr = Utils.range(0, 10);
+			arr = Util.range(0, 10);
 			assertEquals(11, arr.length);
 			assertEquals(10, arr[arr.length - 1]);
-			arr = Utils.range(0.2, 0, -0.1);
+			arr = Util.range(0.2, 0, -0.1);
 			assertEquals(3, arr.length);
 		}
 
@@ -84,7 +84,7 @@ package flexUnitTests
 			}
 //			bytes.writeByte(1);
 			bytes.deflate(); bytes.inflate();  // or bytes.position = 0;
-			var bmps:Array = Utils.bytesToMirBitmaps(bytes);
+			var bmps:Array = Util.bytesToMirBitmaps(bytes);
 //			assertEquals(bmps.blendMode, BlendMode.ADD);
 			assertEquals(bmps[0].width, w);
 			assertEquals(bmps[0].height, h);

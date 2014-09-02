@@ -10,7 +10,7 @@ package {
 	import mir.Filters;
 	import mir.MirBitmapData;
 	import mir.StructObjects;
-	import mir.Utils;
+	import mir.Util;
 
 	public final class MapObjects extends Sprite {
 
@@ -31,7 +31,7 @@ package {
 			x = Const.MAP_OFFSET_X;
 			y = Const.MAP_OFFSET_Y;
 
-			Utils.loadBinary(Const.ASSETS_DOMAIN + "objects.bin", function(bytes:ByteArray):void {
+			Util.loadBinary(Const.ASSETS_DOMAIN + "objects.bin", function(bytes:ByteArray):void {
 				struct = new StructObjects(bytes);
 				var t:Timer = new Timer(1000);
 				t.addEventListener(TimerEvent.TIMER, function(e){update()});
@@ -93,13 +93,13 @@ package {
 
 		public function set mapX(n:int):void {
 			if (mX == n) return;
-			stepsX = Utils.steps(x, Const.TILE_W * (mX - n) + x, FRAME);
+			stepsX = Util.steps(x, Const.TILE_W * (mX - n) + x, FRAME);
 			mX_ = n;
 		}
 
 		public function set mapY(n:int):void {
 			if (mY == n) return;
-			stepsY = Utils.steps(y, Const.TILE_H * (mY - n) + y, FRAME);
+			stepsY = Util.steps(y, Const.TILE_H * (mY - n) + y, FRAME);
 			mY_ = n;
 		}
 
@@ -125,8 +125,8 @@ package {
 				data = struct.g(x, y);
 				bmp.bitmapData = data;
 				if (data) {
-					bmp.x = 7 - data.width;
-					bmp.y = -44 - data.height;
+					bmp.x = data.x - data.width;
+					bmp.y = data.y - data.height;
 				}
 			}
 		}

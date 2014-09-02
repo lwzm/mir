@@ -15,7 +15,7 @@ package mir {
 	import flash.utils.ByteArray;
 	
 
-	public final class Utils {
+	public final class Util {
 
 		public static function trim(str:String):String {
 			return str.replace(/^\s+/, "").replace(/\s+$/, "");
