@@ -1,22 +1,21 @@
-package mir  {
+package mir {
 	import flash.display.Bitmap;
 	import flash.utils.ByteArray;
-	
-	public final class MapGround extends MapBase {
 
-		public function MapGround() {
-			super("ground.bin")
+	public final class MapMiddle extends MapBase {
+		public function MapMiddle() {
+			super("middle.bin");
 		}
 
 		override protected function initStruct(bytes:ByteArray):void {
-			struct = new StructMapGround(bytes);
+			struct = new StructMapMiddle(bytes);
 		}
 
 		override protected function initChildren():void {
 			var bmp:Bitmap;
 			var w:int, h:int;
-			for (h = 0; h < Const.TILE_Y; h += 2) {
-				for (w = 0; w < Const.TILE_X; w += 2) {
+			for (h = 0; h < Const.TILE_Y; h++) {
+				for (w = 0; w < Const.TILE_X; w++) {
 					bmp = new Bitmap();
 					bmp.x = Const.TILE_W * (w - 1) + 7;
 					bmp.y = Const.TILE_H * (h - 1) - 44;
@@ -28,11 +27,11 @@ package mir  {
 		override protected function update(active:Boolean=false):void {
 			var w:int, h:int, i:int;
 			if (active) {
-				x = -(mX % 2) * Const.TILE_W + Const.MAP_OFFSET_X;
-				y = -(mY % 2) * Const.TILE_H + Const.MAP_OFFSET_Y;
+				x = Const.MAP_OFFSET_X;
+				y = Const.MAP_OFFSET_Y;
 			}
-			for (h = 0; h < Const.TILE_Y; h += 2) {
-				for (w = 0; w < Const.TILE_X; w += 2) {
+			for (h = 0; h < Const.TILE_Y; h++) {
+				for (w = 0; w < Const.TILE_X; w++) {
 					setTile(getChildAt(i++) as Bitmap, w + mX, h + mY, active);
 				}
 			}

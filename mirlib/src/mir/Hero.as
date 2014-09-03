@@ -12,7 +12,7 @@ package mir {
 
 	public final class Hero extends Sprite {
 
-		public static const DELAIES:Array = [500, 100, 100, 100, 100, 100, 100, 100, 200, 100, 150];
+		public static const DELAIES:Array = [500, 100, 20, 100, 100, 100, 100, 100, 200, 100, 150];
 		public static const MOTION_DEFAULT:int = 0;
 
 		public var shadow:Sprite;
@@ -60,7 +60,7 @@ package mir {
 			shadow.mouseEnabled = false;
 			shadow.visible = false;
 			hitArea = new Sprite();
-			hitArea.graphics.beginFill(0, 0.5);
+			hitArea.graphics.beginFill(0, 0.0);
 			hitArea.graphics.drawRect(0,-32,48,64);
 			hitArea.graphics.drawCircle(0,0,1);
 			bmpBody = new Bitmap();

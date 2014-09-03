@@ -12,13 +12,16 @@ package {
 	import mir.CoordinateSystem;
 	import mir.Hero;
 	import mir.MapGround;
+	import mir.MapMiddle;
+	import mir.MapObjects;
 	import mir.Res;
 	
-	[SWF(width="800", height="600", backgroundColor="#808080", frameRate="60")]
+	[SWF(width="800", height="600", backgroundColor="#808080", frameRate="40")]
 	public class mir extends Sprite {
 
 		private var ground:MapGround;
 		private var objects:MapObjects;
+		private var middle:MapMiddle;
 		private var center:Point = new Point(400, 220);
 		private var range:Array;
 		private var h:Hero = new Hero();
@@ -29,16 +32,24 @@ package {
 			initStage();
 			ground = new MapGround();
 			objects = new MapObjects();
+			middle = new MapMiddle();
 			addChild(ground);
+			addChild(middle);
 			addChild(objects);
 			addChild(h);
+			addChild(h.hitArea);
 			h.body = 5
 			h.hair = 2
 			h.weapon = 5
-			ground.mapX = 300
-			ground.mapY = 300
-			objects.mapX = 300
-			objects.mapY = 300
+			ground.mapX = 650
+			ground.mapY = 650
+			objects.mapX = 650
+			objects.mapY = 650
+			middle.mapX = 650
+			middle.mapY = 650
+            ground.f2();
+            objects.f2();
+            middle.f2();
 			h.x = 376
 			h.y = 209//Math.random() * 600;
 
@@ -107,9 +118,11 @@ package {
 				ground.mapY += y;
 				objects.mapX += x;
 				objects.mapY += y;
+				middle.mapX += x;
+				middle.mapY += y;
 			};
-			h.hook1 = function() { ground.f1(); objects.f1();};
-			h.hook2 = function() { ground.f2(); objects.f2(); if (pressed) {fmv()}};
+			h.hook1 = function() { ground.f1(); objects.f1(); middle.f1(); };
+			h.hook2 = function() { ground.f2(); objects.f2(); middle.f2(); if (pressed) {fmv()}};
 			h.direction = d;
 			h.motion = l;
 		}

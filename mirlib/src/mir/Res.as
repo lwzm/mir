@@ -4,6 +4,7 @@ package mir {
 		public static const hairs:RemoteMultiple = new RemoteMultiple("hairs");
 		public static const weapons:RemoteMultiple = new RemoteMultiple("weapons");
 		public static const tiles:RemoteSingle = new RemoteSingle("tiles");
+		public static const tilesm:RemoteSingle = new RemoteSingle("tilesm");
 		public static const objects:Vector.<RemoteSingle> = Vector.<RemoteSingle>([
 //			null,
 			new RemoteSingle("objs1"),
