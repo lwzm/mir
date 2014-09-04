@@ -1,36 +1,36 @@
 package mir {
+	import flash.sampler.getSize;
 	import flash.utils.ByteArray;
 
 	public final class StructMapObjects extends StructMapBase {
-		private var index1:Vector.<int>;
-		private var index2:Vector.<int>;
+		private var index1:Object;
+		private var index2:Object;
 
 		public function StructMapObjects(bytes:ByteArray) {
-			var i:int, j:int, idx:int;
+			var idx:int, i:int, j:int;
 			w = bytes.readUnsignedShort();
 			h = bytes.readUnsignedShort();
-			len = w * h;
-			index1 = new Vector.<int>(len);
-			index2 = new Vector.<int>(len);
-			for (i = 0; i < h; i++) {
-				for (j = 0; j < w; j++) {
-					idx = w * i + j;
-					index1[idx] = bytes.readUnsignedByte();
-					index2[idx] = bytes.readUnsignedShort();
-				}
+			index1 = {};
+			index2 = {};
+			while (bytes.bytesAvailable > 6) {
+				idx = bytes.readUnsignedInt();
+				i = bytes.readUnsignedByte();
+				j = bytes.readUnsignedShort();
+				index1[idx] = i;
+				index2[idx] = j;
 			}
+//			trace(getSize(index1))
+//			trace(getSize(index2))
+//			trace(Util.len(index2))
 		}
 
 		override public function g(x:int, y:int):MirBitmapData {
-			var i:int, j:int, idx:int;
+			var i:int, idx:int;
 			var data:MirBitmapData;
 			idx = w * y + x;
-			if (idx < len) {
-				i = index1[idx];
-				j = index2[idx];
-				if (j) {
-					data = Res.objects[i].g((j - 1).toString());
-				}
+			i = index2[idx];
+			if (i) {
+				data = Res.objects[index1[idx]].g((i - 1).toString());
 			}
 			return data;
 		}

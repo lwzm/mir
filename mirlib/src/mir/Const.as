@@ -1,6 +1,6 @@
 package mir {
 	public final class Const {
-		public static const ASSETS_DOMAIN:String = "../../t/" && "http://tmp.qww.pw/";
+		public static const ASSETS_DOMAIN:String = "../../t/" || "http://tmp.qww.pw/";
 		public static const ASSETS_ARGUMENT:String = String(new Date().time);
 		public static const SCREEN_W:int = 800;
 		public static const SCREEN_H:int = 600;
@@ -8,6 +8,7 @@ package mir {
 		public static const TILE_H:int = 32;
 		public static const TILE_X:int = 20;
 		public static const TILE_Y:int = 40;
+		public static const TILE_EDGE:int = -2;  // TILE_EDGE % 2 == 0
 		public static const MAP_OFFSET_X:int = 9;
 		public static const MAP_OFFSET_Y:int = -8;
 		public static const PALLET:Vector.<uint> = Vector.<uint>([

@@ -6,19 +6,37 @@ package mir {
 	import flash.events.ErrorEvent;
 	import flash.events.Event;
 	import flash.events.IOErrorEvent;
+	import flash.events.TimerEvent;
 	import flash.geom.Point;
 	import flash.geom.Rectangle;
 	import flash.net.URLLoader;
 	import flash.net.URLLoaderDataFormat;
 	import flash.net.URLRequest;
 	import flash.net.URLStream;
+	import flash.system.System;
 	import flash.utils.ByteArray;
+	import flash.utils.Timer;
 	
 
 	public final class Util {
 
 		public static function trim(str:String):String {
 			return str.replace(/^\s+/, "").replace(/\s+$/, "");
+		}
+
+		public static function len(obj:Object):int {
+			var n:int;
+			for (var x:* in obj)
+				n++;
+			return n;
+		}
+
+		public static function autoGc():void {  // for dev
+			var timer:Timer = new Timer(3000);
+			timer.addEventListener(TimerEvent.TIMER, function(e:TimerEvent):void {
+				System.gc();
+			});
+			timer.start();
 		}
 
 		public static function range(start:Number, stop:Number, step:Number=1):Array {

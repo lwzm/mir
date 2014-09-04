@@ -7,6 +7,7 @@ package {
 	import flash.events.MouseEvent;
 	import flash.events.TimerEvent;
 	import flash.geom.Point;
+	import flash.system.System;
 	import flash.utils.Timer;
 	
 	import mir.CoordinateSystem;
@@ -15,6 +16,7 @@ package {
 	import mir.MapMiddle;
 	import mir.MapObjects;
 	import mir.Res;
+	import mir.Util;
 	
 	[SWF(width="800", height="600", backgroundColor="#808080", frameRate="40")]
 	public class mir extends Sprite {
@@ -29,6 +31,7 @@ package {
 			var coor:CoordinateSystem = new CoordinateSystem(center, 8);
 
 		public function mir() {
+			Util.autoGc();
 			initStage();
 			ground = new MapGround();
 			objects = new MapObjects();
@@ -36,17 +39,17 @@ package {
 			addChild(ground);
 			addChild(middle);
 			addChild(objects);
-			addChild(h);
+//			addChild(h);
 			addChild(h.hitArea);
 			h.body = 5
 			h.hair = 2
 			h.weapon = 5
-			ground.mapX = 650
-			ground.mapY = 650
-			objects.mapX = 650
-			objects.mapY = 650
-			middle.mapX = 650
-			middle.mapY = 650
+			ground.mapX = 333
+			ground.mapY = 333
+			objects.mapX = 333
+			objects.mapY = 333
+			middle.mapX = 333
+			middle.mapY = 333
             ground.f2();
             objects.f2();
             middle.f2();
