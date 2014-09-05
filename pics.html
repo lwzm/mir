@@ -5,5 +5,5 @@
 </span>
 
 <p ng-repeat="pics in pics_list">
-<img ng-src="{{i}}" ng-repeat="i in pics">
+<span ng-repeat="i in pics"><img ng-src="{{i}}">{{code(i)}}</span>
 </p>

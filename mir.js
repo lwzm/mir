@@ -37,5 +37,8 @@ angular.module("mir", ["ngRoute", ], function($routeProvider) {
         $scope.pics_list = pics_list;
         $scope.pages = pages;
         $scope.href_pre = "#" + $location.path() + "?page=";
+        $scope.code = function(s) {
+            return s.replace(RegExp("^.*\\/"), "").replace(/\.bmp$/, "");
+        }
     });
 })
