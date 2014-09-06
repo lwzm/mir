@@ -4,18 +4,21 @@ package {
 	import flash.display.Sprite;
 	import flash.display.StageAlign;
 	import flash.display.StageScaleMode;
+	import flash.events.KeyboardEvent;
 	import flash.events.MouseEvent;
 	import flash.events.TimerEvent;
 	import flash.geom.Point;
 	import flash.system.System;
 	import flash.utils.Timer;
 	
+	import mir.Const;
 	import mir.CoordinateSystem;
 	import mir.Hero;
-	import mir.MapGround;
+	import mir.MapGround
 	import mir.MapMiddle;
 	import mir.MapObjects;
 	import mir.Res;
+	import mir.StructMapAnimations;
 	import mir.Util;
 	
 	[SWF(width="800", height="600", backgroundColor="#808080", frameRate="40")]
@@ -27,29 +30,37 @@ package {
 		private var center:Point = new Point(400, 220);
 		private var range:Array;
 		private var h:Hero = new Hero();
-            var pressed:Boolean;
-			var coor:CoordinateSystem = new CoordinateSystem(center, 8);
+		private var pressed:Boolean;
+		private var coor:CoordinateSystem = new CoordinateSystem(center, 8);
+		private var floor:int;
 
 		public function mir() {
 			Util.autoGc();
+//			Util.loadString(Const.ASSETS_DOMAIN+"animations.bin", function(s:String):void {
+//				Debug.traceObj(new StructMapAnimations(s));
+//			});
 			initStage();
-			ground = new MapGround();
-			objects = new MapObjects();
-			middle = new MapMiddle();
+			var map:String = "0";
+			var xx:int = 290;
+			var yy:int = 290;
+			ground = new MapGround(map);
+			objects = new MapObjects(map);
+			middle = new MapMiddle(map);
 			addChild(ground);
 			addChild(middle);
+//			for each (var obj:Sprite in objects.
 			addChild(objects);
-//			addChild(h);
+			addChild(h);
 			addChild(h.hitArea);
 			h.body = 5
 			h.hair = 2
 			h.weapon = 5
-			ground.mapX = 333
-			ground.mapY = 333
-			objects.mapX = 333
-			objects.mapY = 333
-			middle.mapX = 333
-			middle.mapY = 333
+			ground.mapX = xx
+			ground.mapY = yy
+			objects.mapX = xx
+			objects.mapY = yy
+			middle.mapX = xx
+			middle.mapY = yy
             ground.f2();
             objects.f2();
             middle.f2();
@@ -59,35 +70,43 @@ package {
 //			initHeroes();
 		}
 		
-			function fmv():void {
-				var p:Point = new Point(stage.mouseX, stage.mouseY);
-				if (p.equals(center)) return;
-				f(coor.direction(p), 2);
-			}
+		private function fmv():void {
+			var p:Point = new Point(stage.mouseX, stage.mouseY);
+			if (p.equals(center)) return;
+			f(coor.direction(p), 1);
+		}
+
 		private function initStage():void {
 			Debug.monitor(stage);
 			stage.align = StageAlign.TOP_LEFT;
 			stage.scaleMode = StageScaleMode.NO_SCALE; 
 
-			
-			var t:Timer = new Timer(600);
+			/*
 			stage.addEventListener(MouseEvent.MOUSE_MOVE, function(e:MouseEvent):void {
 				var p:Point = new Point(e.stageX, e.stageY);
-//				trace(coor.direction(p));
+				trace(coor.direction(p));
 			});
+			*/
 
-
-			t.addEventListener(TimerEvent.TIMER, fmv);
 
 			stage.addEventListener(MouseEvent.RIGHT_MOUSE_DOWN, function(e:MouseEvent):void {
-            pressed = true;
-				//t.start();
+				pressed = true;
 				fmv();
 			});
 			stage.addEventListener(MouseEvent.RIGHT_MOUSE_UP, function(e:MouseEvent):void {
-            pressed = false;
-			h.motion = 0;
-				//t.stop();
+				pressed = false;
+				h.motion = 0;
+			});
+			stage.addEventListener(KeyboardEvent.KEY_DOWN, function(e:KeyboardEvent):void {
+				trace(e.keyCode, e.charCode);
+				if (e.keyCode == 38) {
+					floor--;
+				}
+				if (e.keyCode == 40) {
+					floor++;
+				}
+				if (floor < 0) floor = 0;
+				addChildAt(h, floor);
 			});
 			/*
 			stage.addEventListener(MouseEvent.CLICK, function(e:MouseEvent):void {

@@ -1,8 +1,5 @@
 package mir {
 	import flash.display.Bitmap;
-	import flash.display.BitmapData;
-	import flash.display.BitmapDataChannel;
-	import flash.display.BlendMode;
 	import flash.events.ErrorEvent;
 	import flash.events.Event;
 	import flash.events.IOErrorEvent;
@@ -63,7 +60,8 @@ package mir {
 		}
 		
 		private static function round(item:Number, index:int, array:Array):int {
-			return Math.round(item);
+			var n:int = Math.ceil(item);
+			return n;
 		}
 
 		public static function copyMirBitmapDataToBitmap(mirbmp:MirBitmapData, bmp:Bitmap):void {

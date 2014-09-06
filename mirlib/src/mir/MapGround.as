@@ -5,14 +5,12 @@ package mir  {
 	
 	public final class MapGround extends MapBase {
 
-		public function MapGround() {
-			super("ground.bin")
+		public function MapGround(name:String) {
+			super(name + ".ground");
 		}
 
-		override protected function initStruct(bytes:ByteArray):void {
-			struct = new StructMapGround(bytes);
-		}
-
+		override protected function get StructClass():Class { return StructMapGround; }
+		
 		override protected function initChildren():void {
 			var bmp:Bitmap;
 			var w:int, h:int;
@@ -25,7 +23,7 @@ package mir  {
 				}
 			}
 		}
-		
+
 		override protected function update(active:Boolean=false):void {
 			var w:int, h:int, i:int;
 			if (active) {

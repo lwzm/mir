@@ -12,7 +12,7 @@ package mir {
 
 	public final class Hero extends Sprite {
 
-		public static const DELAIES:Array = [500, 100, 20, 100, 100, 100, 100, 100, 200, 100, 150];
+		public static const DELAIES:Array = [500, 50, 20, 100, 100, 100, 100, 100, 200, 100, 150];
 		public static const MOTION_DEFAULT:int = 0;
 
 		public var shadow:Sprite;
@@ -24,10 +24,6 @@ package mir {
 		private var bmpBodyShadow:Bitmap;
 		private var bmpHairShadow:Bitmap;
 		private var bmpWeaponShadow:Bitmap;
-		private var arrBody:Array;
-		private var arrHair:Array;
-		private var arrWeapon:Array;
-		private var arrLength:int;
 
 		public var nameBody:String;
 		public var nameHair:String;
@@ -35,8 +31,8 @@ package mir {
 		
 		public var deltaX:int;
 		public var deltaY:int;
-		private var stepsX:Array;
-		private var stepsY:Array;
+		public var stepsX:Array;
+		public var stepsY:Array;
 
 		private var _b:int;
 		private var _h:int;
@@ -114,10 +110,6 @@ package mir {
 				switch_delay();
 				switch_layers();
 				renameThem();
-				arrBody = Res.bodies.g(nameBody);
-				arrHair = _h ? Res.hairs.g(nameHair) : RemoteMultiple.dummy;
-				arrWeapon = _w ? Res.weapons.g(nameWeapon) : RemoteMultiple.dummy;
-				arrLength = arrBody.length;//Math.max(arrBody.length, arrHair.length, arrWeapon.length);
 				stepsX = deltaX ? Util.steps(x, x + deltaX, arrLength) : null;
 				stepsY = deltaY ? Util.steps(y, y + deltaY, arrLength) : null;
 				deltaX = deltaY = 0;
@@ -125,6 +117,10 @@ package mir {
 				hooksTodo = null;
 				exeHook(0);
 			}
+			var arrBody:Array = Res.bodies.g(nameBody);
+			var arrHair:Array = _h ? Res.hairs.g(nameHair) : RemoteMultiple.dummy;
+			var arrWeapon:Array = _w ? Res.weapons.g(nameWeapon) : RemoteMultiple.dummy;
+			var arrLength:int = arrBody.length;
 			var b:MirBitmapData = arrBody[aniIdx] as MirBitmapData;
 			var h:MirBitmapData = arrHair[aniIdx] as MirBitmapData;
 			var w:MirBitmapData = arrWeapon[aniIdx] as MirBitmapData;

@@ -3,14 +3,13 @@ package mir {
 	import flash.utils.ByteArray;
 
 	public final class MapMiddle extends MapBase {
-		public function MapMiddle() {
-			super("middle.bin");
+
+		public function MapMiddle(name:String) {
+			super(name + ".middle");
 		}
 
-		override protected function initStruct(bytes:ByteArray):void {
-			struct = new StructMapMiddle(bytes);
-		}
-
+		override protected function get StructClass():Class { return StructMapMiddle; }
+		
 		override protected function initChildren():void {
 			var bmp:Bitmap;
 			var w:int, h:int;
@@ -23,7 +22,7 @@ package mir {
 				}
 			}
 		}
-		
+
 		override protected function update(active:Boolean=false):void {
 			var w:int, h:int, i:int;
 			if (active) {

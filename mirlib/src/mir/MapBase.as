@@ -6,7 +6,6 @@ package mir {
 	import flash.utils.Timer;
 
 	public class MapBase extends Sprite {
-//		public var struct:IMapStruct;
 		public var struct:StructMapBase;
 		
 		private var timer:Timer;
@@ -22,19 +21,23 @@ package mir {
 
 		private static const FRAME:int = 6;
 
-		public function MapBase(asset:String) {
+		public function MapBase(name:String) {
 			x = Const.MAP_OFFSET_X;
 			y = Const.MAP_OFFSET_Y;
 			initChildren();
-			Util.loadBinary(Const.ASSETS_DOMAIN + asset, buildStruct);
+			Util.loadBinary(completeAssetUrl(name), buildStruct);
 		}
 		
+		protected static function completeAssetUrl(name:String):String {
+			return Const.ASSETS_DOMAIN + "map/" + name;
+		}
+
+		protected function get StructClass():Class { throw Error }
 		protected function initChildren():void { throw Error }
-		protected function initStruct(bytes:ByteArray):void { throw Error }
 		protected function update(active:Boolean=false):void { throw Error }
 
 		private function buildStruct(bytes:ByteArray):void {
-			initStruct(bytes);
+			struct = new StructClass(bytes);
 			update(true);
 			timer = new Timer(1000);
 			timer.addEventListener(TimerEvent.TIMER, update_periodically);
@@ -43,7 +46,12 @@ package mir {
 
 		public function f1():void {
 			stepsX ? x = stepsX[idx] : null;
-			stepsY ? y = stepsY[idx] : null;
+//			stepsY ? y = stepsY[idx] : null;  // will be shake
+//			trace(stepsY);
+			if (stepsY) {  // this is prettier
+				var i:int = stepsY[idx];
+				y = i - ((i & 0x01) ? 0 : 1);
+			}
 			++idx;
 		}
 

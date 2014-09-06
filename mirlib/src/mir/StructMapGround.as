@@ -21,8 +21,8 @@ package mir {
 		override public function g(x:int, y:int):MirBitmapData {
 			var i:int, idx:int;
 			var data:MirBitmapData;
-			x -= x % 2;
-			y -= y % 2;
+			x -= x & 0x01;
+			y -= y & 0x01;
 			idx = w * y + x;
 			i = idx < maxLen ? tiles[idx] : 0;
 			if (i) {

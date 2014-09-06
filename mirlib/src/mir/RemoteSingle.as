@@ -10,7 +10,7 @@ package mir {
 		}
 		
 		public function g(name:String):MirBitmapData {
-			if (!all[name]) {
+			if (!(name in all)) {
 				prepair(name);
 			}
 			return all[name];
