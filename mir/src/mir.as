@@ -1,4 +1,4 @@
-package {
+package  {
 	import com.hexagonstar.util.debug.Debug;
 	
 	import flash.display.Sprite;
@@ -14,16 +14,17 @@ package {
 	import mir.Const;
 	import mir.CoordinateSystem;
 	import mir.Hero;
-	import mir.MapGround
+	import mir.MapGround;
 	import mir.MapMiddle;
 	import mir.MapObjects;
 	import mir.Res;
-	import mir.StructMapAnimations;
 	import mir.Util;
+	
 	
 	[SWF(width="800", height="600", backgroundColor="#808080", frameRate="40")]
 	public class mir extends Sprite {
 
+		private var map:Map;
 		private var ground:MapGround;
 		private var objects:MapObjects;
 		private var middle:MapMiddle;
@@ -36,23 +37,35 @@ package {
 
 		public function mir() {
 			Util.autoGc();
+			var xx:int = 290;
+			var yy:int = 290;
+			map = new Map("0");
+			map.viewX = xx;
+			map.viewY = yy;
+			addChild(map);
+			stage.addEventListener(MouseEvent.CLICK, function(e:MouseEvent):void {
+				map.x = -Const.TILE_W * map.viewX;
+				map.y = -Const.TILE_H * map.viewY;
+				h.x = -map.x + 376
+				h.y = -map.y + 209
+				map.update();
+				trace(map.numChildren);
+			});
 //			Util.loadString(Const.ASSETS_DOMAIN+"animations.bin", function(s:String):void {
 //				Debug.traceObj(new StructMapAnimations(s));
 //			});
 			initStage();
-			var map:String = "0";
-			var xx:int = 290;
-			var yy:int = 290;
-			ground = new MapGround(map);
-			objects = new MapObjects(map);
-			middle = new MapMiddle(map);
-			addChild(ground);
-			addChild(middle);
+			var m:String = "0";
+			ground = new MapGround(m);
+			objects = new MapObjects(m);
+			middle = new MapMiddle(m);
+//			addChild(ground);
+//			addChild(middle);
 //			for each (var obj:Sprite in objects.
-			addChild(objects);
-			addChild(h);
+//			addChild(objects);
+			map.addChild(h);
 			addChild(h.hitArea);
-			h.body = 5
+			h.body = 0
 			h.hair = 2
 			h.weapon = 5
 			ground.mapX = xx
@@ -73,7 +86,7 @@ package {
 		private function fmv():void {
 			var p:Point = new Point(stage.mouseX, stage.mouseY);
 			if (p.equals(center)) return;
-			f(coor.direction(p), 1);
+			f(coor.direction(p), 2);
 		}
 
 		private function initStage():void {
@@ -123,19 +136,22 @@ package {
 		}
 
 		public function f(d:uint, l:int):void {
+			var x:int, y:int;
+			switch (d) {
+				case 0: y = -l; break;
+				case 1: x = l, y = -l;break;
+				case 2: x = l;break;
+				case 3: x = l, y = l;break;
+				case 4: y = l;break;
+				case 5: x = -l; y = l;break;
+				case 6: x = -l;break;
+				case 7: x = -l, y= -l;break;
+				default: break;
+			}
+				h.deltaX = Const.TILE_W * x;
+				h.deltaY = Const.TILE_H * y;
+				
 			h.hook0 = function() { 
-				var x:int, y:int;
-				switch (d) {
-					case 0: y = -l; break;
-					case 1: x = l, y = -l;break;
-					case 2: x = l;break;
-					case 3: x = l, y = l;break;
-					case 4: y = l;break;
-					case 5: x = -l; y = l;break;
-					case 6: x = -l;break;
-					case 7: x = -l, y= -l;break;
-					default: break;
-				}
 				ground.mapX += x;
 				ground.mapY += y;
 				objects.mapX += x;
@@ -143,8 +159,25 @@ package {
 				middle.mapX += x;
 				middle.mapY += y;
 			};
-			h.hook1 = function() { ground.f1(); objects.f1(); middle.f1(); };
-			h.hook2 = function() { ground.f2(); objects.f2(); middle.f2(); if (pressed) {fmv()}};
+				map.viewX += x;
+				map.viewY += y;
+			var i:int, mapx:int, mapy:int
+			mapx = map.x
+			mapy = map.y
+			var stepsx:Array = Util.steps(map.x, -Const.TILE_W * map.viewX, 6);
+			var stepsy:Array = Util.steps(map.y, -Const.TILE_H * map.viewY, 6);
+			h.hook1 = function() { ground.f1(); objects.f1(); middle.f1();
+				map.x = stepsx[i];
+				map.y = stepsy[i];
+				i++
+			};
+			h.hook2 = function() { ground.f2(); objects.f2(); middle.f2(); if (pressed) {fmv()}
+				map.x = -Const.TILE_W * map.viewX;
+				map.y = -Const.TILE_H * map.viewY;
+				if (map.viewX % 2 + map.viewY % 2 === 0) {
+					map.update();
+				}
+			};
 			h.direction = d;
 			h.motion = l;
 		}

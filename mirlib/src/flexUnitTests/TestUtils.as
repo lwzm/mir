@@ -36,12 +36,14 @@ package flexUnitTests
 		
 		[Test]
 		public function test_loadAsset():void {
+			/*
 			Util.loadDeflatedBinary("http://tmp.qww.pw/../../data/bodies/00", function(bytes:ByteArray):void {
 				assertTrue(bytes.length > 0);
 			});
 			Util.loadDeflatedBinary("http://tmp.qww.pw/not_exist", function(bytes:ByteArray):void {
 				trace("loaded");
 			});
+			*/
 		}
 		
 		[Test]
@@ -57,6 +59,17 @@ package flexUnitTests
 			assertEquals(10, arr[arr.length - 1]);
 			arr = Util.range(0.2, 0, -0.1);
 			assertEquals(3, arr.length);
+		}
+
+		[Test]
+		public function test_steps():void {
+			var steps:Array;
+			steps = Util.steps(1, 4, 3);
+			assertEquals(2, steps[0]);
+			assertEquals(4, steps[steps.length - 1]);
+			steps = Util.steps(1, 1, 3);
+			assertEquals(1, steps[0]);
+			assertEquals(1, steps[steps.length - 1]);
 		}
 
 		[Test]

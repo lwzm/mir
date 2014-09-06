@@ -34,6 +34,11 @@ package mir {
 		public var stepsX:Array;
 		public var stepsY:Array;
 
+		private var arrBody:Array;
+		private var arrHair:Array;
+		private var arrWeapon:Array;
+		private var arrLength:int;
+
 		private var _b:int;
 		private var _h:int;
 		private var _w:int;
@@ -106,24 +111,30 @@ package mir {
 		}
 
 		private function timer_task(e:TimerEvent):void {
+			var b:MirBitmapData, h:MirBitmapData, w:MirBitmapData;
 			if (aniIdx == 0) {
 				switch_delay();
 				switch_layers();
 				renameThem();
+				arrBody = Res.bodies.g(nameBody);
+				arrHair = _h ? Res.hairs.g(nameHair) : RemoteMultiple.dummy;
+				arrWeapon = _w ? Res.weapons.g(nameWeapon) : RemoteMultiple.dummy;
+				arrLength = arrBody.length;
 				stepsX = deltaX ? Util.steps(x, x + deltaX, arrLength) : null;
 				stepsY = deltaY ? Util.steps(y, y + deltaY, arrLength) : null;
 				deltaX = deltaY = 0;
 				hooks = hooksTodo;
 				hooksTodo = null;
 				exeHook(0);
+			} else {
+				if (!arrBody[0]) {  // retry body
+					arrBody = Res.bodies.g(nameBody);
+					arrLength = arrBody.length;
+				}
 			}
-			var arrBody:Array = Res.bodies.g(nameBody);
-			var arrHair:Array = _h ? Res.hairs.g(nameHair) : RemoteMultiple.dummy;
-			var arrWeapon:Array = _w ? Res.weapons.g(nameWeapon) : RemoteMultiple.dummy;
-			var arrLength:int = arrBody.length;
-			var b:MirBitmapData = arrBody[aniIdx] as MirBitmapData;
-			var h:MirBitmapData = arrHair[aniIdx] as MirBitmapData;
-			var w:MirBitmapData = arrWeapon[aniIdx] as MirBitmapData;
+			b = arrBody[aniIdx] as MirBitmapData;
+			h = arrHair[aniIdx] as MirBitmapData;
+			w = arrWeapon[aniIdx] as MirBitmapData;
 			Util.copyMirBitmapDataToBitmap(b, bmpBody);
 			Util.copyMirBitmapDataToBitmap(h, bmpHair);
 			Util.copyMirBitmapDataToBitmap(w, bmpWeapon);

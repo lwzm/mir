@@ -19,10 +19,12 @@ package mir {
 		override public function g(x:int, y:int):MirBitmapData {
 			var i:int, idx:int;
 			var data:MirBitmapData;
-			idx = w * y + x;
-			i = tiles[idx];
-			if (i) {
-				data = Res.tilesm.g((i - 1).toString());
+			if (x >= 0 && y >= 0) {
+				idx = w * y + x;
+				i = tiles[idx];
+				if (i) {
+					data = Res.tilesm.g((i - 1).toString());
+				}
 			}
 			return data;
 		}

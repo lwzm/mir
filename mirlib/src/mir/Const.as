@@ -1,13 +1,15 @@
 package mir {
 	public final class Const {
 		public static const ASSETS_DOMAIN:String = "../../t/" && "http://tmp.qww.pw/";
-		public static const ASSETS_ARGUMENT:String = String(new Date().time);
+		public static const ASSETS_VERSION:String = String(new Date().time);
 		public static const SCREEN_W:int = 800;
 		public static const SCREEN_H:int = 600;
+		public static const HERO_X:int = 376;
+		public static const HERO_Y:int = 209;
 		public static const TILE_W:int = 48;
 		public static const TILE_H:int = 32;
 		public static const TILE_X:int = 20;
-		public static const TILE_Y:int = 44;
+		public static const TILE_Y:int = 44;  // bigger is better
 		public static const TILE_EDGE:int = -2;  // TILE_EDGE % 2 == 0
 		public static const MAP_OFFSET_X:int = -15;
 		public static const MAP_OFFSET_Y:int = -3;
