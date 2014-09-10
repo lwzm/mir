@@ -37,9 +37,9 @@ package  {
 
 		public function mir() {
 			Util.autoGc();
-			var xx:int = 290;
-			var yy:int = 290;
-			map = new Map("0");
+			var xx:int = 3;
+			var yy:int = 19;
+			map = new Map("0122");
 			map.viewX = xx;
 			map.viewY = yy;
 			addChild(map);
@@ -64,7 +64,7 @@ package  {
 //			for each (var obj:Sprite in objects.
 //			addChild(objects);
 			map.addChild(h);
-			addChild(h.hitArea);
+			map.addChild(h.hitArea);
 			h.body = 0
 			h.hair = 2
 			h.weapon = 5
@@ -86,7 +86,7 @@ package  {
 		private function fmv():void {
 			var p:Point = new Point(stage.mouseX, stage.mouseY);
 			if (p.equals(center)) return;
-			f(coor.direction(p), 2);
+			f(coor.direction(p), 1);
 		}
 
 		private function initStage():void {
@@ -148,8 +148,8 @@ package  {
 				case 7: x = -l, y= -l;break;
 				default: break;
 			}
-				h.deltaX = Const.TILE_W * x;
-				h.deltaY = Const.TILE_H * y;
+//				h.deltaX = Const.TILE_W * x;
+//				h.deltaY = Const.TILE_H * y;
 				
 			h.hook0 = function() { 
 				ground.mapX += x;

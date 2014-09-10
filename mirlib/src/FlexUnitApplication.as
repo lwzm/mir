@@ -5,6 +5,8 @@ package
 	import flash.display.Sprite;
 	
 	import flexUnitTests.TestConst;
+	import flexUnitTests.TestHero;
+	import flexUnitTests.TestRes;
 	import flexUnitTests.TestUtils;
 	
 	import flexunit.flexui.FlexUnitTestRunnerUIAS;
@@ -28,6 +30,8 @@ package
 		{
 			var testsToRun:Array = new Array();
 			testsToRun.push(flexUnitTests.TestConst);
+			testsToRun.push(flexUnitTests.TestHero);
+			testsToRun.push(flexUnitTests.TestRes);
 			testsToRun.push(flexUnitTests.TestUtils);
 			return testsToRun;
 		}

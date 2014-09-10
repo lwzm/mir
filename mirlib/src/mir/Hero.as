@@ -13,7 +13,10 @@ package mir {
 	public final class Hero extends Sprite {
 
 		public static const DELAIES:Array = [500, 50, 20, 100, 100, 100, 100, 100, 200, 100, 150];
+
 		public static const MOTION_DEFAULT:int = 0;
+		public static const MOTION_WALK:int = 1;
+		public static const MOTION_RUN:int = 2;
 
 		public var shadow:Sprite;
 
@@ -29,10 +32,12 @@ package mir {
 		public var nameHair:String;
 		public var nameWeapon:String;
 		
-		public var deltaX:int;
-		public var deltaY:int;
-		public var stepsX:Array;
-		public var stepsY:Array;
+//		public var deltaX:int;
+//		public var deltaY:int;
+//		public var stepsX:Array;
+//		public var stepsY:Array;
+//		public var stepsX:Vector.<int>;
+//		public var stepsY:Vector.<int>;
 
 		private var arrBody:Array;
 		private var arrHair:Array;
@@ -61,21 +66,27 @@ package mir {
 			shadow.mouseEnabled = false;
 			shadow.visible = false;
 			hitArea = new Sprite();
-			hitArea.graphics.beginFill(0, 0.0);
+			hitArea.graphics.beginFill(0, 0.5);
 			hitArea.graphics.drawRect(0,-32,48,64);
-			hitArea.graphics.drawCircle(0,0,1);
+			hitArea.graphics.drawCircle(0,0,3);
 			bmpBody = new Bitmap();
 			bmpHair = new Bitmap();
 			bmpWeapon = new Bitmap();
 			bmpBodyShadow = new Bitmap();
 			bmpHairShadow = new Bitmap();
 			bmpWeaponShadow = new Bitmap();
+			addChild(bmpBody);
+			addChild(bmpHair);
+			addChild(bmpWeapon);
+			shadow.addChild(bmpBodyShadow);
+			shadow.addChild(bmpHairShadow);
+			shadow.addChild(bmpWeaponShadow);
 			timer = new Timer(DELAIES[0]);
 			filtersRecord = {};
 			body = hair = weapon = sex = motion = direction = 0;
 			tuneLayers(isUp(_d));
 
-			timer.addEventListener(TimerEvent.TIMER, timer_task);
+			timer.addEventListener(TimerEvent.TIMER, animate);
 			timer.start();
 			
 			hitArea.addEventListener(MouseEvent.RIGHT_CLICK, function(e:MouseEvent):void {
@@ -93,36 +104,36 @@ package mir {
 				shadow.visible = false;
 			});
 		}
+		
+		private function get filtersRecordAsFiltersArray():Array {
+			var name:String;
+			var arr:Array = [];
+			for (name in filtersRecord) {
+				arr.push(Filters[name]);
+			}
+			return arr;
+		}
 
 		public function addFilter(name:String):void {
-			if (filtersRecord[name])
-				return
-			var arr:Array = filters;
-			filtersRecord[name] = arr.length;
-			arr.push(Filters[name]);
-			shadow.filters = filters = arr;
+			filtersRecord[name] = true;
+			shadow.filters = filters = filtersRecordAsFiltersArray;
 		}
 
 		public function delFilter(name:String):void {
-			shadow.filters = filters = filters.filter(function(item:*, index:int, array:Array):Boolean {
-				return index !== filtersRecord[name];
-			});
-			filtersRecord[name] = null;
+			delete filtersRecord[name];
+			shadow.filters = filters = filtersRecordAsFiltersArray;
 		}
 
-		private function timer_task(e:TimerEvent):void {
+		private function animate(e:TimerEvent):void {
 			var b:MirBitmapData, h:MirBitmapData, w:MirBitmapData;
 			if (aniIdx == 0) {
-				switch_delay();
-				switch_layers();
+				switchDelay();
+				switchLayers();
 				renameThem();
 				arrBody = Res.bodies.g(nameBody);
 				arrHair = _h ? Res.hairs.g(nameHair) : RemoteMultiple.dummy;
 				arrWeapon = _w ? Res.weapons.g(nameWeapon) : RemoteMultiple.dummy;
 				arrLength = arrBody.length;
-				stepsX = deltaX ? Util.steps(x, x + deltaX, arrLength) : null;
-				stepsY = deltaY ? Util.steps(y, y + deltaY, arrLength) : null;
-				deltaX = deltaY = 0;
 				hooks = hooksTodo;
 				hooksTodo = null;
 				exeHook(0);
@@ -141,8 +152,7 @@ package mir {
 			Util.copyMirBitmapDataToBitmap(b, bmpBodyShadow);
 			Util.copyMirBitmapDataToBitmap(h, bmpHairShadow);
 			Util.copyMirBitmapDataToBitmap(w, bmpWeaponShadow);
-			stepsX ? x = stepsX[aniIdx] : null;
-			stepsY ? y = stepsY[aniIdx] : null;
+			tuneXY();
 			if (++aniIdx < arrLength) {
 				exeHook(1);
 			} else {
@@ -154,6 +164,28 @@ package mir {
 				_m_todo = -1;
 				aniIdx = 0;
 				exeHook(2);
+			}
+		}
+
+		private function tuneXY():void {
+			var deltaX:int, deltaY:int;
+			switch (_m) {
+				case MOTION_WALK:
+					deltaX = Const.WALK_DIRECTIONS_X_DELTA[_d][aniIdx];
+					deltaY = Const.WALK_DIRECTIONS_Y_DELTA[_d][aniIdx];
+					break;
+				case MOTION_RUN:
+					deltaX = Const.RUN_DIRECTIONS_X_DELTA[_d][aniIdx];
+					deltaY = Const.RUN_DIRECTIONS_Y_DELTA[_d][aniIdx];
+					break;
+				default:
+					break;
+			}
+			if (deltaX) {
+				x += deltaX;
+			}
+			if (deltaY) {
+				y += deltaY;
 			}
 		}
 
@@ -215,8 +247,7 @@ package mir {
 			if (_m == MOTION_DEFAULT) {
 				_m = m;
 				aniIdx = 0;
-				switch_delay();
-//				switch_layers();
+				switchDelay();
 				renameThem();
 			} else {
 				_m_todo = m;
@@ -227,14 +258,14 @@ package mir {
 			_d_todo = d;
 		}
 		
-		private function switch_delay():void {
+		private function switchDelay():void {
 			var delay:Number = DELAIES[_m];
 			if (timer.delay != delay) {
 				timer.delay = delay;
 			}
 		}
 
-		private function switch_layers():void {
+		private function switchLayers():void {
 			if (_d != _d_todo) {
 				var w0:Boolean = isUp(_d);
 				var w1:Boolean = isUp(_d_todo);
@@ -262,19 +293,11 @@ package mir {
 
 		private function tuneLayers(isWeaponUp:Boolean):void {
 			if (isWeaponUp) {
-				addChild(bmpBody);
-				addChild(bmpHair);
-				addChild(bmpWeapon);
-				shadow.addChild(bmpBodyShadow);
-				shadow.addChild(bmpHairShadow);
-				shadow.addChild(bmpWeaponShadow);
+				setChildIndex(bmpWeapon, 2);
+				shadow.setChildIndex(bmpWeaponShadow, 2);
 			} else {
-				addChild(bmpWeapon);
-				addChild(bmpBody);
-				addChild(bmpHair);
-				shadow.addChild(bmpWeaponShadow);
-				shadow.addChild(bmpBodyShadow);
-				shadow.addChild(bmpHairShadow);
+				setChildIndex(bmpWeapon, 0);
+				shadow.setChildIndex(bmpWeaponShadow, 0);
 			}
 		}
 	}
