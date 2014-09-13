@@ -28,8 +28,8 @@ package mir {
 					if (data) {
 						bmp.bitmapData = data;
 						// i guess (7, -44), haha...
-						bmp.x = 7 + data.x - data.width;
-						bmp.y = -44 + data.y - data.height;
+//						bmp.x = data.x - data.width;
+//						bmp.y = data.y - data.height;
 					}
 				}
 			}

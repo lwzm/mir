@@ -14,8 +14,8 @@ package mir  {
 		override protected function initChildren():void {
 			var bmp:Bitmap;
 			var w:int, h:int;
-			for (h = Const.TILE_EDGE; h < Const.TILES_COUNT_H; h += 2) {
-				for (w = Const.TILE_EDGE; w < Const.TILES_COUNT_W; w += 2) {
+			for (h = Const.TILES_COUNT_UP; h < Const.TILES_COUNT_DOWN; h += 2) {
+				for (w = Const.TILES_COUNT_UP; w < Const.TILES_COUNT_RIGHT; w += 2) {
 					bmp = new Bitmap();
 					bmp.x = Const.TILE_W * (w - 1) + 7;
 					bmp.y = Const.TILE_H * (h - 1) - 44;
@@ -30,8 +30,8 @@ package mir  {
 				x = -(mX % 2) * Const.TILE_W + Const.MAP_OFFSET_X;
 				y = -(mY % 2) * Const.TILE_H + Const.MAP_OFFSET_Y;
 			}
-			for (h = Const.TILE_EDGE; h < Const.TILES_COUNT_H; h += 2) {
-				for (w = Const.TILE_EDGE; w < Const.TILES_COUNT_W; w += 2) {
+			for (h = Const.TILES_COUNT_UP; h < Const.TILES_COUNT_DOWN; h += 2) {
+				for (w = Const.TILES_COUNT_UP; w < Const.TILES_COUNT_RIGHT; w += 2) {
 					setTile(getChildAt(i++) as Bitmap, w + mX, h + mY, active);
 				}
 			}

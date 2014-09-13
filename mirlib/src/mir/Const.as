@@ -8,21 +8,22 @@ package mir {
 		public static const HERO_Y:int = 209;
 		public static const TILE_W:int = 48;
 		public static const TILE_H:int = 32;
-		public static const TILES_COUNT_W:int = 20;
-		public static const TILES_COUNT_H:int = 44;  // bigger is better
-		public static const TILE_EDGE:int = -2;  // TILE_EDGE % 2 == 0
+		public static const TILES_COUNT_LEFT:int = 10;
+		public static const TILES_COUNT_RIGHT:int = 10;
+		public static const TILES_COUNT_UP:int = 8;
+		public static const TILES_COUNT_DOWN:int = 36;
 		public static const MAP_OFFSET_X:int = -15;
 		public static const MAP_OFFSET_Y:int = -3;
 		public static const DELTA_ZERO:Vector.<int>    = Vector.<int>([0, 0, 0, 0, 0, 0]);
-		public static const DELTA_1_UP:Vector.<int>    = Vector.<int>([-5, -5, -7, -5, -5, -5]);
+		public static const DELTA_1_UP:Vector.<int>    = Vector.<int>([-4, -6, -6, -6, -6, -4]);
 		public static const DELTA_1_DOWN:Vector.<int>  = Vector.<int>([+4, +6, +6, +6, +6, +4]);
 		public static const DELTA_1_LEFT:Vector.<int>  = Vector.<int>([-8, -8, -8, -8, -8, -8]);
 		public static const DELTA_1_RIGHT:Vector.<int> = Vector.<int>([+8, +8, +8, +8, +8, +8]);
-		public static const DELTA_2_UP:Vector.<int>    = Vector.<int>([-10, -11, -11, -11, -11, -10]);
+		public static const DELTA_2_UP:Vector.<int>    = Vector.<int>([-10, -10, -12, -12, -10, -10]);
 		public static const DELTA_2_DOWN:Vector.<int>  = Vector.<int>([+10, +10, +12, +12, +10, +10]);
 		public static const DELTA_2_LEFT:Vector.<int>  = Vector.<int>([-16, -16, -16, -16, -16, -16]);
 		public static const DELTA_2_RIGHT:Vector.<int> = Vector.<int>([+16, +16, +16, +16, +16, +16]);
-		public static const WALK_DIRECTIONS_X_DELTA:Array = [
+		public static const WALK_DIRECTIONS_X_DELTA:Vector.<Vector.<int>> = Vector.<Vector.<int>>([
 			DELTA_ZERO,
 			DELTA_1_RIGHT,
 			DELTA_1_RIGHT,
@@ -31,8 +32,8 @@ package mir {
 			DELTA_1_LEFT,
 			DELTA_1_LEFT,
 			DELTA_1_LEFT,
-		];
-		public static const WALK_DIRECTIONS_Y_DELTA:Array = [
+		]);
+		public static const WALK_DIRECTIONS_Y_DELTA:Vector.<Vector.<int>> = Vector.<Vector.<int>>([
 			DELTA_1_UP,
 			DELTA_1_UP,
 			DELTA_ZERO,
@@ -41,8 +42,8 @@ package mir {
 			DELTA_1_DOWN,
 			DELTA_ZERO,
 			DELTA_1_UP,
-		];
-		public static const RUN_DIRECTIONS_X_DELTA:Array = [
+		]);
+		public static const RUN_DIRECTIONS_X_DELTA:Vector.<Vector.<int>> = Vector.<Vector.<int>>([
 			DELTA_ZERO,
 			DELTA_2_RIGHT,
 			DELTA_2_RIGHT,
@@ -51,8 +52,8 @@ package mir {
 			DELTA_2_LEFT,
 			DELTA_2_LEFT,
 			DELTA_2_LEFT,
-		];
-		public static const RUN_DIRECTIONS_Y_DELTA:Array = [
+		]);
+		public static const RUN_DIRECTIONS_Y_DELTA:Vector.<Vector.<int>> = Vector.<Vector.<int>>([
 			DELTA_2_UP,
 			DELTA_2_UP,
 			DELTA_ZERO,
@@ -61,7 +62,7 @@ package mir {
 			DELTA_2_DOWN,
 			DELTA_ZERO,
 			DELTA_2_UP,
-		];
+		]);
 		public static const PALLET:Vector.<uint> = Vector.<uint>([
 			0,
 			0xFF800000,

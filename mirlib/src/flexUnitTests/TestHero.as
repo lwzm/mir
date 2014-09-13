@@ -6,6 +6,7 @@ package flexUnitTests
 	import mir.Hero;
 	
 	import org.flexunit.asserts.assertEquals;
+	import org.flexunit.asserts.assertStrictlyEquals;
 	import org.flexunit.async.Async;
 	
 	public class TestHero
@@ -181,6 +182,16 @@ package flexUnitTests
 			}, delay);
 		}
 		
+		[Test(async)]
+		public function testSwitchLayer():void {
+			var weaponLayer:* = hero.getChildAt(0);
+			hero.direction = 1;
+			hero.motion = 0;
+			Async.delayCall(this, function():void {
+				assertStrictlyEquals(weaponLayer, hero.getChildAt(2));
+			}, Hero.DELAIES[0] + 1);
+		}
+
 		[Test]
 		public function testSet_body():void {
 		}

@@ -12,7 +12,7 @@ package mir {
 
 	public final class Hero extends Sprite {
 
-		public static const DELAIES:Array = [500, 50, 20, 100, 100, 100, 100, 100, 200, 100, 150];
+		public static const DELAIES:Array = [500, 100, 100, 100, 100, 100, 100, 100, 200, 100, 150];
 
 		public static const MOTION_DEFAULT:int = 0;
 		public static const MOTION_WALK:int = 1;
@@ -31,6 +31,8 @@ package mir {
 		public var nameBody:String;
 		public var nameHair:String;
 		public var nameWeapon:String;
+
+		public var shadowVisible:Boolean;
 		
 //		public var deltaX:int;
 //		public var deltaY:int;
@@ -66,7 +68,7 @@ package mir {
 			shadow.mouseEnabled = false;
 			shadow.visible = false;
 			hitArea = new Sprite();
-			hitArea.graphics.beginFill(0, 0.5);
+			hitArea.graphics.beginFill(0, 0.0);
 			hitArea.graphics.drawRect(0,-32,48,64);
 			hitArea.graphics.drawCircle(0,0,3);
 			bmpBody = new Bitmap();
@@ -81,52 +83,49 @@ package mir {
 			shadow.addChild(bmpBodyShadow);
 			shadow.addChild(bmpHairShadow);
 			shadow.addChild(bmpWeaponShadow);
+
 			timer = new Timer(DELAIES[0]);
+			timer.addEventListener(TimerEvent.TIMER, animate);
+			timer.start();
+
 			filtersRecord = {};
+
 			body = hair = weapon = sex = motion = direction = 0;
 			tuneLayers(isUp(_d));
 
-			timer.addEventListener(TimerEvent.TIMER, animate);
-			timer.start();
-			
-			hitArea.addEventListener(MouseEvent.RIGHT_CLICK, function(e:MouseEvent):void {
-//				motion = 2;
-//				deltaY = -64;
-				direction = (direction+1) % 8;
-				motion = 0;
-			});
 			hitArea.addEventListener(MouseEvent.MOUSE_OVER, function(e:MouseEvent):void {
 				addFilter("highlight");
 				shadow.visible = true;
 			});
 			hitArea.addEventListener(MouseEvent.MOUSE_OUT, function(e:MouseEvent):void {
 				delFilter("highlight");
-				shadow.visible = false;
+				shadow.visible = shadowVisible;
 			});
 		}
 		
-		private function get filtersRecordAsFiltersArray():Array {
+		private function applyFiltersRecord():void {
 			var name:String;
 			var arr:Array = [];
 			for (name in filtersRecord) {
 				arr.push(Filters[name]);
 			}
-			return arr;
+			shadow.filters = filters = arr;
 		}
 
 		public function addFilter(name:String):void {
 			filtersRecord[name] = true;
-			shadow.filters = filters = filtersRecordAsFiltersArray;
+			applyFiltersRecord();
 		}
 
 		public function delFilter(name:String):void {
 			delete filtersRecord[name];
-			shadow.filters = filters = filtersRecordAsFiltersArray;
+			applyFiltersRecord();
 		}
 
 		private function animate(e:TimerEvent):void {
 			var b:MirBitmapData, h:MirBitmapData, w:MirBitmapData;
 			if (aniIdx == 0) {
+				exeHook(0);
 				switchDelay();
 				switchLayers();
 				renameThem();
@@ -136,7 +135,6 @@ package mir {
 				arrLength = arrBody.length;
 				hooks = hooksTodo;
 				hooksTodo = null;
-				exeHook(0);
 			} else {
 				if (!arrBody[0]) {  // retry body
 					arrBody = Res.bodies.g(nameBody);
@@ -156,14 +154,18 @@ package mir {
 			if (++aniIdx < arrLength) {
 				exeHook(1);
 			} else {
-				_m = _m_todo;
-				if (_m === -1) {  // block
-					timer.delay = 3000;
+				exeHook(2);
+				if (_m_todo === -1) {
+					if (_m !== MOTION_DEFAULT) {
+						timer.delay = 3000;
+						trace('b');
+					}
 					_m = MOTION_DEFAULT;
+				} else {
+					_m = _m_todo;
 				}
 				_m_todo = -1;
 				aniIdx = 0;
-				exeHook(2);
 			}
 		}
 

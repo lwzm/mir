@@ -47,17 +47,17 @@ package  {
 			var row:Sprite, other:Sprite, obj:Sprite;
 			var bmp:Bitmap;
 			var x:int, y:int;
-			var deltaX:int = Const.TILE_W * (-2) + 7, deltaY:int = Const.TILE_H * (-2) - 44;  // fuck, i don't know
-			for (y = Const.TILE_EDGE; y < Const.TILES_COUNT_H; y += 2) {
-				for (x = Const.TILE_EDGE; x < Const.TILES_COUNT_W; x += 2) {
+			var deltaX:int = Const.TILE_W * (-2) + 7, deltaY:int = Const.TILE_H * (-2) - 44;  // fuck, i don't know why
+			for (y = Const.TILE_COUNT_UP; y < Const.TILES_COUNT_DOWN; y += 2) {
+				for (x = Const.TILE_COUNT_UP; x < Const.TILES_COUNT_RIGHT; x += 2) {
 					bmp = new Bitmap();
 					bmp.x = Const.TILE_W * x + deltaX;
 					bmp.y = Const.TILE_H * y + deltaY;
 					ground.addChild(bmp);
 				}
 			}
-			for (y = Const.TILE_EDGE; y < Const.TILES_COUNT_H; y++) {
-				for (x = Const.TILE_EDGE; x < Const.TILES_COUNT_W; x++) {
+			for (y = Const.TILE_COUNT_UP; y < Const.TILES_COUNT_DOWN; y++) {
+				for (x = Const.TILE_COUNT_UP; x < Const.TILES_COUNT_RIGHT; x++) {
 					bmp = new Bitmap();
 					bmp.x = Const.TILE_W * x + deltaX;
 					bmp.y = Const.TILE_H * y + deltaY;
@@ -65,14 +65,14 @@ package  {
 				}
 			}
 			objs_bmp = new Vector.<Bitmap>();
-			for (y = Const.TILE_EDGE; y < Const.TILES_COUNT_H; y++) {
+			for (y = Const.TILE_COUNT_UP; y < Const.TILES_COUNT_DOWN; y++) {
 				row = new Sprite();
 				addChild(row);
 				rows.push(row);
 				other = new Sprite();
 				addChild(other);
 				others.push(other);
-				for (x = Const.TILE_EDGE; x < Const.TILES_COUNT_W; x++) {
+				for (x = Const.TILE_COUNT_UP; x < Const.TILES_COUNT_RIGHT; x++) {
 					obj = new Sprite();
 					row.addChild(obj);
 					obj.x = Const.TILE_W * x;
@@ -125,24 +125,24 @@ package  {
 			}
 
 			i = 0;
-			for (y = Const.TILE_EDGE; y < Const.TILES_COUNT_H; y += 2) {
-				for (x = Const.TILE_EDGE; x < Const.TILES_COUNT_W; x += 2) {
+			for (y = Const.TILE_COUNT_UP; y < Const.TILES_COUNT_DOWN; y += 2) {
+				for (x = Const.TILE_COUNT_UP; x < Const.TILES_COUNT_RIGHT; x += 2) {
 					data = structGround.g(x + viewX, y + viewY);
 					(ground.getChildAt(i++) as Bitmap).bitmapData = data;
 				}
 			}
 
 			i = 0;
-			for (y = Const.TILE_EDGE; y < Const.TILES_COUNT_H; y++) {
-				for (x = Const.TILE_EDGE; x < Const.TILES_COUNT_W; x++) {
+			for (y = Const.TILE_COUNT_UP; y < Const.TILES_COUNT_DOWN; y++) {
+				for (x = Const.TILE_COUNT_UP; x < Const.TILES_COUNT_RIGHT; x++) {
 					data = structMiddle.g(x + viewX, y + viewY);
 					(middle.getChildAt(i++) as Bitmap).bitmapData = data;
 				}
 			}
 
 			i = 0;
-			for (y = Const.TILE_EDGE; y < Const.TILES_COUNT_H; y++) {
-				for (x = Const.TILE_EDGE; x < Const.TILES_COUNT_W; x++) {
+			for (y = Const.TILE_COUNT_UP; y < Const.TILES_COUNT_DOWN; y++) {
+				for (x = Const.TILE_COUNT_UP; x < Const.TILES_COUNT_RIGHT; x++) {
 					data = structObjects.g(x + viewX, y + viewY);
 					bmp = objs_bmp[i++];
 					bmp.bitmapData = data;

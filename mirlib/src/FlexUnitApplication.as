@@ -7,6 +7,7 @@ package
 	import flexUnitTests.TestConst;
 	import flexUnitTests.TestHero;
 	import flexUnitTests.TestRes;
+	import flexUnitTests.TestScene;
 	import flexUnitTests.TestUtils;
 	
 	import flexunit.flexui.FlexUnitTestRunnerUIAS;
@@ -32,6 +33,7 @@ package
 			testsToRun.push(flexUnitTests.TestConst);
 			testsToRun.push(flexUnitTests.TestHero);
 			testsToRun.push(flexUnitTests.TestRes);
+			testsToRun.push(flexUnitTests.TestScene);
 			testsToRun.push(flexUnitTests.TestUtils);
 			return testsToRun;
 		}

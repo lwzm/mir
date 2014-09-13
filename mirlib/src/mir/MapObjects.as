@@ -34,9 +34,9 @@ package mir {
 			var bmp:Bitmap;
 			var w:int, h:int;
 			objs = new Vector.<Bitmap>();
-			for (h = Const.TILE_EDGE; h < Const.TILES_COUNT_H; h++) {
+			for (h = Const.TILES_COUNT_UP; h < Const.TILES_COUNT_DOWN; h++) {
 				row = new Sprite();
-				for (w = Const.TILE_EDGE; w < Const.TILES_COUNT_W; w++) {
+				for (w = Const.TILES_COUNT_UP; w < Const.TILES_COUNT_RIGHT; w++) {
 					sp = new Sprite();
 					sp.x = Const.TILE_W * w;
 					sp.y = Const.TILE_H * h;
@@ -67,8 +67,8 @@ package mir {
 				x = Const.MAP_OFFSET_X;
 				y = Const.MAP_OFFSET_Y;
 			}
-			for (h = Const.TILE_EDGE; h < Const.TILES_COUNT_H; h++) {
-				for (w = Const.TILE_EDGE; w < Const.TILES_COUNT_W; w++) {
+			for (h = Const.TILES_COUNT_UP; h < Const.TILES_COUNT_DOWN; h++) {
+				for (w = Const.TILES_COUNT_UP; w < Const.TILES_COUNT_RIGHT; w++) {
 					setTile(objs[i++], w + mX, h + mY, active);
 				}
 			}
@@ -95,8 +95,8 @@ package mir {
 			var w:int, h:int, i:int, t:int, n:int;
 			var bmp:Bitmap;
 			n = timer.currentCount;
-			for (h = Const.TILE_EDGE; h < Const.TILES_COUNT_H; h++) {
-				for (w = Const.TILE_EDGE; w < Const.TILES_COUNT_W; w++) {
+			for (h = Const.TILES_COUNT_UP; h < Const.TILES_COUNT_DOWN; h++) {
+				for (w = Const.TILES_COUNT_UP; w < Const.TILES_COUNT_RIGHT; w++) {
 					setAnimation(objs[i++], w + mX, h + mY, n);
 				}
 			}
