@@ -1,19 +1,26 @@
 package mir {
+	import flash.geom.Point;
+
 	public final class Const {
 		public static const ASSETS_DOMAIN:String = "../../t/" && "http://tmp.qww.pw/";
 		public static const ASSETS_VERSION:String = String(new Date().time);
 		public static const SCREEN_W:int = 800;
 		public static const SCREEN_H:int = 600;
+		public static const VIEW_CENTER:Point = new Point(400, 220);
+		public static const CENTER_COOR_8:CoordinateSystem = new CoordinateSystem(VIEW_CENTER,8);
+		public static const CENTER_COOR_16:CoordinateSystem = new CoordinateSystem(VIEW_CENTER, 16);
 		public static const HERO_X:int = 376;
 		public static const HERO_Y:int = 209;
 		public static const TILE_W:int = 48;
 		public static const TILE_H:int = 32;
 		public static const TILES_COUNT_LEFT:int = 10;
-		public static const TILES_COUNT_RIGHT:int = 10;
+		public static const TILES_COUNT_RIGHT:int = 12;
 		public static const TILES_COUNT_UP:int = 8;
 		public static const TILES_COUNT_DOWN:int = 36;
 		public static const MAP_OFFSET_X:int = -15;
 		public static const MAP_OFFSET_Y:int = -3;
+		public static const DIRECTION_DELTA_X:Vector.<int> = Vector.<int>([0, 1, 1, 1, 0, -1, -1, -1]);
+		public static const DIRECTION_DELTA_Y:Vector.<int> = Vector.<int>([-1, -1, 0, 1, 1, 1, 0, -1]);
 		public static const DELTA_ZERO:Vector.<int>    = Vector.<int>([0, 0, 0, 0, 0, 0]);
 		public static const DELTA_1_UP:Vector.<int>    = Vector.<int>([-4, -6, -6, -6, -6, -4]);
 		public static const DELTA_1_DOWN:Vector.<int>  = Vector.<int>([+4, +6, +6, +6, +6, +4]);

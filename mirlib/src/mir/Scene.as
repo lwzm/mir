@@ -1,5 +1,6 @@
 package mir {
 	import flash.display.Bitmap;
+	import flash.display.BlendMode;
 	import flash.display.Sprite;
 	import flash.events.MouseEvent;
 	import flash.events.TimerEvent;
@@ -9,41 +10,27 @@ package mir {
 
 	public final class Scene {
 		public var name:String;
-		public var sprite:Sprite;
+		public const sprite:Sprite = new Sprite();
+		private const shadows:Sprite = new Sprite();
 		
-		private const DIRECTION_MAP:Vector.<int> = Vector.<int>([4, 5, 6, 7, 0, 1, 2, 3]);
-
 		public var X:int;
 		public var Y:int;
-
-		private var timer:Timer;
 
 		public var structGround:StructMapGround;
 		public var structMiddle:StructMapMiddle;
 		public var structObjects:StructMapObjects;
 		public var structAnimations:StructMapAnimations;
 
-		private var groundBmps:Vector.<Bitmap>;
-		private var middleBmps:Vector.<Bitmap>;
-		private var objectBmps:Vector.<Bitmap>;
-		private var animateBmps:Vector.<Bitmap>;
-		private var rows:Vector.<Sprite>;
-		private var hitAreas:Vector.<Sprite>;
-		private var shadows:Sprite;
+		private const groundBmps:Vector.<Bitmap> = new Vector.<Bitmap>();
+		private const middleBmps:Vector.<Bitmap> = new Vector.<Bitmap>();
+		private const objectBmps:Vector.<Bitmap> = new Vector.<Bitmap>();
+		private const rows:Vector.<Sprite> = new Vector.<Sprite>();
+		private const hitRows:Vector.<Sprite> = new Vector.<Sprite>();
 
 		public function Scene(n:String) {
 			name = n;
-			sprite = new Sprite();
 			sprite.mouseEnabled = false;
-			shadows = new Sprite();
 			shadows.mouseEnabled = false;
-			shadows.mouseChildren = false;
-			rows = new Vector.<Sprite>();
-			hitAreas = new Vector.<Sprite>();
-			groundBmps = new Vector.<Bitmap>();
-			middleBmps = new Vector.<Bitmap>();
-			objectBmps = new Vector.<Bitmap>();
-			animateBmps = new Vector.<Bitmap>();
 			loop(function(i:int, j:int, k:int):void {
 				var bmp:Bitmap;
 				if (i % 2 === 0 && j % 2 === 0) {
@@ -56,22 +43,31 @@ package mir {
 				middleBmps.push(sprite.addChild(new Bitmap()));
 			});
 			loop(function(i:int, j:int, k:int):void {
-				i += Const.TILES_COUNT_UP;
+				i += Const.TILES_COUNT_UP;  // i start from 0
 				if (i === rows.length) {
 					rows.push(sprite.addChild(new Sprite()));
 				}
-				objectBmps.push(rows[i].addChild(new Bitmap()));
+				var sp:Sprite = new Sprite();
+				rows[i].addChild(sp);
+				objectBmps.push(sp.addChild(new Bitmap));
+//				sp.addEventListener(MouseEvent.MOUSE_OVER, function(e:*):void {
+//					sp.filters = [Filters.red];
+//				});
+//				sp.addEventListener(MouseEvent.MOUSE_OUT, function(e:*):void {
+//					sp.filters = [];
+//				});
+//				sp.addEventListener(MouseEvent.CLICK, function(e:*):void {
+//					//todo
+//				});
 			});
 			loop(function(i:int, j:int, k:int):void {
-				i += Const.TILES_COUNT_UP;
-				if (i === hitAreas.length) {
-					hitAreas.push(sprite.addChild(new Sprite()));
+				i += Const.TILES_COUNT_UP;  // i start from 0
+				if (i === hitRows.length) {
+					hitRows.push(sprite.addChild(new Sprite()));
 				}
 			});
-			hitAreas.reverse();
-			loop(function(i:int, j:int, k:int):void {
-				animateBmps.push(sprite.addChild(new Bitmap()));
-			});
+			hitRows.reverse();
+
 			sprite.addChild(shadows);
 			
 			Util.loadBinary(completeAssetUrl("ground"), function(bytes:ByteArray):void {
@@ -87,38 +83,29 @@ package mir {
 				structAnimations = new StructMapAnimations(str);
 			});
 
-			timer = new Timer(200);
-			timer.addEventListener(TimerEvent.TIMER, animate);
-//			timer.start();
 		}
 		
+		/*
         private function _animate(i:int, j:int, k:int):void {
             var bmp:Bitmap;
             var data:MirBitmapData;
             var x:int, y:int;
             x = X + j;
             y = Y + i;
-            bmp = animateBmps[k];
-            bmp.x = dispX(x);
-            bmp.y = dispY(y);
-			x >= 0 && y >= 0 && structAnimations.s(bmp, x, y, timer.currentCount);
+            bmp = objectBmps[k];
+			x >= 0 && y >= 0 && structAnimations.s(bmp, x, y, timer.currentCount, dispX(x+1), dispY(y+1));
 		}
 
 		private function animate(e:TimerEvent):void {
 			structAnimations && loop(_animate);
 		}
+		*/
 
         private function _update(i:int, j:int, k:int):void {
             var bmp:Bitmap;
             var data:MirBitmapData;
-            var x:int, y:int;
-            x = X + j;
-            y = Y + i;
-
-            bmp = middleBmps[k];
-            bmp.bitmapData = structMiddle.g(x, y);
-            bmp.x = dispX(x);
-            bmp.y = dispY(y);
+            const x:int = X + j;
+            const y:int = Y + i;
 
             bmp = groundBmps[k];
             if (bmp) {
@@ -127,28 +114,37 @@ package mir {
                 bmp.y = dispY(y - (y & 0x01));
             }
 
+            bmp = middleBmps[k];
+            bmp.bitmapData = structMiddle.g(x, y);
+            bmp.x = dispX(x);
+            bmp.y = dispY(y);
+
             bmp = objectBmps[k];
             data = structObjects.g(x, y);
             bmp.bitmapData = data;
             if (data) {
+				if (bmp.blendMode !== BlendMode.NORMAL) {
+					bmp.blendMode = BlendMode.NORMAL;
+				}
                 bmp.x = dispX(x + 1) - data.width;
                 bmp.y = dispY(y + 1) - data.height;
             }
         }
 
-		public function update():void {
+		public function update(..._):void {
 			sprite.x = -Const.TILE_W * X;
 			sprite.y = -Const.TILE_H * Y;
-			loop(_update);
+			structGround && structMiddle && structObjects && loop(_update);
 		}
 
 		private function dispX(n:int):int {
-            return Const.TILE_W * n + 376;
+            return Const.TILE_W * n + Const.HERO_X;
         }
 		private function dispY(n:int):int {
-            return Const.TILE_H * n + 209;
+            return Const.TILE_H * n + Const.HERO_Y;
         }
 
+		/**
 		private function _move(deltaX:int, deltaY:int):Function {
             return function():void {
                 sprite.x += deltaX;
@@ -162,11 +158,11 @@ package mir {
 			var i:int;
 			direction = DIRECTION_MAP[direction];
             switch (type) {
-                case Hero.MOTION_WALK:
+                case Hero0.MOTION_WALK:
                     deltaX = Const.WALK_DIRECTIONS_X_DELTA[direction];
                     deltaY = Const.WALK_DIRECTIONS_Y_DELTA[direction];
                     break;
-                case Hero.MOTION_RUN:
+                case Hero0.MOTION_RUN:
                     deltaX = Const.RUN_DIRECTIONS_X_DELTA[direction];
                     deltaY = Const.RUN_DIRECTIONS_Y_DELTA[direction];
                     break;
@@ -180,16 +176,19 @@ package mir {
 			} while (++i < 5);
 			return funcs
 		}
+		*/
 
-		public function place(x:int, y:int, hero:Hero):void {
+		public function place(x:int, y:int, hero:Hero, reset:Boolean=false):void {
 			var y_:int = y - Y + Const.TILES_COUNT_UP;
 			if (y_ >= 0) {
 				rows[y_].addChild(hero);
-				hitAreas[y_].addChild(hero.hitArea);
 				shadows.addChild(hero.shadow);
+				hitRows[y_].addChild(hero.hitArea);
 			}
-            hero.x = dispX(x);
-            hero.y = dispY(y);
+			if (reset) {
+				hero.x = dispX(x);
+				hero.y = dispY(y);
+			}
 		}
 		
 		private static function loop(f:Function):void {

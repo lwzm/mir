@@ -1,5 +1,5 @@
 package mir {
-	public class StructMapBase implements IMapStruct {
+	public class StructMapBase {
 		protected var w:int;
 		protected var h:int;
 

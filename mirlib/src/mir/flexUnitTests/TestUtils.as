@@ -1,4 +1,4 @@
-package flexUnitTests
+package mir.flexUnitTests
 {
 	import flash.display.Bitmap;
 	import flash.display.BitmapData;
@@ -55,27 +55,6 @@ package flexUnitTests
 		[Test]
 		public function test_trim():void {
 			assertEquals("s", Util.trim(" s  "));
-		}
-
-		[Test]
-		public function test_range():void {
-			var arr:Array;
-			arr = Util.range(0, 10);
-			assertEquals(11, arr.length);
-			assertEquals(10, arr[arr.length - 1]);
-			arr = Util.range(0.2, 0, -0.1);
-			assertEquals(3, arr.length);
-		}
-
-		[Test]
-		public function test_steps():void {
-			var steps:Array;
-			steps = Util.steps(1, 4, 3);
-			assertEquals(2, steps[0]);
-			assertEquals(4, steps[steps.length - 1]);
-			steps = Util.steps(1, 1, 3);
-			assertEquals(1, steps[0]);
-			assertEquals(1, steps[steps.length - 1]);
 		}
 
 		[Test]

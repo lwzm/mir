@@ -1,6 +1,6 @@
 package mir {
 	public final class RemoteSingle {
-		public static const dummy:Array = null;  // dummy 用于临时顶替显示
+		public static const dummy:MirBitmapData = null;  // dummy 用于临时顶替显示
 		public var all:Object; 
 		public var urlPrefix:String; 
 
@@ -10,6 +10,9 @@ package mir {
 		}
 		
 		public function g(name:String):MirBitmapData {
+			if (!name) {
+				return dummy;
+			}
 			if (!(name in all)) {
 				prepair(name);
 			}

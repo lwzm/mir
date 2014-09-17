@@ -12,7 +12,7 @@ package mir {
 			h = animations.h;
 		}
 
-		public function s(bmp:Bitmap, x:int, y:int, count:int):void {
+		public function s(bmp:Bitmap, x:int, y:int, count:int, dispX:int, dispY:int):void {
 			var idx:int, arr:Array, i:int, j:int, n:int, blendAdd:Boolean;
 			var data:MirBitmapData;
 			if (x >= 0 && y >= 0) {
@@ -27,9 +27,8 @@ package mir {
 					data = Res.objects[i].g((j + count % n).toString());
 					if (data) {
 						bmp.bitmapData = data;
-						// i guess (7, -44), haha...
-//						bmp.x = data.x - data.width;
-//						bmp.y = data.y - data.height;
+						bmp.x = dispX + data.x - data.width;
+						bmp.y = dispY + data.y - data.height;
 					}
 				}
 			}

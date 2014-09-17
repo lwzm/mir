@@ -1,4 +1,4 @@
-package flexUnitTests
+package mir.flexUnitTests
 {
 	import flexunit.framework.Assert;
 	
@@ -33,32 +33,19 @@ package flexUnitTests
 		
 		[Test]
 		public function testLoop():void {
-			assertEquals(Const.TILES_COUNT_RIGHT * Const.TILES_COUNT_DOWN * 1.25 + Const.TILES_COUNT_DOWN, scene.sprite.numChildren);
-		}
-		
-		[Test]
-		public function testMove():void {
-			assertEquals(6, scene.move(1, 1).length);
+			assertEquals(
+				(Const.TILES_COUNT_LEFT + Const.TILES_COUNT_RIGHT)
+				* (Const.TILES_COUNT_UP + Const.TILES_COUNT_DOWN)
+				* 1.25  // big-tiles(.25) and small-tiles(1)
+				+ (Const.TILES_COUNT_UP + Const.TILES_COUNT_DOWN)  // rows
+				+ (Const.TILES_COUNT_UP + Const.TILES_COUNT_DOWN)  // hitRows
+				+ 1  // shadows
+				,
+				scene.sprite.numChildren);
 		}
 		
 		[Test]
 		public function testPlace():void {
-		}
-		
-		[Test]
-		public function testGet_x():void {
-		}
-		
-		[Test]
-		public function testSet_x():void {
-		}
-		
-		[Test]
-		public function testGet_y():void {
-		}
-		
-		[Test]
-		public function testSet_y():void {
 		}
 	}
 }

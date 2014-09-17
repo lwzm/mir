@@ -36,44 +36,6 @@ package mir {
 			timer.start();
 		}
 
-		public static function range(start:Number, stop:Number, step:Number=1):Array {
-			var arr:Array = [];
-			if (start <= stop) {
-				stop += 0.01;
-				while (start < stop) {
-					arr.push(start);
-					start += step;
-				}
-			} else {
-				stop -= 0.01;
-				while (start > stop) {
-					arr.push(start);
-					start += step;
-				}
-			}
-			return arr;
-		}
-
-		public static function steps(start:Number, stop:Number, n:Number):Array {
-			if (!n) throw Error;
-			var delta:Number = (stop - start) / n;
-			var arr:Array;
-			if (delta) {
-				arr = range(start + delta, stop, delta).map(round);
-			} else {
-				arr = [];
-				while (n--) {
-					arr.push(start);
-				}
-			}
-			return arr;
-		}
-		
-		private static function round(item:Number, index:int, array:Array):int {
-			var n:int = Math.ceil(item);
-			return n;
-		}
-
 		public static function copyMirBitmapDataToBitmap(mirbmp:MirBitmapData, bmp:Bitmap):void {
 			if (mirbmp) {
 				bmp.bitmapData = mirbmp;

@@ -10,6 +10,9 @@ package mir {
 		}
 		
 		public function g(name:String):Array {
+			if (!name) {
+				return dummy;
+			}
 			if (!(name in all)) {
 				prepair(name);
 			}
