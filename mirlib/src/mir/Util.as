@@ -1,5 +1,6 @@
 package mir {
 	import flash.display.Bitmap;
+	import flash.display.Sprite;
 	import flash.events.ErrorEvent;
 	import flash.events.Event;
 	import flash.events.IOErrorEvent;
@@ -29,10 +30,20 @@ package mir {
 		}
 
 		public static function autoGc():void {  // for dev
-			var timer:Timer = new Timer(3000);
+			const timer:Timer = new Timer(3000);
 			timer.addEventListener(TimerEvent.TIMER, function(e:TimerEvent):void {
 				System.gc();
 			});
+			timer.start();
+		}
+
+		public static function delayCall(callback:Function, delay:Number):void {
+			const timer:Timer = new Timer(delay, 1);
+			function f(e:TimerEvent):void {
+				timer.removeEventListener(TimerEvent.TIMER_COMPLETE, f);
+				callback();
+			}
+			timer.addEventListener(TimerEvent.TIMER_COMPLETE, f);
 			timer.start();
 		}
 
@@ -48,12 +59,11 @@ package mir {
 
 		public static function bytesToMirBitmapData(bytes:ByteArray):MirBitmapData {
 			var data:MirBitmapData;
-			var w:int, h:int, x:int, y:int;
 			var iw:int, ih:int, color:uint;
-			w = bytes.readShort();
-			h = bytes.readShort();
-			x = bytes.readShort();
-			y = bytes.readShort();
+			const w:int = bytes.readShort();
+			const h:int = bytes.readShort();
+			const x:int = bytes.readShort();
+			const y:int = bytes.readShort();
 			if (w && h) {
 				data = new MirBitmapData(w, h, x, y);
 				for (ih = h - 1; ih >= 0; ih--) {
@@ -75,20 +85,20 @@ package mir {
 		}
 
 		public static function loadMirBitmap(url:String, callback:Function):void {
-			loadDeflatedBinary(url, function(bytes:ByteArray):void {
+			loadBinary(url, function(bytes:ByteArray):void {
 				callback(bytesToMirBitmapData(bytes));
-			});
+			}, true);
 		}
 
 		public static function loadMirBitmaps(url:String, callback:Function):void {
-			loadDeflatedBinary(url, function(bytes:ByteArray):void {
+			loadBinary(url, function(bytes:ByteArray):void {
 				callback(bytesToMirBitmaps(bytes));
-			});
+			}, true);
 		}
 
 
 		private static function load(url:String, format:String, callback:Function):void {
-			var loader:URLLoader = new URLLoader(new URLRequest(url));
+			const loader:URLLoader = new URLLoader(new URLRequest(url));
 			loader.dataFormat = format;
 			function f(e:Event):void {
 				loader.removeEventListener(Event.COMPLETE, f);  // trace(loader.hasEventListener(Event.COMPLETE));
@@ -107,19 +117,15 @@ package mir {
 			load(url, URLLoaderDataFormat.TEXT, callback);
 		}
 
-		public static function loadBinary(url:String, callback:Function):void {
-			var bytes:ByteArray = new ByteArray();
+		public static function loadBinary(url:String, callback:Function, deflated:Boolean=false):void {
+			const bytes:ByteArray = new ByteArray();
 			load(url, URLLoaderDataFormat.BINARY, function(bytes:ByteArray):void {
+				if (deflated) {
+					bytes.inflate();
+				}
 				callback(bytes);
 			});
 		}
 
-		public static function loadDeflatedBinary(url:String, callback:Function):void {
-			var bytes:ByteArray = new ByteArray();
-			load(url, URLLoaderDataFormat.BINARY, function(bytes:ByteArray):void {
-				bytes.inflate();
-				callback(bytes);
-			});
-		}
 	}
 }

@@ -4,7 +4,9 @@ package mir {
 	import flash.display.Sprite;
 	import flash.events.MouseEvent;
 	import flash.events.TimerEvent;
+	import flash.geom.Point;
 	import flash.utils.ByteArray;
+	import flash.utils.Dictionary;
 	import flash.utils.Timer;
 	
 
@@ -12,6 +14,7 @@ package mir {
 		public var name:String;
 		public const sprite:Sprite = new Sprite();
 		private const shadows:Sprite = new Sprite();
+		private const record:Dictionary = new Dictionary(true);
 		
 		public var X:int;
 		public var Y:int;
@@ -72,35 +75,19 @@ package mir {
 			
 			Util.loadBinary(completeAssetUrl("ground"), function(bytes:ByteArray):void {
 				structGround = new StructMapGround(bytes);
-			});
+			}, true);
 			Util.loadBinary(completeAssetUrl("middle"), function(bytes:ByteArray):void {
 				structMiddle = new StructMapMiddle(bytes);
-			});
+			}, true);
 			Util.loadBinary(completeAssetUrl("objects"), function(bytes:ByteArray):void {
 				structObjects = new StructMapObjects(bytes);
-			});
+			}, true);
 			Util.loadString(completeAssetUrl("animations"), function(str:String):void {
 				structAnimations = new StructMapAnimations(str);
 			});
 
 		}
 		
-		/*
-        private function _animate(i:int, j:int, k:int):void {
-            var bmp:Bitmap;
-            var data:MirBitmapData;
-            var x:int, y:int;
-            x = X + j;
-            y = Y + i;
-            bmp = objectBmps[k];
-			x >= 0 && y >= 0 && structAnimations.s(bmp, x, y, timer.currentCount, dispX(x+1), dispY(y+1));
-		}
-
-		private function animate(e:TimerEvent):void {
-			structAnimations && loop(_animate);
-		}
-		*/
-
         private function _update(i:int, j:int, k:int):void {
             var bmp:Bitmap;
             var data:MirBitmapData;
@@ -134,7 +121,15 @@ package mir {
 		public function update(..._):void {
 			sprite.x = -Const.TILE_W * X;
 			sprite.y = -Const.TILE_H * Y;
+//			trace(sprite.x, sprite.y)
 			structGround && structMiddle && structObjects && loop(_update);
+			var role:Role;
+			var p:Point;
+			for (role in record) {
+				p = record[role];
+//				place(p.x, p.y, role);
+//				trace(p);
+			}
 		}
 
 		private function dispX(n:int):int {
@@ -144,50 +139,18 @@ package mir {
             return Const.TILE_H * n + Const.HERO_Y;
         }
 
-		/**
-		private function _move(deltaX:int, deltaY:int):Function {
-            return function():void {
-                sprite.x += deltaX;
-                sprite.y += deltaY;
-            }
-        }
-
-		public function move(direction:int, type:int):Vector.<Function> {
-            var deltaX:Vector.<int>, deltaY:Vector.<int>;
-			var funcs:Vector.<Function>;
-			var i:int;
-			direction = DIRECTION_MAP[direction];
-            switch (type) {
-                case Hero0.MOTION_WALK:
-                    deltaX = Const.WALK_DIRECTIONS_X_DELTA[direction];
-                    deltaY = Const.WALK_DIRECTIONS_Y_DELTA[direction];
-                    break;
-                case Hero0.MOTION_RUN:
-                    deltaX = Const.RUN_DIRECTIONS_X_DELTA[direction];
-                    deltaY = Const.RUN_DIRECTIONS_Y_DELTA[direction];
-                    break;
-                default:
-                    throw Error;
-                    break;
-            }
-            funcs = new Vector.<Function>();
-			do {
-                funcs.push(_move(deltaX[i], deltaY[i]));
-			} while (++i < 5);
-			return funcs
-		}
-		*/
-
-		public function place(x:int, y:int, hero:Hero, reset:Boolean=false):void {
-			var y_:int = y - Y + Const.TILES_COUNT_UP;
+		public function place(x:int, y:int, role:Role, reset:Boolean=false):void {
+			const y_:int = y - Y + Const.TILES_COUNT_UP;
 			if (y_ >= 0) {
-				rows[y_].addChild(hero);
-				shadows.addChild(hero.shadow);
-				hitRows[y_].addChild(hero.hitArea);
+//				trace(y_);
+				rows[y_].addChild(role);
+				shadows.addChild(role.shadow);
+				hitRows[y_].addChild(role.hitArea);
 			}
 			if (reset) {
-				hero.x = dispX(x);
-				hero.y = dispY(y);
+				role.x = dispX(x);
+				role.y = dispY(y);
+				record[role] = new Point(x, y);
 			}
 		}
 		

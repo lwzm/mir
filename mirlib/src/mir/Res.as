@@ -1,10 +1,13 @@
 package mir {
+	import flash.display.Sprite;
+
 	public final class Res {
 		public static const bodies:RemoteMultiple = new RemoteMultiple("bodies");
 		public static const hairs:RemoteMultiple = new RemoteMultiple("hairs");
 		public static const weapons:RemoteMultiple = new RemoteMultiple("weapons");
 		public static const tiles:RemoteSingle = new RemoteSingle("tiles");
 		public static const tilesm:RemoteSingle = new RemoteSingle("tilesm");
+		public static const monsters:RemoteMultiple = new RemoteMultiple("monsters");
 		public static const objects:Vector.<RemoteSingle> = Vector.<RemoteSingle>([
 //			null,
 			new RemoteSingle("objs1"),
@@ -15,5 +18,14 @@ package mir {
 			new RemoteSingle("objs6"),
 			new RemoteSingle("objs7"),
 		]);
+
+		public static function get hitArea():Sprite {
+			const sp:Sprite = new Sprite();
+			sp.graphics.beginFill(0, 0.0);
+			sp.graphics.drawRect(0, -Const.TILE_H, Const.TILE_W, Const.TILE_H * 2);
+			sp.graphics.drawCircle(0,0,3);
+			return sp;
+		}
+
 	}
 }
