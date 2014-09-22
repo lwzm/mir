@@ -35,7 +35,7 @@ package mir {
 			initFactories[Hero.MOTION_RUN] = _run;
 
 			timer = new Timer(100);
-			timer.addEventListener(TimerEvent.TIMER, timerTask);
+			timer.addEventListener(TimerEvent.TIMER, hero.ani);
 
 			hero.addEventListener(Role.EVENT_MOTION, motionDoing);
 			hero.addEventListener(Role.EVENT_MOTION_END, motionEnded);
@@ -100,14 +100,10 @@ package mir {
 			}
 		}
 
-		private function timerTask(e:TimerEvent):void {
-			hero.ani();
-		}
-
 		private function motionDoing(e:Event):void {
 			const motion:int = hero.motion;
 			const move:Boolean = (motion === Hero.MOTION_WALK || motion === Hero.MOTION_RUN);
-			const n:int = hero.n;
+			const n:int = hero.aniIdx;
 			if (n === 0) {
 				initFactories[motion]();
 				timer.delay = DELAIES[motion];

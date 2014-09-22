@@ -27,22 +27,23 @@ package mir {
 			shadow.addChild(bmpBodyShadow);
 		}
 
-		override protected function initAni():int {
+		override protected function initAni():void {
 			rebuildNames();
 			changeAsset();
-			return arrBody.length - 1;
+			aniLastStep = arrBody.length - 1;
+		}
+			
+		override protected function tryAni():void {
+			if (!arrBody[0]) {
+				changeAsset();
+				aniLastStep = arrBody.length - 1;
+			}
 		}
 			
 		override protected function applyAni():void {
 			const b:MirBitmapData = arrBody[aniIdx] as MirBitmapData;
 			Util.copyMirBitmapDataToBitmap(b, bmpBody);
 			Util.copyMirBitmapDataToBitmap(b, bmpBodyShadow);
-		}
-			
-		override protected function tryAni():void {
-			if (!arrBody[0]) {
-				changeAsset();  // try again
-			}
 		}
 
 		private function rebuildNames():void {

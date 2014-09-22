@@ -8,6 +8,7 @@ package mir {
 	import flash.events.Event;
 	import flash.events.MouseEvent;
 	import flash.events.TimerEvent;
+	import flash.globalization.LastOperationStatus;
 	import flash.utils.Timer;
 	
 	public final class Hero extends Role {
@@ -53,13 +54,20 @@ package mir {
 			shadow.addChild(bmpWeaponShadow);
 		}
 		
-		override protected function initAni():int {
+		override protected function initAni():void {
 			rebuildNames();
 			changeAsset();
 			tuneLayers();
-			return arrBody.length - 1;
+			aniLastStep = arrBody.length - 1;
 		}
 			
+		override protected function tryAni():void {
+			if (!arrBody[0]) {
+				changeAsset();  // try again
+				aniLastStep = arrBody.length - 1;
+			}
+		}
+
 		override protected function applyAni():void {
 			const b:MirBitmapData = arrBody[aniIdx] as MirBitmapData;
 			const h:MirBitmapData = arrHair[aniIdx] as MirBitmapData;
@@ -72,12 +80,6 @@ package mir {
 			Util.copyMirBitmapDataToBitmap(w, bmpWeaponShadow);
 		}
 			
-		override protected function tryAni():void {
-			if (!arrBody[0]) {
-				changeAsset();  // try again
-			}
-		}
-
 		private function changeAsset():void {
 			arrBody = Res.bodies.g(nameBody);
 			arrHair = Res.hairs.g(nameHair);

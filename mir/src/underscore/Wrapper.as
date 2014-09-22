@@ -1,4 +1,4 @@
-package mir.underscore {
+package underscore {
 	
 	public class Wrapper {
 		internal var _wrapped:*;

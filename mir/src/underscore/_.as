@@ -6,13 +6,13 @@
  *
  * Like underscore.js, it is freely distributable under the MIT license.
  */
-package mir.underscore {
+package underscore {
 // imports
 import flash.utils.ByteArray;
 import flash.utils.Dictionary;
 import flash.utils.Timer;
 import flash.events.TimerEvent;
-import mir.underscore.Wrapper;
+import underscore.Wrapper;
 
 
 /**

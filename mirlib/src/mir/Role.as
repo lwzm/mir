@@ -9,25 +9,26 @@ package mir {
 		public static const EVENT_MOTION_END:String = "mirMotionEnd";
 
 		public const shadow:Sprite = new Sprite();
-
-		public var direction:int;
-		public var shadowVisible:Boolean;
-		private var ended:Boolean;
-
+		public const effects:Sprite = new Sprite();
 		private const filtersRecord:Object = {};
 
-		private var aniLastStep:int;
-
+		public var shadowVisible:Boolean;
+		public var direction:int;
+		public var aniIdx:int;
+		protected var aniLastStep:int;
 		protected var motionNext:int;
 		protected var motionCurrent:int;
-		protected var aniIdx:int;
 
-		
+		private var end:Boolean;
+
 		public function Role() {
 			mouseEnabled = false;
 			shadow.alpha = 0.5;
 			shadow.mouseEnabled = false;
 			shadow.visible = false;
+			
+			effects.mouseEnabled = false;
+
 			hitArea = Res.hitArea;
 
 			hitArea.addEventListener(MouseEvent.MOUSE_OVER, function(e:MouseEvent):void {
@@ -39,49 +40,47 @@ package mir {
 				shadow.visible = shadowVisible;
 			});
 			
-			ended = true;
+			end = true;
 		}
 		
-		protected function initAni():int { throw Error; }
+		protected function initAni():void { throw Error; }
 		protected function tryAni():void { throw Error; }
 		protected function applyAni():void { throw Error; }
 
-		public function ani():void {
-			if (breakable) {
+		public function ani(_:Event=null):void {
+			if (resetable) {
+				end = false;
 				aniIdx = 0;
 				motionCurrent = motionNext;
 				motionNext = MOTION_DEFAULT;
-                ended = false;
-				aniLastStep = initAni();
+				initAni();
 			} else {
 				tryAni();
 			}
 			applyAni();
 			dispatchEvent(new Event(EVENT_MOTION));
-			if (aniIdx === aniLastStep) {
-                ended = true;
+			if (aniIdx >= aniLastStep) {
+				end = true;
 				dispatchEvent(new Event(EVENT_MOTION_END));
 			}
 			++aniIdx;
 		}
 
-		public function get n():int {
-			return aniIdx;
-		}
-
-		public function get breakable():Boolean {
-			return ended || (motionNext !== MOTION_DEFAULT && motionCurrent === MOTION_DEFAULT)
+		private function get resetable():Boolean {
+			return end || (motionNext !== MOTION_DEFAULT && motionCurrent === MOTION_DEFAULT)
 		}
 
 		override public function set x(n:Number):void {
 			super.x = n;
 			shadow.x = n;
+			effects.x = n;
 			hitArea.x = n;
 		}
 
 		override public function set y(n:Number):void {
 			super.y = n;
 			shadow.y = n;
+			effects.y = n;
 			hitArea.y = n;
 		}
 
