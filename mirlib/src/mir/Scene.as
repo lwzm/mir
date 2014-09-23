@@ -20,14 +20,16 @@ package mir {
 		public var X:int;
 		public var Y:int;
 
+
 		public var structMask:StructMapMask;
 		public var structGround:StructMapGround;
 		public var structMiddle:StructMapMiddle;
 		public var structObjects:StructMapObjects;
 		public var structAnimations:StructMapAnimations;
 
-		private const mask1Bmps:Vector.<Bitmap> = new Vector.<Bitmap>();//test
-		private const mask2Bmps:Vector.<Bitmap> = new Vector.<Bitmap>();//test
+		public var showMask:Boolean;  // for developer
+		private const mask1Bmps:Vector.<Bitmap> = new Vector.<Bitmap>();
+		private const mask2Bmps:Vector.<Bitmap> = new Vector.<Bitmap>();
 
 		private const groundBmps:Vector.<Bitmap> = new Vector.<Bitmap>();
 		private const middleBmps:Vector.<Bitmap> = new Vector.<Bitmap>();
@@ -78,11 +80,6 @@ package mir {
 
 			sprite.addChild(shadows);
 			
-			loop(function(i:int, j:int, k:int):void {
-				mask1Bmps.push(sprite.addChild(new Bitmap()));
-				mask2Bmps.push(sprite.addChild(new Bitmap()));
-			});
-
 			Util.loadBinary(completeAssetUrl("mask"), function(bytes:ByteArray):void {
 				structMask = new StructMapMask(bytes);
 			}, true);
@@ -119,14 +116,24 @@ package mir {
             bmp.x = dispX(x);
             bmp.y = dispY(y);
 
-            bmp = mask1Bmps[k];
-            bmp.bitmapData = structMask.m1(x, y) ? Res.tilesm.g('58') : null;
-            bmp.x = dispX(x);
-            bmp.y = dispY(y);
-            bmp = mask2Bmps[k];
-            bmp.bitmapData = structMask.m2(x, y) ? Res.tilesm.g('59') : null;
-            bmp.x = dispX(x);
-            bmp.y = dispY(y);
+			if (showMask) {
+				if (!mask1Bmps.length) {
+					loop(function(i:int, j:int, k:int):void {
+						mask1Bmps.push(sprite.addChild(new Bitmap()));
+						mask2Bmps.push(sprite.addChild(new Bitmap()));
+					});
+				}
+				bmp = mask1Bmps[k];
+				bmp.bitmapData = structMask.m1(x, y) ? Res.tilesm.g("58") : null;
+				bmp.x = dispX(x);
+				bmp.y = dispY(y);
+				bmp = mask2Bmps[k];
+				bmp.bitmapData = structMask.m2(x, y) ? Res.tilesm.g("59") : null;
+				bmp.x = dispX(x);
+				bmp.y = dispY(y);
+			} else if (mask1Bmps.length) {
+				mask1Bmps[k].bitmapData = mask2Bmps[k].bitmapData = null;
+			}
 
             bmp = objectBmps[k];
             data = structObjects.g(x, y);
@@ -140,12 +147,12 @@ package mir {
             }
         }
 
-		public function update(_:Event=null):void {
+		public function update():void {
 			sprite.x = -Const.TILE_W * X;
 			sprite.y = -Const.TILE_H * Y;
 			structGround && structMiddle && structObjects && loop(_update);
 			for (var role:Role in record) {
-				placeRow(record[role], role);
+				placeRow(role, record[role]);
 			}
 //			var arr:Array = [];
 //			rows.forEach(function(e:Sprite,i,a){arr.push(e.numChildren)});
@@ -159,19 +166,19 @@ package mir {
             return Const.TILE_H * n + Const.HERO_Y;
         }
 
-		private function placeRow(p:Point, role:Role):void {
-			const y:int = p.y - Y + Const.TILES_COUNT_UP;
+		public function placeRow(role:Role, y:int):void {
+			y += Const.TILES_COUNT_UP - Y;
 			if (y in rows) {
 				rows[y].addChild(role);
 				hitRows[y].addChild(role.hitArea);
 			}
 		}
 
-		public function place(x:int, y:int, role:Role):void {
+		public function place(role:Role, x:int, y:int):void {
 			shadows.addChild(role.shadow);
 			role.x = dispX(x);
 			role.y = dispY(y);
-			record[role] = new Point(x, y);
+			record[role] = y;
 		}
 		
 		private static function loop(f:Function):void {
