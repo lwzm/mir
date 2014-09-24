@@ -26,7 +26,7 @@ package mir {
 		public static function get hitArea():Sprite {
 			const sp:Sprite = new Sprite();
 			sp.graphics.beginFill(0, 0.0);
-			sp.graphics.drawRect(0, -Const.TILE_H, Const.TILE_W, Const.TILE_H * 2);
+			sp.graphics.drawRect(0, -Const.TILE_H - 20, Const.TILE_W, Const.TILE_H * 2 + 15);
 			sp.graphics.drawCircle(0,0,3);
 			return sp;
 		}

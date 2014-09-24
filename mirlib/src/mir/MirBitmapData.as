@@ -1,5 +1,4 @@
 package mir {
-	import flash.display.Bitmap;
 	import flash.display.BitmapData;
 	
 	public final class MirBitmapData extends BitmapData {

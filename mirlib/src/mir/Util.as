@@ -1,5 +1,6 @@
 package mir {
 	import flash.display.Bitmap;
+	import flash.display.BitmapData;
 	import flash.display.Sprite;
 	import flash.events.ErrorEvent;
 	import flash.events.Event;
@@ -47,13 +48,25 @@ package mir {
 			timer.start();
 		}
 
-		public static function copyMirBitmapDataToBitmap(mirbmp:MirBitmapData, bmp:Bitmap):void {
+		public static function copyMirBitmapDataToBitmap(mirbmp:MirBitmapData, bmp:Bitmap, rect:Rectangle=null):void {
+			var data:BitmapData;
 			if (mirbmp) {
-				bmp.bitmapData = mirbmp;
+				if (rect) {
+					if (!rect.width) {
+						rect.width = mirbmp.width - rect.x;
+					}
+					if (!rect.height) {
+						rect.height = mirbmp.height - rect.y;
+					}
+					data = new BitmapData(mirbmp.width, mirbmp.height, true, 0);
+					data.copyPixels(mirbmp, rect, rect.topLeft);
+				}
+				bmp.bitmapData = data || mirbmp;
 				bmp.x = mirbmp.x;
 				bmp.y = mirbmp.y;
 			} else {
 				bmp.bitmapData = null;
+				bmp.x = bmp.y = 0;
 			}
 		}
 

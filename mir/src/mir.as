@@ -16,10 +16,10 @@ package  {
 	import mir.CoordinateSystem;
 	import mir.Filters;
 	import mir.Hero;
-	import mir.HeroC;
 	import mir.Monster;
 	import mir.Res;
 	import mir.Role;
+	import mir.RoleC;
 	import mir.Scene;
 	import mir.Util;
 	
@@ -29,6 +29,22 @@ package  {
 
 		public function mir() {
 			initStage();
+			var ui:UI = new UI();
+			addChild(ui);
+			var i:uint;
+			stage.addEventListener(KeyboardEvent.KEY_DOWN, function(e:KeyboardEvent):void {
+				switch (e.keyCode) {
+					case 37: i--; break;
+					case 39: i++; break;
+					default: break;
+				}
+				ui.test(i);
+			});
+			ui.x = ui.y = 50;
+			scene();
+		}
+
+		private function scene():void {
 			var s:Scene = new Scene("0");
 			var h:Hero = new Hero(true);
 			var m:Monster = new Monster();
@@ -42,12 +58,12 @@ package  {
 			h.body = 3;
 			h.weapon = 17;
 			h.hair = 2;
-			addChild(s.sprite);
+			addChild(s);
 			s.X = 392;
 			s.Y = 326;
 			s.place(h, s.X, s.Y);
 			s.place(m, s.X + 1, s.Y-9);
-			var hc:HeroC = new HeroC(stage, h, s);
+			var hc:RoleC = new RoleC(h, s);
 			stage.addEventListener(KeyboardEvent.KEY_DOWN, function(e:KeyboardEvent):void {
 				s.showMask = !s.showMask;
 			});
@@ -58,6 +74,7 @@ package  {
 //			stage.align = StageAlign.TOP_LEFT;
 			stage.scaleMode = StageScaleMode.NO_SCALE; 
 			Util.autoGc();
+			Res.stage = stage;  // !!!
 		}
 	}
 }
