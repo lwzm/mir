@@ -1,13 +1,11 @@
 package mir {
-	import flash.display.Stage;
 	import flash.events.Event;
 	import flash.events.MouseEvent;
 	import flash.events.TimerEvent;
 	import flash.geom.Point;
-	import flash.utils.Dictionary;
 	import flash.utils.Timer;
 
-	public final class HeroC {
+	public final class RoleC {
 		public static const DELAIES:Vector.<int> = Vector.<int>([500, 80, 80, 100, 100, 100, 100, 100, 200, 100, 150]);
 
 		private const initFactories:Vector.<Function> = new Vector.<Function>(11);
@@ -17,14 +15,12 @@ package mir {
 
 		public var hero:Hero;
 		public var scene:Scene;
-		public var stage:Stage;
 		private var stepX:Vector.<int>;
 		private var stepY:Vector.<int>;
 
-		public function HeroC(stage:Stage, hero:Hero, scene:Scene) {
+		public function RoleC(hero:Hero, scene:Scene) {
 			this.hero = hero;
 			this.scene = scene;
-			this.stage = stage;
 			init();
 		}
 			
@@ -40,38 +36,33 @@ package mir {
 			hero.addEventListener(Role.EVENT_MOTION, motionDoing);
 			hero.addEventListener(Role.EVENT_MOTION_END, motionEnded);
 
-			stage.addEventListener(MouseEvent.MOUSE_DOWN, function(e:MouseEvent):void {
+			scene.addEventListener(MouseEvent.MOUSE_DOWN, function(e:MouseEvent):void {
 				states[Hero.MOTION_WALK] = true;
 				act();
 			});
-			stage.addEventListener(MouseEvent.MOUSE_UP, function(e:MouseEvent):void {
+			scene.addEventListener(MouseEvent.MOUSE_UP, function(e:MouseEvent):void {
 				states[Hero.MOTION_WALK] = false;
 			});
-			stage.addEventListener(MouseEvent.RIGHT_MOUSE_DOWN, function(e:MouseEvent):void {
+			scene.addEventListener(MouseEvent.RIGHT_MOUSE_DOWN, function(e:MouseEvent):void {
 				states[Hero.MOTION_RUN] = true;
 				act();
 			});
-			stage.addEventListener(MouseEvent.RIGHT_MOUSE_UP, function(e:MouseEvent):void {
+			scene.addEventListener(MouseEvent.RIGHT_MOUSE_UP, function(e:MouseEvent):void {
 				states[Hero.MOTION_RUN] = false;
 			});
+
 			timer.start();
-			
 		}
 
-		private function mot(m, d):int {
-			var x:int, y:int;
-            if (m === Hero.MOTION_RUN) {
-				x = scene.X + Geom.DIRECTION_DELTA_X[d] * 2;
-				y = scene.Y + Geom.DIRECTION_DELTA_Y[d] * 2;
-				if (scene.structMask.m1(x, y)) {
-                    m = Hero.MOTION_WALK;
-                }
+		private function mot(m:int, d:int):int {
+            if (m === Hero.MOTION_RUN && scene.structMask.m1(scene.X + Geom.DIRECTION_DELTA_X[d] * 2, scene.Y + Geom.DIRECTION_DELTA_Y[d] * 2)) {
+                m = Hero.MOTION_WALK;
             }
-            return m
+            return m;
         }
 
 		private function dir(move:Boolean=false):int {
-			const p:Point = new Point(stage.mouseX, stage.mouseY);
+			const p:Point = Res.mousePoint;
 			var d:int = Geom.CENTER_COOR_8.direction(p);
 			var a:int, x:int, y:int;
 			if (move && scene.structMask) {
@@ -148,8 +139,8 @@ package mir {
 				hero.x += x;
 				hero.y += y;
 				if (scene) {
-					scene.sprite.x -= x;
-					scene.sprite.y -= y;
+					scene.x -= x;
+					scene.y -= y;
 				}
 			}
 			if (motion === Role.MOTION_DEFAULT) {

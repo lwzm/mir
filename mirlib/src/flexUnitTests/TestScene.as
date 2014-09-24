@@ -1,4 +1,4 @@
-package mir.flexUnitTests
+package flexUnitTests
 {
 	import flexunit.framework.Assert;
 	
@@ -41,7 +41,7 @@ package mir.flexUnitTests
 				+ (Const.TILES_COUNT_UP + Const.TILES_COUNT_DOWN)  // hitRows
 				+ 1  // shadows
 				,
-				scene.sprite.numChildren);
+				scene.numChildren);
 		}
 		
 		[Test]

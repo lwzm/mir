@@ -1,4 +1,4 @@
-package mir.flexUnitTests
+package flexUnitTests
 {
 	
 	import flash.events.IOErrorEvent;

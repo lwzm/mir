@@ -11,9 +11,8 @@ package mir {
 	import flash.utils.Timer;
 	
 
-	public final class Scene {
-		public var name:String;
-		public const sprite:Sprite = new Sprite();
+	public final class Scene extends Sprite {
+		public var mapName:String;
 		private const shadows:Sprite = new Sprite();
 		private const record:Dictionary = new Dictionary(true);
 		
@@ -37,25 +36,27 @@ package mir {
 		private const rows:Vector.<Sprite> = new Vector.<Sprite>();
 		private const hitRows:Vector.<Sprite> = new Vector.<Sprite>();
 
-		public function Scene(n:String) {
-			name = n;
-			sprite.mouseEnabled = false;
+		public function Scene(name:String) {
+			mapName = name;
 			shadows.mouseEnabled = false;
+
 			loop(function(i:int, j:int, k:int):void {
 				var bmp:Bitmap;
 				if (i % 2 === 0 && j % 2 === 0) {
-                    groundBmps.push(sprite.addChild(new Bitmap()));
+                    groundBmps.push(addChild(new Bitmap()));
 				} else {
 					groundBmps.push(null);
 				}
 			});
+
 			loop(function(i:int, j:int, k:int):void {
-				middleBmps.push(sprite.addChild(new Bitmap()));
+				middleBmps.push(addChild(new Bitmap()));
 			});
+
 			loop(function(i:int, j:int, k:int):void {
 				i += Const.TILES_COUNT_UP;  // i start from 0
 				if (i === rows.length) {
-					rows.push(sprite.addChild(new Sprite()));
+					rows.push(addChild(new Sprite()));
 				}
 				var sp:Sprite = new Sprite();
 				rows[i].addChild(sp);
@@ -70,15 +71,16 @@ package mir {
 //					//todo
 //				});
 			});
+
 			loop(function(i:int, j:int, k:int):void {
 				i += Const.TILES_COUNT_UP;  // i start from 0
 				if (i === hitRows.length) {
-					hitRows.push(sprite.addChild(new Sprite()));
+					hitRows.push(addChild(new Sprite()));
 				}
 			});
 			hitRows.reverse();
 
-			sprite.addChild(shadows);
+			addChild(shadows);
 			
 			Util.loadBinary(completeAssetUrl("mask"), function(bytes:ByteArray):void {
 				structMask = new StructMapMask(bytes);
@@ -119,8 +121,8 @@ package mir {
 			if (showMask) {
 				if (!mask1Bmps.length) {
 					loop(function(i:int, j:int, k:int):void {
-						mask1Bmps.push(sprite.addChild(new Bitmap()));
-						mask2Bmps.push(sprite.addChild(new Bitmap()));
+						mask1Bmps.push(addChild(new Bitmap()));
+						mask2Bmps.push(addChild(new Bitmap()));
 					});
 				}
 				bmp = mask1Bmps[k];
@@ -148,8 +150,8 @@ package mir {
         }
 
 		public function update():void {
-			sprite.x = -Const.TILE_W * X;
-			sprite.y = -Const.TILE_H * Y;
+			x = -Const.TILE_W * X;
+			y = -Const.TILE_H * Y;
 			structGround && structMiddle && structObjects && loop(_update);
 			for (var role:Role in record) {
 				placeRow(role, record[role]);
@@ -162,6 +164,7 @@ package mir {
 		private function dispX(n:int):int {
             return Const.TILE_W * n + Const.HERO_X;
         }
+
 		private function dispY(n:int):int {
             return Const.TILE_H * n + Const.HERO_Y;
         }
@@ -192,7 +195,7 @@ package mir {
 		}
 
 		private function completeAssetUrl(suffix:String):String {
-			return Const.ASSETS_DOMAIN + "map/" + name + "." + suffix;
+			return Const.ASSETS_DOMAIN + "map/" + mapName + "." + suffix;
 		}
 
 	}

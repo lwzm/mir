@@ -4,13 +4,13 @@ package
 	
 	import flash.display.Sprite;
 	
-	import flexunit.flexui.FlexUnitTestRunnerUIAS;
+	import flexUnitTests.TestConst;
+	import flexUnitTests.TestHero;
+	import flexUnitTests.TestRes;
+	import flexUnitTests.TestScene;
+	import flexUnitTests.TestUtils;
 	
-	import mir.flexUnitTests.TestConst;
-	import mir.flexUnitTests.TestHero;
-	import mir.flexUnitTests.TestRes;
-	import mir.flexUnitTests.TestScene;
-	import mir.flexUnitTests.TestUtils;
+	import flexunit.flexui.FlexUnitTestRunnerUIAS;
 	
 	public class FlexUnitApplication extends Sprite
 	{
@@ -30,11 +30,11 @@ package
 		public function currentRunTestSuite():Array
 		{
 			var testsToRun:Array = new Array();
-			testsToRun.push(mir.flexUnitTests.TestConst);
-			testsToRun.push(mir.flexUnitTests.TestHero);
-			testsToRun.push(mir.flexUnitTests.TestRes);
-			testsToRun.push(mir.flexUnitTests.TestScene);
-			testsToRun.push(mir.flexUnitTests.TestUtils);
+			testsToRun.push(flexUnitTests.TestConst);
+			testsToRun.push(flexUnitTests.TestHero);
+			testsToRun.push(flexUnitTests.TestRes);
+			testsToRun.push(flexUnitTests.TestScene);
+			testsToRun.push(flexUnitTests.TestUtils);
 			return testsToRun;
 		}
 	}

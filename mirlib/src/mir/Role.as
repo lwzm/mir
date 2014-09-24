@@ -22,23 +22,15 @@ package mir {
 		private var end:Boolean;
 
 		public function Role() {
-			mouseEnabled = false;
 			shadow.alpha = 0.5;
-			shadow.mouseEnabled = false;
 			shadow.visible = false;
-			
-			effects.mouseEnabled = false;
+
+			mouseEnabled = shadow.mouseEnabled = effects.mouseEnabled = false;
 
 			hitArea = Res.hitArea;
 
-			hitArea.addEventListener(MouseEvent.MOUSE_OVER, function(e:MouseEvent):void {
-				addFilter("highlight");
-				shadow.visible = true;
-			});
-			hitArea.addEventListener(MouseEvent.MOUSE_OUT, function(e:MouseEvent):void {
-				delFilter("highlight");
-				shadow.visible = shadowVisible;
-			});
+			hitArea.addEventListener(MouseEvent.MOUSE_OVER, highlightOn);
+			hitArea.addEventListener(MouseEvent.MOUSE_OUT, highlightOff);
 			
 			end = true;
 		}
@@ -46,6 +38,16 @@ package mir {
 		protected function initAni():void { throw Error; }
 		protected function tryAni():void { throw Error; }
 		protected function applyAni():void { throw Error; }
+
+		private function highlightOn(e:Event):void {
+            addFilter("highlight");
+            shadow.visible = true;
+        }
+
+		private function highlightOff(e:Event):void {
+            delFilter("highlight");
+            shadow.visible = shadowVisible;
+        }
 
 		public function ani(_:Event=null):void {
 			if (resetable) {
@@ -71,17 +73,11 @@ package mir {
 		}
 
 		override public function set x(n:Number):void {
-			super.x = n;
-			shadow.x = n;
-			effects.x = n;
-			hitArea.x = n;
+			super.x = shadow.x = effects.x = hitArea.x = n;
 		}
 
 		override public function set y(n:Number):void {
-			super.y = n;
-			shadow.y = n;
-			effects.y = n;
-			hitArea.y = n;
+			super.y = shadow.y = effects.y = hitArea.y = n;
 		}
 
 		public function get motion():int {
@@ -93,12 +89,11 @@ package mir {
 		}
 
 		private function applyFiltersRecord():void {
-			var name:String;
-			var arr:Array = [];
-			for (name in filtersRecord) {
+			const arr:Array = [];
+			for (var name:String in filtersRecord) {
 				arr.push(Filters[name]);
 			}
-			shadow.filters = filters = arr;
+			filters = shadow.filters = arr;
 		}
 
 		public function addFilter(name:String):void {
