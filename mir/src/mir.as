@@ -10,7 +10,10 @@ package  {
 	import flash.events.TimerEvent;
 	import flash.geom.Point;
 	import flash.system.System;
+	import flash.system.fscommand;
 	import flash.utils.Timer;
+	
+	import mx.utils.StringUtil;
 	
 	import mir.Const;
 	import mir.CoordinateSystem;
@@ -32,16 +35,7 @@ package  {
 			var ui:UI = new UI();
 			addChild(ui);
 			var i:uint;
-			stage.addEventListener(KeyboardEvent.KEY_DOWN, function(e:KeyboardEvent):void {
-				switch (e.keyCode) {
-					case 37: i--; break;
-					case 39: i++; break;
-					default: break;
-				}
-				ui.test(i);
-			});
-			ui.x = ui.y = 50;
-			scene();
+//			this["scene"]();
 		}
 
 		private function scene():void {
@@ -70,8 +64,9 @@ package  {
 		}
 
 		private function initStage():void {
+			var i:int = undefined;
 			Debug.monitor(stage);
-//			stage.align = StageAlign.TOP_LEFT;
+			stage.align = StageAlign.TOP_LEFT;
 			stage.scaleMode = StageScaleMode.NO_SCALE; 
 			Util.autoGc();
 			Res.stage = stage;  // !!!

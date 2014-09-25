@@ -2,7 +2,7 @@ package mir {
 
 	public final class Const {
 		public static const ASSETS_DOMAIN:String = "../../t/" && "http://tmp.qww.pw/";
-		public static const ASSETS_VERSION:String = String(new Date().time);
+		public static const ASSETS_VERSION:String = "?" + String(new Date().time);
 		public static const SCREEN_W:int = 800;
 		public static const SCREEN_H:int = 600;
 		public static const HERO_X:int = 376;

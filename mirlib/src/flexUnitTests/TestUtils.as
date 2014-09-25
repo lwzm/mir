@@ -53,11 +53,6 @@ package flexUnitTests
 		}
 		
 		[Test]
-		public function test_trim():void {
-			assertEquals("s", Util.trim(" s  "));
-		}
-
-		[Test]
 		public function test_loadBitmaps():void {
 //			Utils.loadMirBitmaps("http://mir.qww.pw/../../data/bodies/00", function(x):void{});
 		}

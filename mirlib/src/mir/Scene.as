@@ -41,7 +41,6 @@ package mir {
 			shadows.mouseEnabled = false;
 
 			loop(function(i:int, j:int, k:int):void {
-				var bmp:Bitmap;
 				if (i % 2 === 0 && j % 2 === 0) {
                     groundBmps.push(addChild(new Bitmap()));
 				} else {

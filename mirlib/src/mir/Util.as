@@ -19,10 +19,6 @@ package mir {
 
 	public final class Util {
 
-		public static function trim(str:String):String {
-			return str.replace(/^\s+/, "").replace(/\s+$/, "");
-		}
-
 		public static function len(obj:Object):int {
 			var n:int;
 			for (var x:* in obj)
