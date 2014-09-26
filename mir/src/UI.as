@@ -9,7 +9,6 @@ package {
 	import flash.geom.Rectangle;
 	
 	import mir.Const;
-	import mir.Res;
 	import mir.Util;
 	
 	public final class UI extends Sprite {
@@ -22,11 +21,10 @@ package {
 				stage.addEventListener(KeyboardEvent.KEY_DOWN, onKeyDown);
 			});
 //			addEventListener(MouseEvent.CLICK, onClick);
-			addEventListener(Event.ENTER_FRAME, test);
 		}
 
 		private function onClick(e:MouseEvent):void {
-			Debug.trace(e);
+//			Debug.trace(e);
 		}
 
 		private function onKeyDown(e:KeyboardEvent):void {
@@ -45,7 +43,6 @@ package {
 				hotkeys[key] = hotkeyCallback(ui, config[key]);
 			}
 		}
-
 		private static function hotkeyCallback(ui:UISprite, config:Object):Function {
 			return function():void {
 				ui.visible = !ui.visible;
@@ -55,15 +52,25 @@ package {
 			}
 		}
 
-		public function test(_):void {
-			for each (var ui:UISprite in modules) {
-				(ui.getChildAt(0) as Bitmap).bitmapData = Res.ui.g(ui.res);
-			}
-		}
+		private function registerCommands(ui:UISprite, config:Object):void {
+			var name:String, attr:String, target:UISprite;
+            for (name in config) {
+                target = modules[name];
+                for (attr in config[name]) {
+                    ui.addEventListener(MouseEvent.CLICK, commandCallback(target, attr, config[name][attr]));
+                }
+            }
+        }
+		private static function commandCallback(ui:UISprite, attr:String, value:*):Function {
+            return function(e:Event):void {
+                ui[attr] = value;
+            }
+        }
 
 		private function init(config:Object):void {
-
-			var name:String, _:Object, ui:UISprite, bmp:Bitmap;
+			var name:String;
+			var _:Object;
+			var ui:UISprite;
 
 			for (name in config) {
 				_ = config[name];
@@ -71,32 +78,38 @@ package {
 				ui.name = name;
 				ui.x = _.x;
 				ui.y = _.y;
-//				ui.visible = !_.hidden;
+				ui.visible = !_.hidden;
 				ui.draggable = _.draggable;
-				ui.state = _.state;
 				ui.res = _.res;
 				ui.resOnClick = _.resOnClick;
 				ui.visibleOnClickOnly = _.visibleOnClickOnly;
+            }
 
-				bmp = new Bitmap();
-				bmp.bitmapData = Res.ui.g(_.res);
-				ui.addChild(bmp);
-
+			for (name in config) {
+				_ = config[name];
+				ui = modules[name];
 				registerHotkeys(ui, _.hotkeys);
+				registerCommands(ui, _.commands);
 			}
 
-			var s:String;
 
 			for (name in config) {
+				_ = config[name];
 				ui = modules[name];
-				(modules[config[name].father] || this).addChild(ui);
-			}
-
-			for (name in config) {
-				ui = modules[name];
-				for each (s in (config[name].stateSections || [])) {
-					ui.addChild(modules[s]);
+				var pages:Array = _.pages;
+				if (pages) {
+                    ui.pages = pages;
+					for each (var s:String in pages) {
+						modules[s].visible = false;
+						ui.addChild(modules[s]);
+					}
+                    ui.page = _.page; // at last
 				}
+			}
+
+			for (name in config) {
+				ui = modules[name];
+				ui.parent || (modules[config[name].father] || this).addChild(ui);
 			}
 
 		}
