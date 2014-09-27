@@ -45,7 +45,6 @@ package {
 		}
 		private static function hotkeyCallback(ui:UISprite, config:Object):Function {
 			return function():void {
-				ui.visible = !ui.visible;
 				for (var k:String in config) {
 					ui[k] = config[k];
 				}
@@ -91,7 +90,6 @@ package {
 				ui.dummyRes = _.dummyRes;
 				ui.res = _.res;
 				ui.resOnClick = _.resOnClick;
-				ui.visibleOnClickOnly = _.visibleOnClickOnly;
             }
 
 			for (name in config) {

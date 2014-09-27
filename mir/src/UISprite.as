@@ -22,7 +22,6 @@ package  {
 	 * doc todo...
 	 */
 	public final class UISprite extends Sprite {
-		public var visibleOnClickOnly:Boolean;
 		public var dummyRes:Boolean;
 		public var pages:Array;
 
@@ -88,9 +87,6 @@ package  {
 					data = Util.dumpBitmapData(data, new Rectangle(1, 1, 0, 0));
 				}
 				bmp.bitmapData = bmpData = data;
-				if (visibleOnClickOnly) {
-					bmp.alpha = 0;
-				}
 			}
 		}
 
@@ -113,16 +109,14 @@ package  {
 		}
 
 		private function click(e:Event):void {
-			e.stopPropagation();
+//			e.stopPropagation();
 			Debug.trace([x, y]);
 		}
 
 		private function activate(e:Event):void {
 			e.stopPropagation();
 			parent.addChild(this);
-			if (visibleOnClickOnly) {
-				bmp.alpha = 1;
-			} else if (bmpDataOnClick) {
+			if (bmpDataOnClick) {
 				bmp.bitmapData = bmpDataOnClick;
 			}
 		}
@@ -130,9 +124,6 @@ package  {
 		private function inactivate(e:Event):void {
 			e.stopPropagation();
 			bmp.bitmapData = bmpData;
-			if (visibleOnClickOnly) {
-				bmp.alpha = 0;
-			}
 		}
 
 		private function dragOn(e:Event):void {

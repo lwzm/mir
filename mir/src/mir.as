@@ -1,6 +1,7 @@
 package  {
 	import com.hexagonstar.util.debug.Debug;
 	
+	import flash.display.Shape;
 	import flash.display.Sprite;
 	import flash.display.StageAlign;
 	import flash.display.StageScaleMode;
@@ -35,6 +36,37 @@ package  {
 			this["scene"]();
 			var ui:UI = new UI();
 			addChild(ui);
+			
+			// debug ui
+			var sp:UISprite;
+			ui.addEventListener(MouseEvent.RIGHT_CLICK, function(e:MouseEvent):void {
+				e.stopPropagation();
+				sp = e.target as UISprite;
+				if (sp) {
+					Debug.trace(sp.name);
+					var shapeName:String = 'shape';
+					var s:Shape = sp.getChildByName(shapeName) as Shape;
+					if (s) {
+						sp.removeChild(s);
+					} else {
+						sp.addChild(s = new Shape());
+						s.name = shapeName;
+						s.graphics.beginFill(0xff0000, 0.5);
+						s.graphics.drawRect(0, 0, sp.width, sp.height);
+					}
+				}
+			});
+			stage.addEventListener(KeyboardEvent.KEY_DOWN, function(e:KeyboardEvent):void {
+				if (sp) {
+					switch (e.keyCode) {
+						case 37: sp.x -= 1; break;
+						case 38: sp.y -= 1; break;
+						case 39: sp.x += 1; break;
+						case 40: sp.y += 1; break;
+					}
+				}
+			});
+			// debug ui
 		}
 
 		private function scene():void {
