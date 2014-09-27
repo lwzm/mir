@@ -44,20 +44,29 @@ package mir {
 			timer.start();
 		}
 
-		public static function copyMirBitmapDataToBitmap(mirbmp:MirBitmapData, bmp:Bitmap, rect:Rectangle=null):void {
-			var data:BitmapData;
+		public static function dumpBitmapData(src:BitmapData, rect:Rectangle):BitmapData {
+			/**
+			 * rect: 不是实际的数据, 而是相对于源图像的百分比, 如:
+			 * (0, 0, 1, 1) 全范围
+			 * (0, 0.5, 1, 0.5) 只要下面一半
+			 * (1/3, 1/3, 1/3, 1/3) 九宫格中心一块
+			 * (1, 1, 0, 0) 只保留原图像大小, 全透明
+			 */
+			const w:Number = src.width, h:Number = src.height;
+			const data:BitmapData = new BitmapData(w, h, true, 0);
+			rect.x *= w;
+			rect.y *= h;
+			rect.width *= w;
+			rect.height *= h;
+			data.copyPixels(src, rect, rect.topLeft);
+			return data;
+		}
+
+		public static function copyMirBitmapDataToBitmap(mirbmp:MirBitmapData, bmp:Bitmap):void {
+			/**
+			 */
 			if (mirbmp) {
-				if (rect) {
-					if (!rect.width) {
-						rect.width = mirbmp.width - rect.x;
-					}
-					if (!rect.height) {
-						rect.height = mirbmp.height - rect.y;
-					}
-					data = new BitmapData(mirbmp.width, mirbmp.height, true, 0);
-					data.copyPixels(mirbmp, rect, rect.topLeft);
-				}
-				bmp.bitmapData = data || mirbmp;
+				bmp.bitmapData = mirbmp;
 				bmp.x = mirbmp.x;
 				bmp.y = mirbmp.y;
 			} else {

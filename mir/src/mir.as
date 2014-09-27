@@ -32,10 +32,9 @@ package  {
 
 		public function mir() {
 			initStage();
+			this["scene"]();
 			var ui:UI = new UI();
 			addChild(ui);
-			var i:uint;
-//			this["scene"]();
 		}
 
 		private function scene():void {
@@ -59,7 +58,7 @@ package  {
 			s.place(m, s.X + 1, s.Y-9);
 			var hc:RoleC = new RoleC(h, s);
 			stage.addEventListener(KeyboardEvent.KEY_DOWN, function(e:KeyboardEvent):void {
-				s.showMask = !s.showMask;
+//				s.showMask = !s.showMask;
 			});
 		}
 

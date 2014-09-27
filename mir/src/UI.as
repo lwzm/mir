@@ -52,20 +52,28 @@ package {
 			}
 		}
 
-		private function registerCommands(ui:UISprite, config:Object):void {
+		private function registerCommands(ui:UISprite, commands:Object):void {
 			var name:String, attr:String, target:UISprite;
-            for (name in config) {
-                target = modules[name];
-                for (attr in config[name]) {
-                    ui.addEventListener(MouseEvent.CLICK, commandCallback(target, attr, config[name][attr]));
-                }
-            }
+			if (commands is String) {
+				ui.addEventListener(MouseEvent.CLICK, this[commands]);
+			} else {
+				for (name in commands) {
+					target = modules[name];
+					for (attr in commands[name]) {
+						ui.addEventListener(MouseEvent.CLICK, commandCallback(target, attr, commands[name][attr]));
+					}
+				}
+			}
         }
 		private static function commandCallback(ui:UISprite, attr:String, value:*):Function {
             return function(e:Event):void {
                 ui[attr] = value;
             }
         }
+		
+		private function command1(e:Event):void {
+			trace('cmd1');
+		}
 
 		private function init(config:Object):void {
 			var name:String;
@@ -80,6 +88,7 @@ package {
 				ui.y = _.y;
 				ui.visible = !_.hidden;
 				ui.draggable = _.draggable;
+				ui.dummyRes = _.dummyRes;
 				ui.res = _.res;
 				ui.resOnClick = _.resOnClick;
 				ui.visibleOnClickOnly = _.visibleOnClickOnly;
