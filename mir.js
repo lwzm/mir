@@ -28,7 +28,7 @@ angular.module("mir", ["ngRoute", ], function($routeProvider) {
             var pics = [];
             for (j = i; j < i + N; j++) {
                 if (data.indexOf(j) != -1) {
-                    pics.push(src_pre + j + ".bmp");
+                    pics.push(src_pre + j + ".png");
                 }
             }
             pics_list.push(pics);
@@ -38,7 +38,7 @@ angular.module("mir", ["ngRoute", ], function($routeProvider) {
         $scope.pages = pages;
         $scope.href_pre = "#" + $location.path() + "?page=";
         $scope.code = function(s) {
-            return s.replace(RegExp("^.*\\/"), "").replace(/\.bmp$/, "");
+            return s.replace(RegExp("^.*\\/"), "").replace(/\.png$/, "");
         }
     });
 })
